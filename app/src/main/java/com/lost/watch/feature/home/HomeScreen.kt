@@ -1,13 +1,10 @@
 package com.lost.watch.feature.home
 
-import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Explore
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lost.designsystem.components.atoms.LostIcon
@@ -58,7 +55,12 @@ private fun HomeContent(
 ) {
     WatchScreenTemplate(ring = { BreathingStatusRing(state.status.tone, state.ringProgress) }) {
         if (state.isMonitoring) {
-            MonitoringStatus(state, onOpenMonitoring)
+            MonitoringStatus(state)
+            LostSecondaryButton(
+                stringResource(R.string.status_tap_for_why),
+                onOpenMonitoring,
+                style = SecondaryButtonStyle.TEXT_ONLY
+            )
             LostSecondaryButton(stringResource(R.string.home_stop_trip), {
                 onEvent(HomeUiEvent.StopTrip)
             }, style = SecondaryButtonStyle.TEXT_ONLY)
@@ -90,15 +92,10 @@ private fun IdleStatus() {
 }
 
 @Composable
-private fun MonitoringStatus(state: HomeUiState, onOpenMonitoring: () -> Unit) {
+private fun MonitoringStatus(state: HomeUiState) {
     val statusLabel = stringResource(state.status.label)
     LostIcon(state.status.icon, null, tint = SemanticTokens.Status.of(state.status.tone))
-    LostText(
-        text = statusLabel,
-        role = LostTextRole.TITLE,
-        color = SemanticTokens.Status.of(state.status.tone),
-        modifier = Modifier.clickable(role = Role.Button, onClick = onOpenMonitoring)
-    )
+    LostText(text = statusLabel, role = LostTextRole.TITLE, color = SemanticTokens.Status.of(state.status.tone))
     when {
         state.isVoluntaryDetour -> LostText(stringResource(R.string.home_walking_safely), role = LostTextRole.CAPTION)
         state.isNewPlace -> NewPlaceLine(state)

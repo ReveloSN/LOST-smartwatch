@@ -247,4 +247,14 @@
     <string name="complication_deviation">Desvio</string>
     <string name="complication_help">Ajuda</string>
     <string name="complication_idle">Atento</string>
+
+    <!-- Rumbos para TalkBack -->
+    <string name="direction_north">para o norte</string>
+    <string name="direction_north_east">para o nordeste</string>
+    <string name="direction_east">para o leste</string>
+    <string name="direction_south_east">para o sudeste</string>
+    <string name="direction_south">para o sul</string>
+    <string name="direction_south_west">para o sudoeste</string>
+    <string name="direction_west">para o oeste</string>
+    <string name="direction_north_west">para o noroeste</string>
 </resources>

@@ -2,6 +2,7 @@ package com.lost.watch.feature.settings
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import com.lost.designsystem.components.atoms.LostTextRole
 import com.lost.designsystem.components.templates.WatchScreenTemplate
 import com.lost.designsystem.preview.LostDevicePreviews
 import com.lost.designsystem.theme.LostTheme
+import com.lost.designsystem.tokens.ComponentTokens
 import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.domain.model.Sensitivity
 import com.lost.domain.model.VibrationIntensity
@@ -72,7 +74,9 @@ private fun DeleteLearningAction(hasDeleted: Boolean, onDelete: () -> Unit) {
             text = stringResource(R.string.privacy_delete),
             role = LostTextRole.TITLE,
             color = SemanticTokens.Status.help,
-            modifier = Modifier.combinedClickable(role = Role.Button, onClick = {}, onLongClick = onDelete)
+            modifier = Modifier
+                .heightIn(min = ComponentTokens.Touch.minTarget)
+                .combinedClickable(role = Role.Button, onClick = {}, onLongClick = onDelete)
         )
         LostText(
             stringResource(R.string.privacy_delete_hint),

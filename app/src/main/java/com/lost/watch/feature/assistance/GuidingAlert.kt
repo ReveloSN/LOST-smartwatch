@@ -13,6 +13,7 @@ import com.lost.designsystem.preview.LostDevicePreviews
 import com.lost.designsystem.theme.LostTheme
 import com.lost.designsystem.tokens.StatusTone
 import com.lost.watch.R
+import com.lost.watch.ui.arrowDescription
 import com.lost.watch.ui.formatDistance
 import kotlin.math.ceil
 
@@ -37,7 +38,8 @@ fun GuidingAlert(state: AssistanceUiState.Guiding) {
             DistanceContent(
                 distance = formatDistance(meters),
                 detail = pluralStringResource(R.plurals.assist_walk_minutes, minutes, minutes),
-                arrowRotationDegrees = state.bearingDegrees
+                arrowRotationDegrees = state.bearingDegrees,
+                arrowDescription = arrowDescription(state.bearingDegrees)
             )
         )
         val toward = state.destinationName?.let { stringResource(R.string.assist_toward_destination, it) }

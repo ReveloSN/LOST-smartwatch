@@ -29,7 +29,7 @@ fun DistanceIndicator(content: DistanceContent, modifier: Modifier = Modifier) {
     ) {
         LostIcon(
             imageVector = Icons.Rounded.Navigation,
-            contentDescription = null,
+            contentDescription = content.arrowDescription,
             modifier = Modifier.rotate(content.arrowRotationDegrees),
             tint = SemanticTokens.Status.of(content.tone),
             size = ComponentTokens.Icon.hero

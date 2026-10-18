@@ -13,6 +13,7 @@ import com.lost.designsystem.components.templates.WatchScreenTemplate
 import com.lost.designsystem.preview.LostDevicePreviews
 import com.lost.designsystem.theme.LostTheme
 import com.lost.watch.R
+import com.lost.watch.ui.arrowDescription
 import com.lost.watch.ui.formatDistance
 
 /** H.2 · Flecha grande hacia el destino, distancia y nombre. Al llegar muestra 02.4. */
@@ -39,7 +40,8 @@ private fun GuideContent(state: NewPlaceGuideUiState, onStop: () -> Unit) {
             DistanceContent(
                 distance = state.distanceMeters?.let { formatDistance(it) }.orEmpty(),
                 detail = state.destinationName.orEmpty(),
-                arrowRotationDegrees = state.bearingDegrees
+                arrowRotationDegrees = state.bearingDegrees,
+                arrowDescription = arrowDescription(state.bearingDegrees)
             )
         )
         LostSecondaryButton(stringResource(R.string.home_stop_trip), onStop, style = SecondaryButtonStyle.TEXT_ONLY)
