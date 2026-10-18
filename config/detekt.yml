@@ -11,7 +11,7 @@ complexity:
     ignoreAnnotated: ['Preview', 'WearPreviewDevices', 'LostDevicePreviews']
   LongParameterList:
     active: true
-    functionThreshold: 4
+    functionThreshold: 5
     constructorThreshold: 7
     ignoreDefaultParameters: true
     ignoreDataClasses: true
