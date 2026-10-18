@@ -27,30 +27,7 @@ import com.lost.designsystem.tokens.SemanticTokens
 /** Tarjeta de recorrido ("Casa → U · L–V · 6:40 · 35 min") sobre superficie de vidrio. */
 @Composable
 fun RoutineCard(content: RoutineCardContent, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Card(
-        onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-            .heightIn(min = ComponentTokens.Touch.minTarget),
-        shape = RoundedCornerShape(SemanticTokens.Shape.container),
-        colors = CardDefaults.cardColors(containerColor = ComponentTokens.Card.surface)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(SemanticTokens.Spacing.sm)
-        ) {
-            LostIcon(imageVector = content.icon, contentDescription = null, tint = SemanticTokens.Status.onRoute)
-            Column {
-                LostText(text = content.title, role = LostTextRole.TITLE, textAlign = TextAlign.Start)
-                LostText(
-                    text = content.detail,
-                    role = LostTextRole.CAPTION,
-                    color = SemanticTokens.Text.secondary,
-                    textAlign = TextAlign.Start
-                )
-            }
-        }
-    }
+    LostListItem(ListItemContent(content.icon, content.title, content.detail), onClick = onClick, modifier = modifier)
 }
 
 @LostDevicePreviews
