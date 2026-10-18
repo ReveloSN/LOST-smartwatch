@@ -9,7 +9,9 @@ import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Text
 import com.lost.watch.R
 import com.lost.watch.presentation.theme.LOSTTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
