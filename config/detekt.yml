@@ -1,0 +1,59 @@
+build:
+  maxIssues: 0
+
+complexity:
+  LargeClass:
+    active: true
+    threshold: 150
+  LongMethod:
+    active: true
+    threshold: 30
+    ignoreAnnotated: ['Preview', 'WearPreviewDevices']
+  LongParameterList:
+    active: true
+    functionThreshold: 4
+    constructorThreshold: 7
+    ignoreDefaultParameters: true
+    ignoreDataClasses: true
+    ignoreAnnotated: ['Composable']
+  TooManyFunctions:
+    active: true
+    thresholdInFiles: 10
+    thresholdInClasses: 10
+    thresholdInInterfaces: 10
+    thresholdInObjects: 10
+    thresholdInEnums: 10
+    ignorePrivate: true
+    excludes: ['**/test/**', '**/androidTest/**']
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 10
+    ignoreSimpleWhenEntries: true
+
+style:
+  MagicNumber:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/tokens/**', '**/*Fixtures.kt']
+    ignorePropertyDeclaration: false
+    ignoreAnnotated: ['Preview', 'WearPreviewDevices', 'WearPreviewFontScales']
+    ignoreEnums: true
+  WildcardImport:
+    active: true
+  UnusedPrivateMember:
+    active: true
+    ignoreAnnotated: ['Preview', 'WearPreviewDevices', 'WearPreviewFontScales']
+  ReturnCount:
+    active: true
+    max: 3
+  ForbiddenComment:
+    active: false
+
+naming:
+  FunctionNaming:
+    active: true
+    ignoreAnnotated: ['Composable']
+  TopLevelPropertyNaming:
+    active: true
+    constantPattern: '[A-Z][A-Za-z0-9_]*'
+  MatchingDeclarationName:
+    active: true
