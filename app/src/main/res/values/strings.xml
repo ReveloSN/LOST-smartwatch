@@ -261,10 +261,7 @@
     <string name="distance_meters">%1$d m</string>
     <string name="distance_kilometers">%1$s km</string>
 
-    <!-- Servicio, Tile y complicación -->
-    <string name="notification_channel_name">Acompañamiento de recorridos</string>
-    <string name="notification_title">LOST te acompaña</string>
-    <string name="notification_text">Observo tu recorrido. Te aviso si algo no se parece al de siempre.</string>
+    <!-- Tile y complicación -->
     <string name="tile_label">LOST</string>
     <string name="complication_label">Estado de LOST</string>
     <string name="complication_on_route">En tu ruta</string>
