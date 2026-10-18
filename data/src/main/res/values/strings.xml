@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Mensaje que recibe el contacto autorizado. %1$s = enlace al mapa. -->
+    <string name="contact_location_message">LOST: tu contacto podría necesitar ayuda para orientarse. Está aquí: %1$s. Ya lo estamos guiando de vuelta a su ruta.</string>
+
+    <!-- Datos de la demo (historia de Sebastián). -->
+    <string name="demo_routine_name">Casa → U</string>
+    <string name="demo_contact_name">Laura</string>
+    <string name="demo_contact_relationship">Hermana</string>
+    <string name="demo_destination_lab">Laboratorio 3, Bloque C</string>
+    <string name="demo_destination_library">Biblioteca Central</string>
+    <string name="demo_destination_cafe">Cafetería</string>
+    <string name="demo_destination_hospital">Consultorio 304</string>
+</resources>
