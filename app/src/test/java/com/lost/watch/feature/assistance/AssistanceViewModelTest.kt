@@ -11,6 +11,7 @@ import com.lost.watch.AppFixtures
 import com.lost.watch.MainDispatcherExtension
 import com.lost.watch.integration.ShareOutcomeStore
 import com.lost.watch.ui.LostErrorToUiMessageMapper
+import com.lost.watch.ui.ToneResolver
 import kotlinx.coroutines.flow.flowOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -23,7 +24,7 @@ class AssistanceViewModelTest {
         session = session,
         observeContact = ObserveAuthorizedContactUseCase(ContactReader { flowOf(null) }),
         shareOutcome = ShareOutcomeStore(),
-        mapper = AssistanceUiStateMapper(LostErrorToUiMessageMapper())
+        mapper = AssistanceUiStateMapper(LostErrorToUiMessageMapper(), ToneResolver())
     )
 
     private fun askForHelp() {

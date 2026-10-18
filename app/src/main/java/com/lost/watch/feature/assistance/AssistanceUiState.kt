@@ -3,6 +3,7 @@ package com.lost.watch.feature.assistance
 import com.lost.domain.assistance.UserFeedback
 import com.lost.domain.detection.DeviationReason
 import com.lost.watch.ui.StatusPresentation
+import com.lost.watch.ui.Tone
 import com.lost.watch.ui.UiMessage
 
 /** Lo que muestra la capa de alerta. [Hidden] = no hay alerta y se ve la pantalla de abajo. */
@@ -11,7 +12,8 @@ sealed interface AssistanceUiState {
 
     data class SoftAsk(val reasons: List<DeviationReason>) : AssistanceUiState
 
-    data class AskForHelp(val status: StatusPresentation, val reasons: List<DeviationReason>) : AssistanceUiState
+    data class AskForHelp(val status: StatusPresentation, val tone: Tone, val reasons: List<DeviationReason>) :
+        AssistanceUiState
 
     data class Guiding(val distanceMeters: Double?, val bearingDegrees: Float, val destinationName: String?) :
         AssistanceUiState

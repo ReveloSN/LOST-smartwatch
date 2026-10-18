@@ -7,10 +7,15 @@ import com.lost.domain.model.AuthorizedContact
 import com.lost.domain.session.TripSessionSnapshot
 import com.lost.watch.ui.LostErrorToUiMessageMapper
 import com.lost.watch.ui.StatusPresentation
+import com.lost.watch.ui.Tone
+import com.lost.watch.ui.ToneResolver
 import javax.inject.Inject
 
 /** Traduce el estado de la máquina de asistencia a lo que muestra la capa de alerta. */
-class AssistanceUiStateMapper @Inject constructor(private val errorMapper: LostErrorToUiMessageMapper) {
+class AssistanceUiStateMapper @Inject constructor(
+    private val errorMapper: LostErrorToUiMessageMapper,
+    private val toneResolver: ToneResolver
+) {
     fun map(snapshot: TripSessionSnapshot, contact: AuthorizedContact?, shareError: LostError?): AssistanceUiState =
         when (val state = snapshot.assistance) {
             AssistanceState.Calm -> AssistanceUiState.Hidden
@@ -20,6 +25,7 @@ class AssistanceUiStateMapper @Inject constructor(private val errorMapper: LostE
             is AssistanceState.AskForHelp ->
                 AssistanceUiState.AskForHelp(
                     StatusPresentation.of(snapshot.detection.level).atLeastDeviation(),
+                    toneResolver.resolve(snapshot.detection.level).atLeastAttentive(),
                     state.reasons
                 )
 
@@ -42,6 +48,8 @@ class AssistanceUiStateMapper @Inject constructor(private val errorMapper: LostE
 
             is AssistanceState.Acknowledged -> AssistanceUiState.Acknowledged(state.feedback)
         }
+
+    private fun Tone.atLeastAttentive() = if (this == Tone.RELAXED) Tone.ATTENTIVE else this
 
     private fun StatusPresentation.atLeastDeviation() = if (this ==
         StatusPresentation.ON_ROUTE

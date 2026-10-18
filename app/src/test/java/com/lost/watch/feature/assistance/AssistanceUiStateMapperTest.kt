@@ -9,11 +9,13 @@ import com.lost.watch.AppFixtures
 import com.lost.watch.R
 import com.lost.watch.ui.LostErrorToUiMessageMapper
 import com.lost.watch.ui.StatusPresentation
+import com.lost.watch.ui.Tone
+import com.lost.watch.ui.ToneResolver
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class AssistanceUiStateMapperTest {
-    private val mapper = AssistanceUiStateMapper(LostErrorToUiMessageMapper())
+    private val mapper = AssistanceUiStateMapper(LostErrorToUiMessageMapper(), ToneResolver())
     private val laura = AuthorizedContact("c", "Laura", "Hermana", "", true)
 
     private fun map(state: AssistanceState, level: AssistanceLevel = AssistanceLevel.MEDIUM, error: LostError? = null) =
@@ -28,6 +30,13 @@ class AssistanceUiStateMapperTest {
     fun `pedir ayuda nunca se muestra con el color de todo en orden`() {
         val state = map(AssistanceState.AskForHelp(AppFixtures.reasons), level = AssistanceLevel.LOW)
         assertEquals(StatusPresentation.DEVIATION, (state as AssistanceUiState.AskForHelp).status)
+        assertEquals(Tone.ATTENTIVE, state.tone)
+    }
+
+    @Test
+    fun `nivel alto usa el tono firme`() {
+        val state = map(AssistanceState.AskForHelp(AppFixtures.reasons), level = AssistanceLevel.HIGH)
+        assertEquals(Tone.FIRM, (state as AssistanceUiState.AskForHelp).tone)
     }
 
     @Test
