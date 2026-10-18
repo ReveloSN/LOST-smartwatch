@@ -4,6 +4,6 @@ import com.lost.domain.model.UserSettings
 import kotlinx.coroutines.flow.Flow
 
 /** Lectura de las preferencias del usuario. */
-interface SettingsReader {
+fun interface SettingsReader {
     fun observeSettings(): Flow<UserSettings>
 }
