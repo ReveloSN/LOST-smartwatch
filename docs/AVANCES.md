@@ -10,7 +10,7 @@ las decisiones tomadas y lo que queda pendiente.
 | 0 | Configuración | ✅ Completa |
 | 1 | Design system | ✅ Completa |
 | 2 | Dominio | ✅ Completa |
-| 3 | Motor de IA | ⏳ |
+| 3 | Motor de IA | ✅ Completa |
 | 4 | Datos | ⏳ |
 | 5 | Pantallas | ⏳ |
 | 6 | Integración | ⏳ |
@@ -104,3 +104,38 @@ las decisiones tomadas y lo que queda pendiente.
 
 **Pendientes**
 - Ninguno.
+
+---
+
+## Fase 3 — Motor de IA (`ai`, Kotlin puro)
+
+**IA**
+- Flujo: puntos GPS → `TrajectoryResampler` (un punto cada 20 m) → `DetectionModeFactory` (rutina / lugar nuevo) → señales → `CompositeAnomalyScorer` → `AssistanceLevelClassifier` + `VoluntaryDetourDetector` + `DeviationExplanationBuilder` → `DetectionResult`.
+- `geometry/`: `HaversineDistanceCalculator`, `BearingCalculator`, `LocalProjection`, `PolylineDistanceCalculator`, `TrajectoryResampler`, `SpatialGrid` (`HashMap<GridCell, MutableList<Int>>`).
+- `sequence/`: `SequenceComparator` (Strategy) con `DtwSequenceComparator` (dos filas `DoubleArray`, banda de Sakoe-Chiba, versión open-end) y `FrechetSequenceComparator` (mismo contrato → Liskov); `RouteProgressLocator`.
+- `learning/`: `RoutineLearner` (implementa el puerto `RoutineLearningEngine`), `RoutineMatcher` (`PriorityQueue<RoutineMatch>`), `RoutineConfirmationPolicy` (5 repeticiones), `RunningStatistics` (Welford).
+- `signals/` (cada una mide una sola cosa): `OffRouteSignal`, `SequenceDivergenceSignal`, `DelaySignal` (depende de la sensibilidad), `LoopSignal` (grilla espacial), `ErraticHeadingSignal` (buffer circular `ArrayDeque`), `MovingAwaySignal`, `UnusualStopSignal` (una pasada O(n)).
+- `scoring/`: `CompositeAnomalyScorer` (Composite) con `z = b0 + w1·desvío + w2·confusión + w3·retraso + w4·desvío·confusión`; `VoluntaryDetourDetector`; `AssistanceLevelClassifier` con umbrales personales.
+- `feedback/PersonalThresholdAdjuster` (implementa `ThresholdAdjuster`): "Estoy bien" sube los umbrales, ayuda confirmada los baja, con límites.
+- `mode/`: `DetectionMode` (Strategy) con `RoutineDetectionMode` y `NewPlaceDetectionMode`, creados por `DetectionModeFactory` (Factory).
+- `LostDetectionEngine` (Facade, implementa el puerto `TripEvaluator`) y `LostEngineAssembly` (arma las piezas; el módulo no depende de Hilt).
+- Todos los umbrales y pesos en `DetectionThresholds`, `ScoringWeights`, `DetectionConfig` y `FeedbackSteps`.
+
+**Pruebas** — 34 pruebas en verde (`./gradlew :ai:test`), incluidas las **5 de escenario de la sección 8.5** (`DetectionScenariosTest`) con recorridos sintéticos (`TripFixtures`, `SyntheticWalk`):
+1. Rutina normal → nivel BAJO, modo rutina, avance > 50 %.
+2. Desvío voluntario (camina recto hacia otro lado) → BAJO + `isVoluntaryDetour` → la máquina de estados pasa a `SoftAsk`.
+3. Desorientación con 3 vueltas a la manzana → MEDIO/ALTO, razones "saliste de tu ruta" y "misma cuadra ×3".
+4. Lugar nuevo (hospital) dando vueltas → MEDIO en modo lugar nuevo.
+5. "Estoy bien" ×3 → el umbral sube y el mismo recorrido pasa de MEDIO a BAJO.
+Además: geometría, remuestreo, DTW/Fréchet, avance en la ruta, Welford, aprendizaje con 5 repeticiones, emparejamiento, cada señal y el puntaje combinado (agregar una señal sin tocar el scorer).
+
+**Decisiones**
+- *Pesos de la regresión (modo rutina)*: b0 = −4, desvío 1.5, confusión 2, retraso 1, interacción 8. Con pesos más altos en desvío y retraso, un desvío voluntario largo terminaba en nivel medio; el término de interacción es el que realmente separa los dos casos.
+- *Desvío voluntario* = desvío ≥ 0.5 y "inestabilidad" (máximo de bucles, giros bruscos y paradas) < 0.2. "Alejarse del destino" no cuenta como inestabilidad porque quien va a otro lado también se aleja.
+- *Giros bruscos*: se resta una línea base (15 % de giros por ventana) para que una esquina normal no cuente como caos.
+- *Emparejar un recorrido en curso*: se elige la rutina que sale del mismo lugar con menor costo DTW aunque hoy se haya desviado (si se exigiera parecido, un desvío fuerte "perdería" la rutina y caería a modo lugar nuevo).
+- *Nombres de rutinas nuevas*: el motor no genera texto; deja el nombre vacío y la UI muestra "Nuevo recorrido" desde `strings.xml`.
+- detekt: máximo 4 parámetros por función (umbral 5). Los constructores de inyección pueden tener hasta 6 dependencias.
+
+**Pendientes**
+- Calibrar los pesos con recorridos reales (los actuales se ajustaron con los escenarios sintéticos).
