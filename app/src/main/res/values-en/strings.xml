@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home">Home</string>
+    <string name="nav_routines">My routes</string>
+    <string name="nav_destinations">Places</string>
+    <string name="nav_contacts">Contacts</string>
+    <string name="nav_settings">Settings</string>
+    <string name="cd_section_position">%1$s, section %2$d of %3$d</string>
+
+    <string name="status_on_route">All good</string>
+    <string name="status_deviation">You may be lost</string>
+    <string name="status_help">I think you need help</string>
+    <string name="status_on_route_detail">You’re on your usual route or walking steadily somewhere else.</string>
+    <string name="status_help_detail">I’ll guide you and let your contact know.</string>
+    <string name="status_tap_for_why">Tap to see why</string>
+    <string name="cd_status">Status: %1$s</string>
+
+    <string name="onboarding_welcome_title">Hi, I’m LOST</string>
+    <string name="onboarding_welcome_body">I learn your routes and help if you get lost, before you have to ask.</string>
+    <string name="onboarding_start">Start</string>
+    <string name="onboarding_location_title">Can we use your location?</string>
+    <string name="onboarding_location_body">To learn your routes we need your location. Your data stays on your watch.</string>
+    <string name="onboarding_allow">Allow</string>
+    <string name="onboarding_not_now">Not now</string>
+    <string name="onboarding_contact_title">Who should I tell if you need help?</string>
+    <string name="onboarding_choose_contact">Choose %1$s</string>
+    <string name="onboarding_contact_footnote">You can remove them anytime.</string>
+    <string name="onboarding_no_contact">You can choose your contact later in Contacts.</string>
+    <string name="onboarding_continue">Continue</string>
+
+    <string name="home_heading_to">Heading to %1$s</string>
+    <string name="home_arrival">arrival</string>
+    <string name="home_progress">arrival · %1$d of %2$d min</string>
+    <string name="home_idle_title">LOST is watching out</string>
+    <string name="home_idle_body">Start walking and LOST will recognize your route.</string>
+    <string name="home_start_trip">Start route</string>
+    <string name="home_stop_trip">End route</string>
+    <string name="home_walking_safely">Walking steadily somewhere else</string>
+    <string name="home_only_observing">Just watching</string>
+    <string name="home_new_place">Exploring a new place</string>
+    <string name="home_see_why">See what I notice</string>
+
+    <string name="learning_progress">%1$d of %2$d</string>
+    <plurals name="learning_seen">
+        <item quantity="one">We’ve seen this route %d time.</item>
+        <item quantity="other">We’ve seen this route %d times.</item>
+    </plurals>
+    <plurals name="learning_remaining">
+        <item quantity="one">One more and we’ll save it as your usual route.</item>
+        <item quantity="other">%d more and we’ll save it as your usual route.</item>
+    </plurals>
+
+    <string name="routine_new">New route</string>
+    <string name="routine_confirm_question">Save it?</string>
+    <string name="routine_save">Save</string>
+    <string name="routine_rename">Rename</string>
+    <string name="routine_delete">Delete</string>
+    <string name="routine_delete_confirm">Tap again to delete</string>
+    <string name="routine_departure">leave</string>
+    <string name="routine_arrival">arrive</string>
+    <string name="routine_schedule">%1$s · %2$s · %3$d min</string>
+    <string name="routine_weekdays">Mon–Fri</string>
+    <string name="routine_learning">Learning</string>
+    <string name="routines_empty_title">We don’t know your routes yet.</string>
+    <string name="routines_empty_body">Walk as usual and LOST will learn.</string>
+    <string name="routines_week">Your week</string>
+    <string name="routine_rename_prompt">Say the new name</string>
+    <string name="cd_routine_map">Usual route for %1$s</string>
+
+    <string name="monitoring_on_route">You’re on your usual route</string>
+    <string name="monitoring_other_street">You took another street today</string>
+    <string name="monitoring_drifting">You’re drifting away</string>
+    <string name="monitoring_not_similar">Today’s route no longer looks like your usual one</string>
+    <string name="monitoring_what_i_notice">What I notice today</string>
+    <string name="monitoring_new_place">New place: there’s no usual route to compare.</string>
+    <string name="monitoring_idle">No route in progress.</string>
+    <string name="cd_route_comparison">Usual route in gray and today’s in color</string>
+
+    <string name="reason_left_route_headline">You left</string>
+    <string name="reason_left_route_detail">%1$s from your usual route</string>
+    <plurals name="reason_repeated_headline">
+        <item quantity="one">%d time</item>
+        <item quantity="other">%d times</item>
+    </plurals>
+    <string name="reason_repeated_detail">around the same block</string>
+    <plurals name="reason_taking_longer_headline">
+        <item quantity="one">%d minute more</item>
+        <item quantity="other">%d minutes more</item>
+    </plurals>
+    <string name="reason_taking_longer_detail">than usual</string>
+    <string name="reason_moving_away_headline">Moving away</string>
+    <string name="reason_moving_away_detail">from your destination</string>
+    <string name="reason_erratic_headline">Changing direction</string>
+    <string name="reason_erratic_detail">several times</string>
+    <string name="reason_unusual_stop_headline">You stopped</string>
+    <string name="reason_unusual_stop_detail">where you never stop</string>
+
+    <string name="explanation_title">Why am I asking?</string>
+    <string name="explanation_one">%1$s.</string>
+    <string name="explanation_two">%1$s and %2$s.</string>
+    <string name="explanation_none">Everything looks like your usual route.</string>
+    <string name="phrase_left_route">you left your usual route</string>
+    <plurals name="phrase_repeated">
+        <item quantity="one">you passed the same block %d time</item>
+        <item quantity="other">you passed the same block %d times</item>
+    </plurals>
+    <plurals name="phrase_taking_longer">
+        <item quantity="one">you’re %d minute later than usual</item>
+        <item quantity="other">you’re %d minutes later than usual</item>
+    </plurals>
+    <string name="phrase_moving_away">you’re moving away from your destination</string>
+    <string name="phrase_erratic">you changed direction several times</string>
+    <string name="phrase_unusual_stop">you stopped where you never stop</string>
+
+    <string name="assist_soft_ask_title">Going somewhere else today?</string>
+    <string name="assist_going_elsewhere">Yes, somewhere else</string>
+    <string name="assist_guide_me">Guide me</string>
+    <string name="assist_left_route">You left your usual route.</string>
+    <string name="assist_need_help">Need help?</string>
+    <string name="assist_yes_guide">Yes, guide me</string>
+    <string name="assist_im_fine">I’m fine</string>
+    <string name="assist_back_to_route">Back to your usual route</string>
+    <string name="assist_toward_route">toward your usual route</string>
+    <string name="assist_toward_destination">toward %1$s</string>
+    <plurals name="assist_walk_minutes">
+        <item quantity="one">≈ %d min walking</item>
+        <item quantity="other">≈ %d min walking</item>
+    </plurals>
+    <string name="assist_sharing_in">Telling %1$s in</string>
+    <plurals name="assist_seconds">
+        <item quantity="one">second</item>
+        <item quantity="other">seconds</item>
+    </plurals>
+    <string name="assist_cancel">Cancel</string>
+    <string name="assist_shared_title">%1$s knows where you are.</string>
+    <string name="assist_shared_body">Follow the arrow. You’re doing well.</string>
+    <string name="assist_keep_guiding">Keep guiding me</string>
+    <string name="assist_understood">Got it.</string>
+    <string name="assist_will_learn">LOST will learn from this.</string>
+    <string name="assist_ask_less">I’ll ask less in cases like this.</string>
+    <string name="assist_back_on_route">You’re back on your route</string>
+    <string name="assist_arrived">You’ve arrived.</string>
+    <string name="contact_fallback_name">your contact</string>
+    <string name="cd_navigation_arrow">Arrow pointing %1$s</string>
+
+    <string name="newplace_chip">New place</string>
+    <string name="newplace_body">I don’t know this place. I’ll tell you if you walk in circles or come back to the same spot.</string>
+    <string name="newplace_start">Start</string>
+    <string name="newplace_arrived">You’ve arrived at %1$s</string>
+    <string name="newplace_save_destination">Save as place</string>
+
+    <string name="destinations_voice">Tell me where you’re going</string>
+    <string name="destinations_voice_example">“Take me home”</string>
+    <string name="destinations_suggested">Suggested</string>
+    <string name="destinations_recent">Recent</string>
+    <string name="destinations_not_found">I couldn’t find “%1$s” in your places.</string>
+    <string name="destinations_empty">You don’t have saved places yet.</string>
+    <string name="cd_voice_search">Search a place by voice</string>
+
+    <string name="contact_authorized">%1$s · trusted contact</string>
+    <string name="contact_sees_location">Sees your location only when LOST is helping you.</string>
+    <string name="contact_pending">Waiting for them to accept the invitation.</string>
+    <string name="contact_call">Call</string>
+    <string name="contact_revoke">Remove access</string>
+    <string name="contact_revoke_confirm">Tap again to remove access</string>
+    <string name="contact_empty">You don’t have a trusted contact yet.</string>
+    <string name="contact_choose">Choose contact</string>
+
+    <string name="settings_sensitivity">Sensitivity</string>
+    <string name="sensitivity_low">Low</string>
+    <string name="sensitivity_medium">Medium</string>
+    <string name="sensitivity_high">High</string>
+    <string name="sensitivity_example">I’ll ask if your %1$d-min route goes past %2$d, or if you walk in circles.</string>
+    <string name="sensitivity_example_generic">I’ll ask if you take much longer than usual, or if you walk in circles.</string>
+    <string name="settings_vibration">Vibration</string>
+    <string name="vibration_soft">Soft</string>
+    <string name="vibration_strong">Strong</string>
+    <string name="settings_large_text">Large text</string>
+    <string name="settings_on">On</string>
+    <string name="settings_off">Off</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_privacy">Privacy</string>
+    <string name="settings_week">Your week</string>
+    <string name="settings_demo">Demo</string>
+
+    <string name="privacy_on_device">Your routes stay on your watch.</string>
+    <string name="privacy_sharing">Your location is only shared when you allow it.</string>
+    <string name="privacy_delete">Delete what I learned</string>
+    <string name="privacy_delete_hint">Press and hold for 2 seconds</string>
+    <string name="privacy_deleted">Done. LOST will start learning again.</string>
+
+    <string name="insights_days_done">%1$d of %2$d</string>
+    <string name="insights_week_summary">This week you made %1$d trips and I learned %2$d routes.</string>
+    <string name="insights_success">Got back on route</string>
+    <string name="insights_decision">Time to decide</string>
+    <string name="insights_recovery">Time to get back</string>
+    <string name="insights_false_positives">Unneeded alerts</string>
+    <string name="insights_no_data">No data yet</string>
+    <string name="insights_percent">%1$d%%</string>
+    <string name="insights_seconds">%1$s s</string>
+    <string name="insights_goal_met">Goal met</string>
+    <string name="insights_goal">Goal: %1$s</string>
+    <string name="insights_goal_success">≥ 90%</string>
+    <string name="insights_goal_decision">&lt; 5 s</string>
+    <string name="insights_goal_recovery">&lt; 30 s</string>
+    <string name="insights_goal_false_positives">&lt; 10%</string>
+
+    <string name="error_gps_what">We can’t find your location.</string>
+    <string name="error_gps_why">You may be indoors.</string>
+    <string name="error_gps_todo">Walk toward an exit or a window.</string>
+    <string name="error_connection_what">We couldn’t reach your contact.</string>
+    <string name="error_connection_why">There’s no connection right now.</string>
+    <string name="error_connection_todo">We’ll try again automatically.</string>
+    <string name="error_battery_what">Battery at %1$d%%.</string>
+    <string name="error_battery_todo">LOST will keep watching your route in saver mode.</string>
+    <string name="error_permission_what">LOST can’t use your location.</string>
+    <string name="error_permission_why">Without location it can’t learn your routes.</string>
+    <string name="error_permission_todo">Turn it on in your watch settings.</string>
+    <string name="error_no_contact_what">You don’t have a trusted contact yet.</string>
+    <string name="error_no_contact_todo">Choose one in Contacts.</string>
+    <string name="error_no_routines_what">We don’t know your routes yet.</string>
+    <string name="error_no_routines_todo">Walk as usual and LOST will learn.</string>
+    <string name="error_storage_what">We couldn’t save your data.</string>
+    <string name="error_storage_todo">Try again in a moment.</string>
+
+    <string name="demo_title">Demo routes</string>
+    <string name="demo_normal">Usual route</string>
+    <string name="demo_voluntary">Planned detour</string>
+    <string name="demo_disorientation">Closed street</string>
+    <string name="demo_new_place">New place (hospital)</string>
+    <string name="demo_stop">Stop demo</string>
+
+    <string name="distance_meters">%1$d m</string>
+    <string name="distance_kilometers">%1$s km</string>
+
+    <string name="tile_label">LOST</string>
+    <string name="complication_label">LOST status</string>
+    <string name="complication_on_route">On route</string>
+    <string name="complication_deviation">Detour</string>
+    <string name="complication_help">Help</string>
+    <string name="complication_idle">Watching</string>
+</resources>

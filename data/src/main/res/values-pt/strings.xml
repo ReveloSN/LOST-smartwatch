@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="contact_location_message">LOST: seu contato pode precisar de ajuda para se orientar. Está aqui: %1$s. Já estamos guiando de volta à rota.</string>
+    <string name="tracking_notification_channel">Acompanhamento de percursos</string>
+    <string name="tracking_notification_title">O LOST acompanha você</string>
+    <string name="tracking_notification_text">Observo seu percurso. Aviso se algo não se parecer com o de sempre.</string>
+    <string name="demo_routine_name">Casa → Universidade</string>
+    <string name="demo_contact_name">Laura</string>
+    <string name="demo_contact_relationship">Irmã</string>
+    <string name="demo_destination_lab">Laboratório 3, Bloco C</string>
+    <string name="demo_destination_library">Biblioteca Central</string>
+    <string name="demo_destination_cafe">Cafeteria</string>
+    <string name="demo_destination_hospital">Consultório 304</string>
+</resources>

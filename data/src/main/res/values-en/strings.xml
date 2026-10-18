@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="contact_location_message">LOST: your contact may need help finding their way. They are here: %1$s. We are already guiding them back to their route.</string>
+    <string name="tracking_notification_channel">Route companion</string>
+    <string name="tracking_notification_title">LOST is with you</string>
+    <string name="tracking_notification_text">I’m watching your route. I’ll let you know if something doesn’t look like usual.</string>
+    <string name="demo_routine_name">Home → Uni</string>
+    <string name="demo_contact_name">Laura</string>
+    <string name="demo_contact_relationship">Sister</string>
+    <string name="demo_destination_lab">Lab 3, Building C</string>
+    <string name="demo_destination_library">Main Library</string>
+    <string name="demo_destination_cafe">Cafeteria</string>
+    <string name="demo_destination_hospital">Office 304</string>
+</resources>
