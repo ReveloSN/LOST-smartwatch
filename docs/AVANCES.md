@@ -3,6 +3,14 @@
 Registro de lo que se hizo en cada fase del plan (sección 11 de `CLAUDE.md`), las pruebas que pasan,
 las decisiones tomadas y lo que queda pendiente.
 
+## Resumen para la entrega
+
+- **Las 10 fases del plan están completas** y publicadas en `main`.
+- **167 pruebas automáticas en verde** (designsystem 8 · domain 64 · ai 34 · data 21 · app 40), más ktlint y detekt sin alertas. Comando: `./gradlew ktlintCheck detekt test assembleDebug`.
+- **Demo con GPX** verificada de punta a punta por prueba: rutina normal (silencio), desvío voluntario (pregunta suave), calle cerrada (pregunta → guía → ruta recuperada) y hospital (pregunta → llegada).
+- **Diseño** fiel a los mockups: tokens en 3 niveles, Atomic Design, previews redondo/cuadrado, voz y tono, 3 idiomas, accesibilidad verificada por prueba.
+- **Lo que falta** (ver "Pendientes generales" al final): verificación visual en un emulador de Wear OS, prueba con usuarios (SUS) y calibrar la IA con recorridos reales.
+
 ## Resumen de fases
 
 | # | Fase | Estado |
@@ -16,7 +24,7 @@ las decisiones tomadas y lo que queda pendiente.
 | 6 | Integración | ✅ Completa |
 | 7 | Contenido e i18n | ✅ Completa |
 | 8 | Accesibilidad y métricas | ✅ Completa |
-| 9 | Documentación | ⏳ |
+| 9 | Documentación | ✅ Completa |
 
 ---
 
@@ -271,3 +279,29 @@ En el reloj: compilar *debug*, Ajustes → Demostración (o "Demostración" en I
 **Pendientes**
 - Revisión con Accessibility Scanner y TalkBack en un reloj o emulador de Wear OS (no disponible en este equipo).
 - Aplicar el cuestionario SUS con usuarios reales y llenar la tabla de resultados.
+
+---
+
+## Fase 9 — Documentación
+
+- `README.md`: qué es LOST, requisitos, cómo ejecutar, cómo reproducir la demo, cómo verificar, estructura y mapa de la documentación.
+- `docs/arquitectura.md`: módulos, SOLID, patrones y estructuras de datos con la clase real de cada uno.
+- `docs/investigacion/`: personas, journey map (enlazado con los estados del código), planteamiento del problema, guion de entrevistas.
+- `docs/ia/`: arquitectura de información (diagrama Mermaid y los 4 sistemas) y motor de IA explicado (flujo, señales, fórmula y pesos).
+- `docs/contenido/glosario-voz.md`, `docs/marca/personalidad.md`, `docs/metricas/` (métricas, protocolo y SUS).
+- `docs/adr/`: 001 Clean Architecture · 002 DTW vs. distancia fija · 003 máquina de estados (con diagrama).
+- Corrección encontrada al documentar: en un lugar nuevo la alerta ya no dice "Te saliste de tu ruta de siempre"; muestra la razón concreta.
+
+---
+
+## Pendientes generales
+
+| Pendiente | Por qué quedó pendiente | Cómo cerrarlo |
+|---|---|---|
+| Ver las pantallas en un emulador de Wear OS y compararlas con los mockups | En este equipo solo hay una imagen de teléfono (Pixel 8); la app exige hardware de reloj. | Android Studio → Device Manager → Wear OS Large Round → `./gradlew :app:installDebug`. Revisar también `en-XA` y TalkBack. |
+| Pruebas con usuarios y SUS | Requiere personas reales. | Seguir `docs/metricas/metricas.md` y llenar la tabla de `sus.md`. |
+| Calibrar los pesos de la IA con recorridos reales | Los pesos se ajustaron con recorridos sintéticos y los GPX de la demo. | Grabar recorridos reales y ajustar `DetectionConfig` / `ScoringWeights`. |
+| Fuente Manrope | Se usa la sans del sistema detrás del token `LostTypography.brandFamily`. | Agregar el archivo de fuente (OFL) en `res/font` y cambiar una línea. |
+| Flecha con brújula | La flecha apunta al rumbo absoluto (norte arriba). | Combinar con el sensor de orientación del reloj. |
+| Selector de contacto real | En el reloj no hay un selector estándar; la demo usa a Laura. | Elegirlo desde el teléfono vinculado (Data Layer). |
+| Pruebas instrumentadas (Room, Compose UI) | Necesitan emulador. | `androidTest` con un emulador de Wear OS. |
