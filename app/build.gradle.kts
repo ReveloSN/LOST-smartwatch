@@ -31,6 +31,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     useLibrary("wear-sdk")
+    androidResources {
+        // Los GPX de sample-routes llegan como assets; el script y el README no hacen falta en el APK.
+        ignoreAssetsPattern = "!*.py:!*.md:!.*"
+    }
     buildFeatures {
         compose = true
     }
