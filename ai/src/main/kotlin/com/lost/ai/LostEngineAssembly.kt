@@ -3,6 +3,7 @@ package com.lost.ai
 import com.lost.ai.config.DetectionConfig
 import com.lost.ai.explanation.DeviationExplanationBuilder
 import com.lost.ai.geometry.TrajectoryResampler
+import com.lost.ai.guidance.NearestRoutePointGuide
 import com.lost.ai.learning.RoutineConfirmationPolicy
 import com.lost.ai.learning.RoutineLearner
 import com.lost.ai.learning.RoutineMatcher
@@ -60,4 +61,6 @@ class LostEngineAssembly(private val config: DetectionConfig = DetectionConfig.D
         confirmationPolicy = RoutineConfirmationPolicy(thresholds.routineConfirmationRepetitions),
         idGenerator = idGenerator
     )
+
+    fun guidanceCalculator(): NearestRoutePointGuide = NearestRoutePointGuide()
 }
