@@ -24,4 +24,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "LOST"
 include(":app")
+include(":core:designsystem")
+include(":domain")
+include(":ai")
+include(":data")
  
