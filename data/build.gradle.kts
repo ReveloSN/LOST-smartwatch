@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.datastore.preferences)
     implementation(libs.play.services.location)
     implementation(libs.lifecycle.service)
+    implementation(libs.core.ktx)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)

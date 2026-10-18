@@ -3,6 +3,11 @@
     <!-- Mensaje que recibe el contacto autorizado. %1$s = enlace al mapa. -->
     <string name="contact_location_message">LOST: tu contacto podría necesitar ayuda para orientarse. Está aquí: %1$s. Ya lo estamos guiando de vuelta a su ruta.</string>
 
+    <!-- Notificación del servicio de acompañamiento -->
+    <string name="tracking_notification_channel">Acompañamiento de recorridos</string>
+    <string name="tracking_notification_title">LOST te acompaña</string>
+    <string name="tracking_notification_text">Observo tu recorrido. Te aviso si algo no se parece al de siempre.</string>
+
     <!-- Datos de la demo (historia de Sebastián). -->
     <string name="demo_routine_name">Casa → U</string>
     <string name="demo_contact_name">Laura</string>
