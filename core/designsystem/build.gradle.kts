@@ -18,6 +18,10 @@ android {
     buildFeatures {
         compose = true
     }
+    testOptions {
+        unitTests.all { it.useJUnitPlatform() }
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -31,4 +35,8 @@ dependencies {
     api(libs.wear.tooling.preview)
     api(libs.material.icons.extended)
     debugImplementation(libs.ui.tooling)
+
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
