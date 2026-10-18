@@ -3,6 +3,7 @@ package com.lost.watch.feature.assistance
 import com.lost.domain.assistance.AssistanceState
 import com.lost.domain.assistance.UserFeedback
 import com.lost.domain.detection.AssistanceLevel
+import com.lost.domain.detection.DetectionModeKind
 import com.lost.domain.error.LostError
 import com.lost.domain.model.AuthorizedContact
 import com.lost.watch.AppFixtures
@@ -62,5 +63,13 @@ class AssistanceUiStateMapperTest {
             AssistanceUiState.Acknowledged(UserFeedback.IM_FINE),
             map(AssistanceState.Acknowledged(UserFeedback.IM_FINE))
         )
+    }
+
+    @Test
+    fun `en lugar nuevo la alerta no habla de la ruta de siempre`() {
+        val detection = AppFixtures.detection(AssistanceLevel.MEDIUM).copy(mode = DetectionModeKind.NEW_PLACE)
+        val snapshot = AppFixtures.monitoring(detection, AssistanceState.AskForHelp(AppFixtures.reasons))
+        val state = mapper.map(snapshot, laura, null) as AssistanceUiState.AskForHelp
+        assertEquals(true, state.isNewPlace)
     }
 }

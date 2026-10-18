@@ -2,6 +2,7 @@ package com.lost.watch.feature.assistance
 
 import com.lost.domain.assistance.AssistanceState
 import com.lost.domain.assistance.AssistanceTimings
+import com.lost.domain.detection.DetectionModeKind
 import com.lost.domain.error.LostError
 import com.lost.domain.model.AuthorizedContact
 import com.lost.domain.session.TripSessionSnapshot
@@ -26,7 +27,8 @@ class AssistanceUiStateMapper @Inject constructor(
                 AssistanceUiState.AskForHelp(
                     StatusPresentation.of(snapshot.detection.level).atLeastDeviation(),
                     toneResolver.resolve(snapshot.detection.level).atLeastAttentive(),
-                    state.reasons
+                    state.reasons,
+                    isNewPlace = snapshot.detection.mode == DetectionModeKind.NEW_PLACE
                 )
 
             AssistanceState.Guiding -> AssistanceUiState.Guiding(

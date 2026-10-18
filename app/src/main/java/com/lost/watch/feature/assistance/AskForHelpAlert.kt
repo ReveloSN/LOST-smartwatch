@@ -33,7 +33,7 @@ fun AskForHelpAlert(state: AssistanceUiState.AskForHelp, onEvent: (AssistanceUiE
     AlertTemplate(
         header = AlertHeader(
             icon = Icons.Rounded.Vibration,
-            context = state.tone.context?.let { stringResource(it) },
+            context = alertContext(state),
             question = stringResource(state.tone.question),
             tone = state.status.tone
         ),
@@ -47,7 +47,7 @@ fun AskForHelpAlert(state: AssistanceUiState.AskForHelp, onEvent: (AssistanceUiE
                 onEvent(AssistanceUiEvent.ImFine)
             }
         )
-        if (state.reasons.isNotEmpty()) {
+        if (state.reasons.isNotEmpty() && !state.isNewPlace) {
             LostText(
                 explanationSentence(state.reasons),
                 role = LostTextRole.CAPTION,
@@ -56,6 +56,11 @@ fun AskForHelpAlert(state: AssistanceUiState.AskForHelp, onEvent: (AssistanceUiE
         }
     }
 }
+
+/** En un lugar nuevo no hay "ruta de siempre": el contexto es la razón concreta. */
+@Composable
+private fun alertContext(state: AssistanceUiState.AskForHelp): String? =
+    if (state.isNewPlace) explanationSentence(state.reasons) else state.tone.context?.let { stringResource(it) }
 
 @LostDevicePreviews
 @Composable

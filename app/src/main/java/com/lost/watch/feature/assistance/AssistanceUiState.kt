@@ -12,8 +12,12 @@ sealed interface AssistanceUiState {
 
     data class SoftAsk(val reasons: List<DeviationReason>) : AssistanceUiState
 
-    data class AskForHelp(val status: StatusPresentation, val tone: Tone, val reasons: List<DeviationReason>) :
-        AssistanceUiState
+    data class AskForHelp(
+        val status: StatusPresentation,
+        val tone: Tone,
+        val reasons: List<DeviationReason>,
+        val isNewPlace: Boolean = false
+    ) : AssistanceUiState
 
     data class Guiding(val distanceMeters: Double?, val bearingDegrees: Float, val destinationName: String?) :
         AssistanceUiState
