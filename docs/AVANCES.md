@@ -9,7 +9,7 @@ las decisiones tomadas y lo que queda pendiente.
 |---|---|---|
 | 0 | Configuración | ✅ Completa |
 | 1 | Design system | ✅ Completa |
-| 2 | Dominio | ⏳ |
+| 2 | Dominio | ✅ Completa |
 | 3 | Motor de IA | ⏳ |
 | 4 | Datos | ⏳ |
 | 5 | Pantallas | ⏳ |
@@ -78,3 +78,29 @@ las decisiones tomadas y lo que queda pendiente.
 **Pendientes**
 - Comparar visualmente las previews contra los mockups en Android Studio (no se puede renderizar previews desde la línea de comandos sin una herramienta de screenshots).
 - Empaquetar Manrope.
+
+---
+
+## Fase 2 — Dominio (`domain`, Kotlin puro)
+
+**Backend**
+- Modelos inmutables: `GeoPoint`, `Trip`, `Routine` (trayectoria de referencia + `RoutineSchedule` con `EnumSet<DayOfWeek>` + `DurationStatistics` para Welford), `Destination`, `AuthorizedContact`, `UserSettings`, `Sensitivity`, `PersonalThresholds`.
+- Tipos seguros `@JvmInline value class`: `Meters`, `Probability` (valida 0..1), `Degrees` (diferencia angular más corta).
+- Detección: `AssistanceLevel`, `DeviationReason` (sealed, sin texto), `DetectionResult`, `DetectionRequest`.
+- Errores explícitos: `sealed interface LostError` + `LostResult` (nunca excepciones hacia la UI).
+- **Patrón State**: `AssistanceState` (Calm, SoftAsk, AskForHelp, Guiding, SharingCountdown, LocationShared, Acknowledged) + `AssistanceStateMachine` pura.
+- **Cadena de responsabilidad**: `AssistanceResponsePolicy` = `VibrateAndAskLink` → `AlternativeRouteLink` → `ShareLocationLink`.
+- **Puertos (ISP)**: `LocationSource`, `HapticNotifier`, `ContactNotifier`, `RoutineReader`/`RoutineWriter`, `TripRecorder`/`TripReader`, `MetricsTracker`/`MetricsReader`, `SettingsReader`/`SettingsWriter`, `ContactReader`/`ContactWriter`, `DestinationReader`/`DestinationWriter`, `TripEvaluator` (el motor de IA visto desde el dominio), `RoutineLearningEngine`, `ThresholdAdjuster`, `TimeSource`, `IdGenerator`.
+- **Casos de uso (verbo + objeto)**: `EvaluateCurrentTripUseCase`, `LearnRoutineFromTripUseCase`, `ShareLocationWithContactUseCase`, `ApplyUserFeedbackUseCase`, `TrackMetricEventUseCase`, `ObserveWeeklyInsightsUseCase`, `ObserveRoutinesUseCase`, `ConfirmRoutineUseCase`, `RenameRoutineUseCase`, `DeleteRoutineUseCase`, `DeleteLearnedDataUseCase`, `ObserveSettingsUseCase`, `UpdateSettingsUseCase`, `ObserveAuthorizedContactUseCase`, `ChooseAuthorizedContactUseCase`, `RevokeAuthorizedContactUseCase`, `ObserveDestinationsUseCase`, `SaveDestinationUseCase`.
+- `InsightsCalculator`: eficacia, tiempo de decisión, tiempo de recuperación, falsos positivos y uso, con las metas del plan (≥ 90 %, < 5 s, < 30 s, < 10 %).
+
+**Pruebas** — 50 pruebas JUnit 5 en verde (`./gradlew :domain:test`): cada transición de la máquina de estados, la cadena de respuesta, las value classes, el cálculo de métricas y los casos de uso (fakes, MockK y Turbine).
+
+**Decisiones**
+- *Cancelar la cuenta regresiva* vuelve a Calm (el usuario demostró que está presente) sin tocar los umbrales.
+- *Nivel alto sin contacto autorizado*: no hay a quién avisar, así que LOST pregunta (AskForHelp) en vez de iniciar la cuenta.
+- *Mientras guía*, nuevas lecturas no interrumpen la guía; solo "llegó a la ruta" o "llegó al destino" la terminan.
+- La sensibilidad se modela como factor sobre la duración habitual: con 35 min → Baja 65, Media 50, Alta 42 min (lámina 04.2).
+
+**Pendientes**
+- Ninguno.
