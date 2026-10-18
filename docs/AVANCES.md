@@ -15,7 +15,7 @@ las decisiones tomadas y lo que queda pendiente.
 | 5 | Pantallas | ✅ Completa |
 | 6 | Integración | ✅ Completa |
 | 7 | Contenido e i18n | ✅ Completa |
-| 8 | Accesibilidad y métricas | ⏳ |
+| 8 | Accesibilidad y métricas | ✅ Completa |
 | 9 | Documentación | ⏳ |
 
 ---
@@ -249,3 +249,25 @@ En el reloj: compilar *debug*, Ajustes → Demostración (o "Demostración" en I
 **Pendientes**
 - Revisar visualmente en `en-XA` en un emulador de Wear OS (no hay imagen de reloj en este equipo).
 - Revisión de las traducciones por hablantes nativos.
+
+---
+
+## Fase 8 — Accesibilidad y métricas
+
+**Accesibilidad (sección 9.5)**
+- Contraste WCAG AA verificado por prueba (`ContrastRatioTest`): texto y estados ≥ 4.5:1 sobre negro OLED.
+- Estado en 4 canales: color + icono + texto + vibración (`StatusPresentation`, `Tone`), comprobado por `AccessibilityRulesTest`.
+- Áreas táctiles ≥ 48 dp: botones de 52 dp a todo el ancho, filas de lista ≥ 48 dp, "Toca para saber por qué" como botón y "Borrar lo aprendido" con alto mínimo.
+- TalkBack: alertas como regiones vivas (la pregunta se anuncia sola), descripciones en mapa, indicador de sección y flecha de guía ("Flecha que apunta al noreste").
+- Texto grande (+30 %) desde Ajustes y respeto de la escala de fuente del sistema (todo en `sp`).
+
+**Métricas (sección 9.4)**
+- `MetricsTracker` → `LocalMetricsTracker` (Room) con eventos de alerta, respuesta (con tiempo), ayuda iniciada, ruta recuperada (con tiempo), llegada, aviso compartido, rutina aprendida y recorrido completado.
+- `InsightsCalculator` + pantalla **Tu semana**: eficacia, tiempo de decisión, tiempo de recuperación, falsos positivos y uso, con la meta de cada una.
+- `docs/metricas/metricas.md` (qué se mide, dónde y protocolo de prueba) y `docs/metricas/sus.md` (cuestionario SUS, cálculo y plantilla de resultados).
+
+**Pruebas** — app 39 pruebas en verde (incluye `AccessibilityRulesTest`).
+
+**Pendientes**
+- Revisión con Accessibility Scanner y TalkBack en un reloj o emulador de Wear OS (no disponible en este equipo).
+- Aplicar el cuestionario SUS con usuarios reales y llenar la tabla de resultados.
