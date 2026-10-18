@@ -14,7 +14,7 @@ las decisiones tomadas y lo que queda pendiente.
 | 4 | Datos | ✅ Completa |
 | 5 | Pantallas | ✅ Completa |
 | 6 | Integración | ✅ Completa |
-| 7 | Contenido e i18n | ⏳ |
+| 7 | Contenido e i18n | ✅ Completa |
 | 8 | Accesibilidad y métricas | ⏳ |
 | 9 | Documentación | ⏳ |
 
@@ -228,3 +228,24 @@ En el reloj: compilar *debug*, Ajustes → Demostración (o "Demostración" en I
 
 **Pendientes**
 - Verificación visual en un emulador de Wear OS: en este equipo solo hay una imagen de teléfono (Pixel 8) y la app exige hardware de reloj. Instalar en Android Studio una imagen "Wear OS 5" y ejecutar `./gradlew :app:installDebug`.
+
+---
+
+## Fase 7 — Contenido e internacionalización
+
+**Diseño / contenido**
+- Textos finales en español (base), inglés y portugués para `app` y `data` (≈ 200 textos + 8 `plurals`).
+- **Voz fija y tono variable**: `ToneResolver` + `Tone` (relajado · atento · firme), cada tono con su texto principal y su vibración. En nivel alto la pregunta pasa a "Creo que necesitas ayuda. Te guío y aviso a tu contacto."
+- **Mensaje de error de 3 partes** obligatorio por estructura (`UiMessage` + `LostErrorToUiMessageMapper`), sin códigos internos.
+- Idiomas por app en Android 13+ (`generateLocaleConfig`), pseudolocales `en-XA`/`ar-XB` en *debug*, horas, distancias y días con el `Locale`.
+- `docs/contenido/glosario-voz.md`: voz, tono, glosario sistema → usuario y tabla de errores.
+
+**Pruebas** — `TranslationsTest`: las tres lenguas tienen exactamente las mismas claves y los mismos marcadores, y ninguna pantalla escribe texto literal en el código. App: 36 pruebas en verde.
+
+**Decisiones**
+- Los `plurals` de español y portugués incluyen la categoría `many` (las reglas CLDR recientes la usan para números grandes).
+- "Casa → U" se tradujo como "Home → Uni" / "Casa → Universidade" porque "U" solo se entiende en Colombia.
+
+**Pendientes**
+- Revisar visualmente en `en-XA` en un emulador de Wear OS (no hay imagen de reloj en este equipo).
+- Revisión de las traducciones por hablantes nativos.
