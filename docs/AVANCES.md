@@ -13,7 +13,7 @@ las decisiones tomadas y lo que queda pendiente.
 | 3 | Motor de IA | ✅ Completa |
 | 4 | Datos | ✅ Completa |
 | 5 | Pantallas | ✅ Completa |
-| 6 | Integración | ⏳ |
+| 6 | Integración | ✅ Completa |
 | 7 | Contenido e i18n | ⏳ |
 | 8 | Accesibilidad y métricas | ⏳ |
 | 9 | Documentación | ⏳ |
@@ -199,3 +199,32 @@ Además: geometría, remuestreo, DTW/Fréchet, avance en la ruta, Welford, apren
 - Girar la flecha con la brújula (sensor de orientación).
 - Selector de contacto real (desde el teléfono vinculado).
 - Pruebas de UI con Compose en emulador.
+
+---
+
+## Fase 6 — Integración
+
+**Backend / IA**
+- Tubería completa: `LocationSource` (GPS real o GPX) → `TripMonitor` (motor de IA + `TripSession` + máquina de estados) → UI (`StateFlow`) + efectos.
+- `TripMonitor` (dominio): alarga el recorrido con cada punto, lo evalúa, publica rutina, guía y llegada, despacha `DetectionUpdated`, detecta "Ya estás en tu ruta" (≤ 25 m) y la llegada (≤ 30 m). Al terminar, la IA aprende del recorrido.
+- `AssistanceTimers` (dominio): vibración repetida a los 15 s, 30 s sin respuesta → cuenta regresiva, tic de 1 s, "Entendido" que se cierra a los 3 s. Probado con tiempo virtual.
+- `RecoveryGrace` (dominio): tras recuperar la ruta, lo anterior se perdona mientras siga cerca (≤ 40 m).
+- Efectos de cada transición (patrón Observer): `AssistanceHapticPolicy` (qué vibración), `AssistanceMetricsRecorder` (alerta, tiempo de decisión, tiempo de recuperación, llegada), `AssistanceFeedbackLearner` ("Estoy bien" sube umbrales, "Sí, guíame" los baja), `LocationSharingEffect` (avisa al contacto y reintenta cada 20 s).
+- `TripMonitorRunner` (app) corre todo en el alcance de la aplicación; `LocationTrackingService` (data) es un servicio en primer plano de tipo ubicación con una notificación tranquila, que mantiene vivo el GPS con la pantalla apagada.
+
+**Demo con GPX** — `GpxDemoEndToEndTest` reproduce los cuatro GPX de `sample-routes/` por la tubería real (motor + monitor + máquina de estados):
+1. Ruta de siempre → nunca sale de Calm y llega a la U.
+2. Desvío voluntario → pregunta suave, nunca "¿Necesitas ayuda?".
+3. Calle cerrada → pregunta → "Sí, guíame" → guía → **ruta recuperada** (Calm).
+4. Hospital sin rutina → pregunta al dar vueltas y luego llega al consultorio.
+En el reloj: compilar *debug*, Ajustes → Demostración (o "Demostración" en Inicio) y elegir el recorrido.
+
+**Pruebas** — dominio 64, app 30 (más las de fases anteriores), todas en verde.
+
+**Decisiones**
+- *Gracia de recuperación*: sin ella, las vueltas que ya pasaron seguían pesando al volver a la ruta y LOST preguntaba otra vez por lo mismo (lo descubrió la prueba de punta a punta).
+- *El servicio en primer plano solo se inicia con permiso de ubicación* (Android 14+ lo exige para el tipo `location`). En la demo sin permiso la tubería corre igual en el alcance de la app.
+- `HapticNotifier` y `SettingsReader` pasan a `fun interface` para crear dobles simples en las pruebas.
+
+**Pendientes**
+- Verificación visual en un emulador de Wear OS: en este equipo solo hay una imagen de teléfono (Pixel 8) y la app exige hardware de reloj. Instalar en Android Studio una imagen "Wear OS 5" y ejecutar `./gradlew :app:installDebug`.
