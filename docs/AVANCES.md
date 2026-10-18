@@ -12,7 +12,7 @@ las decisiones tomadas y lo que queda pendiente.
 | 2 | Dominio | ✅ Completa |
 | 3 | Motor de IA | ✅ Completa |
 | 4 | Datos | ✅ Completa |
-| 5 | Pantallas | ⏳ |
+| 5 | Pantallas | ✅ Completa |
 | 6 | Integración | ⏳ |
 | 7 | Contenido e i18n | ⏳ |
 | 8 | Accesibilidad y métricas | ⏳ |
@@ -165,3 +165,37 @@ Además: geometría, remuestreo, DTW/Fréchet, avance en la ruta, Welford, apren
 
 **Pendientes**
 - Pruebas instrumentadas de los DAO de Room en un emulador (`androidTest`).
+
+---
+
+## Fase 5 — Pantallas (`app`)
+
+**Diseño**
+- **Arquitectura de información**: 5 secciones globales (Inicio · Mis recorridos · Destinos · Contactos · Ajustes) en un `HorizontalPager` con indicador de sección; navegación local con `SwipeDismissableNavHost` (deslizar = volver), nunca más de 2 niveles. `LostDestination` (sealed interface) define todas las rutas.
+- **Capa de alerta fuera del árbol** (`AssistanceOverlay`): se superpone a cualquier pantalla con un fundido suave y vuelve a donde estaba el usuario.
+- Pantallas de la sección 9.6, cada una con `XxxScreen` (sin lógica, con *state hoisting*), `XxxViewModel`, `XxxUiState`, `XxxUiEvent`:
+  - `onboarding/`: Bienvenida, permiso de ubicación explicado, contacto autorizado.
+  - `home/`: anillo que respira con avance sobre la ruta, "Vas a la U · 7:15 · llegada".
+  - `learning/`: "4 de 5" con anillo segmentado.
+  - `routines/`: lista circular, vacío, detalle con mini-mapa, guardar, renombrar por voz y borrar con confirmación.
+  - `monitoring/`: doble línea (siempre vs. hoy), arco de probabilidad, "Lo que noto hoy" y "¿Por qué te pregunto?" en una frase humana.
+  - `assistance/`: pregunta suave, pedir ayuda, guía con flecha, cuenta regresiva cancelable, aviso enviado (o error de 3 partes), "Entendido. LOST aprenderá de esto." con rebote y "Ya estás en tu ruta".
+  - `destinations/` (búsqueda por voz con `RecognizerIntent`, sugeridos y recientes), `newplace/` (lugar nuevo, guía y llegada), `contacts/` (permiso revocable), `settings/` (sensibilidad con ejemplo real, vibración, texto grande, idioma, privacidad con pulsación larga), `insights/` (Tu semana + métricas), `errors/` (qué pasó · por qué · qué hacer), `demo/`.
+  - `tile/` y `complication/`: estado de LOST en un vistazo.
+- Modo **texto grande** (+30 %) aplicado a toda la app desde Ajustes.
+- `ui/`: `StatusPresentation` (color + icono + texto), `PlaceIcons`, razones y frase explicable con plurales, distancias y horas según el idioma, `RouteProjector` para el mini-mapa, `UiMessage` y `LostErrorToUiMessageMapper`.
+- Nuevos componentes del design system: `PageIndicator` y `LostListItem` (`RoutineCard` lo reutiliza).
+
+**Pruebas** — 26 pruebas de la app en verde (`./gradlew :app:testDebugUnitTest`): mappers de Inicio, Monitoreo, Asistencia y Tu semana; ViewModel de asistencia con la sesión real; búsqueda de destinos por voz; mini-mapa; mensajes de error.
+
+**Decisiones**
+- *Pager horizontal para la navegación global*: los mockups proponen corona/deslizamiento vertical, pero las listas de cada sección ya usan la corona para desplazarse; con un pager vertical ambos gestos chocarían. El plan (sección 9.1) también menciona `HorizontalPager`.
+- *Borrar* (rutina, contacto) pide un segundo toque; *Borrar lo aprendido* exige mantener presionado, como en el mockup.
+- *Flecha de guía* apunta al rumbo absoluto (norte arriba); falta combinarla con la brújula del reloj.
+- *Elegir otra persona* como contacto: en un reloj no hay un selector de contactos estándar; en la demo se usa a Laura y el contacto se puede quitar en Contactos.
+- En modo demo, Inicio no bloquea por permisos para que la presentación siempre funcione.
+
+**Pendientes**
+- Girar la flecha con la brújula (sensor de orientación).
+- Selector de contacto real (desde el teléfono vinculado).
+- Pruebas de UI con Compose en emulador.
