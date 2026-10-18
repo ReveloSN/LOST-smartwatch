@@ -11,7 +11,7 @@ las decisiones tomadas y lo que queda pendiente.
 | 1 | Design system | ✅ Completa |
 | 2 | Dominio | ✅ Completa |
 | 3 | Motor de IA | ✅ Completa |
-| 4 | Datos | ⏳ |
+| 4 | Datos | ✅ Completa |
 | 5 | Pantallas | ⏳ |
 | 6 | Integración | ⏳ |
 | 7 | Contenido e i18n | ⏳ |
@@ -139,3 +139,29 @@ Además: geometría, remuestreo, DTW/Fréchet, avance en la ruta, Welford, apren
 
 **Pendientes**
 - Calibrar los pesos con recorridos reales (los actuales se ajustaron con los escenarios sintéticos).
+
+---
+
+## Fase 4 — Datos (`data`)
+
+**Backend**
+- **Room** (`persistence/`): `LostDatabase` con `TripEntity`, `RoutineEntity`, `MetricEventEntity`, `DestinationEntity`; DAOs; mappers (`TripEntityMapper`, `RoutineEntityMapper`, `MetricEventEntityMapper`, `DestinationEntityMapper`); codecs compactos para puntos y días. Repositorios **(patrón Repository)**: `RoomTripRepository`, `RoomRoutineRepository`, `RoomDestinationRepository`. Esquema exportado en `data/schemas/`.
+- **DataStore** (`preferences/`): `DataStoreSettingsRepository` (sensibilidad, vibración, texto grande, bienvenida y umbrales personales) con `SettingsPreferencesMapper`.
+- **Contactos** (`contacts/`): `AuthorizedContactRepository` (uno solo, revocable), `SmsContactNotifier` (devuelve `LostError.NoConnection` si el reloj no puede enviar), `FakeContactNotifier` (demo) y `ActiveContactNotifier` que elige según el modo.
+- **Ubicación** (`location/`): `FusedLocationSource` **(Adapter)** de Google Play Services → `LocationSource`; `ActiveLocationSource` elige GPS real o simulado.
+- **Háptica** (`haptics/`): `AndroidHapticNotifier` + `HapticWaveforms` (suave 40 ms · doble 2×80/120 · insistente 3×150 · giro largo+corto) con la intensidad de Ajustes.
+- **Métricas** (`metrics/`): `LocalMetricsTracker` guarda eventos en Room (nada sale del reloj).
+- **Demo** (`demo/`): `GpxRouteReader`, `SimulatedLocationSource` (reproduce un GPX 10× más rápido conservando los tiempos reales), `DemoScenarioSelector`, `DemoDataSeeder` (rutina "Casa → U", Laura y destinos de ejemplo).
+- **GPX** en `sample-routes/` (normal, desvío voluntario, desorientación con regreso, lugar nuevo) generados por `generate_routes.py` con la misma geometría que las pruebas del motor.
+- **Hilt**: `StorageModule` (base de datos, DataStore, alcance de la app) y `DataBindingsModule` (cada puerto → su implementación).
+
+**Pruebas** — 21 pruebas en verde (`./gradlew :data:testDebugUnitTest`): codecs, mappers ida y vuelta, repositorio de rutinas con DAO en memoria (Turbine), DataStore de ajustes y contacto, lectura de todos los GPX, reproducción simulada y ondas hápticas.
+
+**Decisiones**
+- *Modo demo = compilación debug* (`BuildConfig.DEMO_MODE`): GPS simulado con los GPX y aviso al contacto simulado. En release se usan el GPS y el SMS reales. Así nunca se envía un SMS real durante una presentación.
+- *Puntos codificados como texto* en una columna en lugar de una tabla por punto: un recorrido se lee y se escribe completo, y no hace falta una librería de JSON.
+- *Pruebas de repositorios con DAOs en memoria*: los DAO de Room son interfaces; probarlos contra SQLite real requeriría Robolectric o un emulador.
+- En Windows el DataStore en archivo no puede reemplazar un archivo abierto; las pruebas con varias escrituras usan un DataStore en memoria.
+
+**Pendientes**
+- Pruebas instrumentadas de los DAO de Room en un emulador (`androidTest`).
