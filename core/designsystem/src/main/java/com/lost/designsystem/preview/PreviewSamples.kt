@@ -22,4 +22,6 @@ internal object PreviewSamples {
     const val ERROR_TITLE = "No encontramos tu ubicación."
     const val ERROR_MESSAGE = "Camina hacia una salida o ventana."
     const val STATUS = "Todo en orden"
+    const val LEARNING_PROGRESS = "4 / 5"
+    const val MAP_DESCRIPTION = "Ruta de siempre y ruta de hoy"
 }
