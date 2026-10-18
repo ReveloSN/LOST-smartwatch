@@ -8,7 +8,7 @@ complexity:
   LongMethod:
     active: true
     threshold: 30
-    ignoreAnnotated: ['Preview', 'WearPreviewDevices']
+    ignoreAnnotated: ['Preview', 'WearPreviewDevices', 'LostDevicePreviews']
   LongParameterList:
     active: true
     functionThreshold: 4
@@ -35,13 +35,13 @@ style:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/tokens/**', '**/*Fixtures.kt']
     ignorePropertyDeclaration: false
-    ignoreAnnotated: ['Preview', 'WearPreviewDevices', 'WearPreviewFontScales']
+    ignoreAnnotated: ['Preview', 'WearPreviewDevices', 'WearPreviewFontScales', 'LostDevicePreviews']
     ignoreEnums: true
   WildcardImport:
     active: true
   UnusedPrivateMember:
     active: true
-    ignoreAnnotated: ['Preview', 'WearPreviewDevices', 'WearPreviewFontScales']
+    ignoreAnnotated: ['Preview', 'WearPreviewDevices', 'WearPreviewFontScales', 'LostDevicePreviews']
   ReturnCount:
     active: true
     max: 3

@@ -13,6 +13,7 @@ playServicesLocation = "21.3.0"
 composeBom = "2025.12.00"
 wearCompose = "1.5.6"
 wearToolingPreview = "1.0.0"
+materialIcons = "1.7.8"
 activityCompose = "1.10.1"
 coreSplashscreen = "1.2.0"
 tiles = "1.5.0"
@@ -39,6 +40,7 @@ compose-material3 = { group = "androidx.wear.compose", name = "compose-material3
 compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "wearCompose" }
 compose-navigation = { group = "androidx.wear.compose", name = "compose-navigation", version.ref = "wearCompose" }
 compose-ui-tooling = { group = "androidx.wear.compose", name = "compose-ui-tooling", version.ref = "wearCompose" }
+material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIcons" }
 wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wearToolingPreview" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }

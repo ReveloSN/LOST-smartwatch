@@ -29,5 +29,6 @@ dependencies {
     api(libs.ui.tooling.preview)
     api(libs.compose.ui.tooling)
     api(libs.wear.tooling.preview)
+    api(libs.material.icons.extended)
     debugImplementation(libs.ui.tooling)
 }
