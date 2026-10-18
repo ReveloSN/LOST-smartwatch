@@ -20,6 +20,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Pseudolocales en-XA (texto ~30 % más largo) y ar-XB (derecha a izquierda) para probar cortes.
+            isPseudoLocalesEnabled = true
+        }
         release {
             optimization {
                 enable = false
@@ -34,6 +38,8 @@ android {
     androidResources {
         // Los GPX de sample-routes llegan como assets; el script y el README no hacen falta en el APK.
         ignoreAssetsPattern = "!*.py:!*.md:!.*"
+        // Idiomas por app (Android 13+): español base, inglés y portugués.
+        generateLocaleConfig = true
     }
     buildFeatures {
         compose = true
