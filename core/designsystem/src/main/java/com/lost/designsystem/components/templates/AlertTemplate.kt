@@ -43,7 +43,7 @@ fun AlertTemplate(
             imageVector = header.icon,
             contentDescription = null,
             tint = SemanticTokens.Status.of(header.tone),
-            size = ComponentTokens.Icon.large
+            size = ComponentTokens.Icon.medium
         )
         header.context?.let {
             LostText(text = it, role = LostTextRole.CAPTION, color = SemanticTokens.Text.secondary)

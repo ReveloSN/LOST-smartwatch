@@ -70,6 +70,13 @@ object ComponentTokens {
         val size: Dp = 8.dp
     }
 
+    object MapScreen {
+        /** El mapa ocupa el centro; arriba queda el estado y abajo el mensaje, sin tapar las rutas. */
+        const val MAP_HEIGHT_FRACTION: Float = 0.56f
+        const val TEXT_WIDTH_FRACTION: Float = 0.64f
+        val edgePadding: Dp = SemanticTokens.Spacing.xl
+    }
+
     object SafeArea {
         /** 320 px de ancho útil sobre 454 px: el texto nunca toca la curva del reloj. */
         const val ROUND_TEXT_WIDTH_FRACTION: Float = 0.70f
