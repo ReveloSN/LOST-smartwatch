@@ -25,8 +25,10 @@ android {
             isPseudoLocalesEnabled = true
         }
         release {
+            // R8: reduce, optimiza y ofusca el código y quita los recursos que no se usan
+            // (los iconos de material-icons-extended pesan casi todo el APK sin esto).
             optimization {
-                enable = false
+                enable = true
             }
         }
     }
