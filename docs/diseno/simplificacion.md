@@ -30,24 +30,46 @@ Se siguió el orden de los PDF del curso: **contenido → jerarquía → estruct
 
 | Pantalla | Había | Se quita | Pasa a segundo nivel | Queda (principal · apoyo · acción) | Por qué |
 |---|---|---|---|---|---|
-| **Bienvenida** | Título, frase de 14 palabras, puntos, botón | — | — | "Hola, soy LOST" · frase de 9 palabras · Empezar | Frase demasiado larga para leer de un vistazo. |
-| **Permiso de ubicación** | Icono, pregunta de 4 palabras, frase de 15 palabras (cortada), 2 botones | Media frase | — | "¿Usamos tu ubicación?" · "Así aprendo tus recorridos. Se quedan en tu reloj." · Permitir / Ahora no | El texto se cortaba con "…". |
-| **Inicio (reposo)** | Anillo, icono, título, frase, 2 botones | — | — | "LOST está atento" · "Camina y reconoceré tu ruta." · Empezar recorrido / Demostración | Frase acortada a 5 palabras. |
-| **Inicio (recorrido)** | Anillo, icono, estado, hora, icono de lugar, destino, progreso, 2 botones | Icono de lugar, línea de progreso ("0 de 13 min", ya está en el anillo), icono suelto del estado | "Terminar recorrido" pasa a Monitoreo | Chip de estado · hora de llegada · "Vas a la U" · Ver detalles | 8 → 4 elementos. El chip une color, icono y texto en un solo bloque. |
-| **Monitoreo** | Arco, chip, mapa, titular largo, "Lo que noto hoy", filas de razones con iconos, botón | Arco de probabilidad (el chip ya da el nivel y el arco competía con el mapa), filas de razones con iconos, encabezado "Lo que noto hoy" | Las razones completas viven en "¿Por qué te pregunto?" | Chip · mapa · titular corto · "Toca para saber más" / Terminar recorrido | Máximo 2 gráficos (mapa + chip). Titulares de 3–4 palabras. |
-| **Explicación** | Encabezado, frase, 2 iconos | Iconos sueltos | — | "¿Por qué te pregunto?" · frase humana | La frase ya lo dice; los iconos sin texto no suman. |
-| **Pregunta suave** | Arco, icono, pregunta, 2 botones | — | — | "¿Vas a otro lado hoy?" · Sí, voy a otro lado / Guíame | Ya cumplía; se verifica que ambos botones quepan. |
-| **¿Necesitas ayuda?** | Arco, icono grande, contexto, pregunta, 2 botones, frase de explicación | Frase de explicación repetida al final | La explicación completa se ve en Monitoreo | Contexto corto · pregunta · Sí, guíame / Estoy bien | "Estoy bien" se cortaba; ahora caben las dos respuestas sin desplazar. |
-| **Guía** | Arco, título, flecha, distancia, minutos, "hacia tu ruta…" | Línea final repetida | — | "Vuelve a tu ruta" · flecha + distancia · minutos | La línea final repetía el título. |
+| **Bienvenida** | Título, frase de 14 palabras, puntos, botón | Media frase | — | "Hola, soy LOST" · frase de 8 palabras · Empezar | Leer de un vistazo. |
+| **Permiso de ubicación** | Icono, pregunta, frase de 15 palabras (cortada con "…"), 2 botones (el segundo bajo el borde) | Icono decorativo, media frase | — | "¿Usamos tu ubicación?" · "Así aprendo tus recorridos, que se quedan en tu reloj." · Permitir / Ahora no | El texto se cortaba y "Ahora no" no se veía. |
+| **Contacto** | Pregunta, fila "Laura · Hermana", botón "Elegir a Laura", nota | La fila (hacía lo mismo que el botón) | — | Pregunta · Elegir a Laura · "Puedes quitarlo cuando quieras." | Dos controles para la misma acción. |
+| **Inicio (reposo)** | Anillo, icono, título, frase, 2 botones | Atajo "Demostración" (ya está en Ajustes y chocaba con el indicador de sección) | — | "LOST está atento" · "Camina y reconoceré tu recorrido." · Empezar recorrido | Una sola acción. |
+| **Inicio (recorrido)** | Anillo, icono, estado, hora, icono de lugar, destino, progreso, 2 botones | Icono suelto, icono de lugar, "0 de 13 min" (ya lo dice el anillo), "Toca para saber por qué" | El detalle: tocar el chip de estado abre Monitoreo | Chip de estado (tocable) · hora de llegada · "Llegas a Casa → U" · Terminar recorrido | 8 → 4 elementos. |
+| **Monitoreo** | Arco, chip, mapa, titular largo (cortado), "Lo que noto hoy", filas de razones, botón | Arco de probabilidad, encabezado, filas de razones, botón | Las razones: tocar el chip abre "¿Por qué te pregunto?" | Chip · **mapa real** a pantalla completa · titular de 3–4 palabras | 2 gráficos (mapa + chip); el mapa es la idea. |
+| **Explicación** | Encabezado, frase, 2 iconos sueltos | Iconos sin texto | — | "¿Por qué te pregunto?" · frase humana | La frase ya lo dice. |
+| **Pregunta suave** | Arco, icono, pregunta, 2 botones (el segundo cortado por el borde) | — | — | "¿Vas a otro lado hoy?" · Sí, voy a otro lado / Guíame | Ahora caben las dos respuestas. |
+| **¿Necesitas ayuda?** | Arco, icono grande, contexto de 2 líneas, pregunta, 2 botones, frase de explicación repetida | La frase repetida | La explicación completa, en Monitoreo | "Te saliste de tu ruta." · ¿Necesitas ayuda? · Sí, guíame / Estoy bien | "Estoy bien" se cortaba; ahora todo cabe sin desplazar. |
+| **Guía** | Arco, título, flecha, distancia, minutos, "hacia tu ruta de siempre" | La línea final (repetía el título) | — | "Vuelve a tu ruta" · flecha (con brújula) + distancia · minutos | Nada repetido. |
 | **Cuenta regresiva / aviso enviado / Entendido** | — | — | — | Sin cambios | Ya tenían una sola idea. |
-| **Tu semana** | Anillo, encabezado, "0 de 5", letras de días, frase resumen, 4 métricas con meta | Letras de los días (el anillo ya tiene un segmento por día), frase larga | Las 4 métricas pasan a una pantalla "Métricas" | "Tu semana" · "3 de 5 días" · "6 recorridos · 1 rutina" · Ver métricas | De 12+ líneas a 4 elementos. |
-| **Ajustes** | 7 filas (incluía "Tu semana") | "Tu semana" (ya está en Mis recorridos: estaba en dos sitios) | — | Lista de ajustes + "Mapa real" + "Acerca de" (Paso 2) | Sin entradas duplicadas. |
-| **Privacidad** | 2 frases, botón de mantener presionado | — | — | Textos corregidos para decir la verdad sobre el mapa (Paso 2) | Honestidad sobre lo que sale del reloj. |
-| **Contactos, Destinos, Mis recorridos, Demostración** | Listas | — | — | Sin cambios de estructura | Son listas: una fila por elemento ya es una idea por fila. |
+| **Aprendiendo tu rutina** | Anillo, icono, "4 de 5", "Hemos visto este recorrido 4 veces", "Una más y…", botón | "Hemos visto… 4 veces" (repetía "4 de 5") | — | "4 de 5" · "Una más y la guardamos" · Guardar | Nada repetido. |
+| **Detalle de rutina** | Mapa, título, horario, hasta 3 botones | "Renombrar" mientras no está guardada | — | **Mapa real** · "Casa → U" · horario · Guardar o Renombrar / Borrar | Como mucho 1 primaria + 1 secundaria. |
+| **Lugar nuevo** | Chip, icono, destino, frase de 14 palabras, botón | Icono de lugar | — | Chip · destino · "Te aviso si das vueltas por aquí." · aviso de privacidad · Empezar | 2 gráficos; el aviso dice qué sale del reloj. |
+| **Tu semana** | Anillo, encabezado, "0 de 5", letras de días, frase resumen, 4 métricas con meta | Letras de los días (el anillo ya tiene un segmento por día), frase larga | Las 4 métricas → pantalla **Métricas** | "Tu semana" · "3 de 5 días" · "6 recorridos · 1 rutina" · Ver métricas | De más de 12 líneas a 4 elementos. |
+| **Ajustes** | 7 filas (incluía "Tu semana") | "Tu semana" (estaba en dos sitios) | — | Sensibilidad · Vibración · Texto grande · **Mapa real** · Idioma · Privacidad · Demostración · **Acerca de** | Sin entradas duplicadas. |
+| **Privacidad** | 2 frases (una cortada), mantener para borrar | — | — | Tres frases cortas y verdaderas (incluye qué pide el mapa) · Borrar lo aprendido | Honestidad sobre lo que sale del reloj. |
+| **Contactos, Destinos, Mis recorridos, Demostración** | Listas | — | — | Sin cambios de estructura (Destinos suma "Lugares encontrados") | Una fila = una idea. |
+
+## Antes y después (emulador Wear OS Large Round)
+
+| Pantalla | Antes | Después |
+|---|---|---|
+| Permiso de ubicación | ![antes](../capturas/antes/02-permiso-ubicacion.png) | ![después](../capturas/despues/02-permiso-ubicacion.png) |
+| Inicio en recorrido | ![antes](../capturas/antes/06-inicio-recorrido.png) | ![después](../capturas/despues/06-inicio-recorrido.png) |
+| ¿Necesitas ayuda? | ![antes](../capturas/antes/07-alerta-ayuda.png) | ![después](../capturas/despues/07-alerta-ayuda.png) |
+| Guía | ![antes](../capturas/antes/08-guia.png) | ![después](../capturas/despues/08-guia.png) |
+| Monitoreo | ![antes](../capturas/antes/11-monitoreo.png) | ![después](../capturas/despues/11-monitoreo.png) |
+| Tu semana | ![antes](../capturas/antes/17-tu-semana.png) | ![después](../capturas/despues/17-tu-semana.png) + [Métricas](../capturas/despues/17b-metricas.png) |
+| Privacidad | ![antes](../capturas/antes/18-privacidad.png) | ![después](../capturas/despues/18-privacidad.png) |
+
+Las demás capturas están en `docs/capturas/antes/` y `docs/capturas/despues/` con el mismo número.
 
 ## Decisiones
 
-- **El arco de probabilidad sale de Monitoreo, no de las alertas.** En la alerta el arco perimetral es el único gráfico junto al icono y comunica la urgencia; en Monitoreo competía con el mapa (tres gráficos a la vez).
-- **"Terminar recorrido" pasa a Monitoreo.** Es una acción rara; en Inicio desplazaba "Ver detalles" fuera de la zona segura.
-- **Las métricas pasan a un segundo nivel** (`LostDestination.Metrics`): la navegación sigue sin superar dos niveles bajo las secciones (Mis recorridos → Tu semana → Métricas es el tercer toque, pero sigue siendo el nivel 2 del flujo local de "Tu semana"). Ver `docs/ia/arquitectura-informacion.md`.
-- **Estado compacto**: en Inicio y Monitoreo el estado es un solo `LostChip` (color + icono + texto); la vibración la sigue dando `Tone`.
+- **El chip de estado es la puerta al detalle** (revelación progresiva): en Inicio abre Monitoreo y en Monitoreo abre "¿Por qué te pregunto?". Muestra una flecha "›" y ocupa un área táctil de 48 dp. Así no hace falta un botón "Toca para saber más" que ocupaba una línea entera.
+- **La segunda respuesta de las alertas va solo con texto** (`DualActionButtons`). El mockup la dibuja como píldora gris, pero en el reloj redondo una píldora a todo el ancho en la parte baja choca con la curva; el área táctil sigue siendo de 52 dp y el contraste no cambia.
+- **El contenido corto se centra en vertical** (`WatchScreenTemplate`): antes el desplazamiento lo pegaba arriba y las acciones caían en la curva de abajo.
+- **El arco de probabilidad sale de Monitoreo, no de las alertas.** En la alerta el arco comunica la urgencia junto al icono; en Monitoreo competía con el mapa.
+- **"Terminar recorrido" se queda en Inicio** (como única acción secundaria) y el detalle se abre tocando el estado.
+- **Métricas en segundo nivel** (`LostDestination.Metrics`): Mis recorridos → Tu semana → Métricas, sin pasar de dos niveles bajo las secciones.
+- **Sin guiones de corte** (`Hyphens.None`): en español partía mal palabras ("reco-rridos").
+- **Estado compacto**: en Inicio y Monitoreo el estado es un solo `LostChip` (color + icono + texto); la vibración la sigue dando `Tone`. El estado nunca se comunica solo con color (`AccessibilityRulesTest` sigue en verde).
