@@ -29,7 +29,7 @@ import com.lost.watch.R
 import com.lost.watch.ui.RouteProjector
 import com.lost.watch.ui.scheduleText
 
-private const val MAP_WIDTH_FRACTION = 0.8f
+private const val MAP_WIDTH_FRACTION = 0.6f
 
 /** B.3 · Detalle del recorrido: trayectoria de referencia y acciones (guardar, renombrar por voz, borrar). */
 @Composable
@@ -93,7 +93,7 @@ private fun RoutineActionButtons(
             onEvent(RoutinesUiEvent.Confirm)
         })
     }
-    LostSecondaryButton(stringResource(R.string.routine_rename), onRename)
+    if (item.isConfirmed) LostSecondaryButton(stringResource(R.string.routine_rename), onRename)
     val deleteLabel = if (isDeleteArmed) R.string.routine_delete_confirm else R.string.routine_delete
     LostSecondaryButton(stringResource(deleteLabel), {
         onEvent(RoutinesUiEvent.DeleteTapped)

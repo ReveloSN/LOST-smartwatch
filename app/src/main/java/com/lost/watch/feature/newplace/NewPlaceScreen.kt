@@ -34,7 +34,6 @@ fun NewPlaceScreen(onStarted: () -> Unit, viewModel: NewPlaceViewModel = hiltVie
 private fun NewPlaceContent(state: NewPlaceUiState, onStart: () -> Unit) {
     WatchScreenTemplate {
         LostChip(stringResource(R.string.newplace_chip), icon = Icons.Rounded.Explore)
-        LostIcon(PlaceIcons.of(state.kind), null, tint = SemanticTokens.Status.onRoute)
         LostText(state.destinationName, role = LostTextRole.TITLE)
         LostText(
             stringResource(R.string.newplace_body),

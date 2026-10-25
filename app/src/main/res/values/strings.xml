@@ -21,7 +21,7 @@
     <string name="onboarding_welcome_title">Hola, soy LOST</string>
     <string name="onboarding_welcome_body">Aprendo tus recorridos y te ayudo si te desorientas.</string>
     <string name="onboarding_start">Empezar</string>
-    <string name="onboarding_location_title">¿Podemos usar tu ubicación?</string>
+    <string name="onboarding_location_title">¿Usamos tu ubicación?</string>
     <string name="onboarding_location_body">Así aprendo tus recorridos. Se quedan en tu reloj.</string>
     <string name="onboarding_allow">Permitir</string>
     <string name="onboarding_not_now">Ahora no</string>
@@ -44,11 +44,6 @@
 
     <!-- Aprendiendo tu rutina -->
     <string name="learning_progress">%1$d de %2$d</string>
-    <plurals name="learning_seen">
-        <item quantity="one">Hemos visto este recorrido %d vez.</item>
-        <item quantity="many">Hemos visto este recorrido %d veces.</item>
-        <item quantity="other">Hemos visto este recorrido %d veces.</item>
-    </plurals>
     <plurals name="learning_remaining">
         <item quantity="one">Una más y lo guardamos como tu ruta de siempre.</item>
         <item quantity="many">%d más y lo guardamos como tu ruta de siempre.</item>
@@ -137,7 +132,7 @@
 
     <!-- Lugar nuevo y navegación -->
     <string name="newplace_chip">Lugar nuevo</string>
-    <string name="newplace_body">No conozco este lugar. Te aviso si das vueltas o vuelves al mismo punto.</string>
+    <string name="newplace_body">Te aviso si das vueltas por aquí.</string>
     <string name="newplace_start">Empezar</string>
     <string name="newplace_arrived">Llegaste a %1$s</string>
     <string name="newplace_save_destination">Guardar como destino</string>

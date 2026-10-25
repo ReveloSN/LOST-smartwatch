@@ -16,7 +16,6 @@ import com.lost.designsystem.components.atoms.SecondaryButtonStyle
 import com.lost.designsystem.components.templates.WatchScreenTemplate
 import com.lost.designsystem.preview.LostDevicePreviews
 import com.lost.designsystem.theme.LostTheme
-import com.lost.designsystem.tokens.ComponentTokens
 import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.watch.R
 
@@ -49,11 +48,14 @@ private fun LocationPermissionContent(onAllow: () -> Unit, onNotNow: () -> Unit)
         LostIcon(
             Icons.Rounded.LocationOn,
             null,
-            tint = SemanticTokens.Status.onRoute,
-            size = ComponentTokens.Icon.large
+            tint = SemanticTokens.Status.onRoute
         )
         LostText(stringResource(R.string.onboarding_location_title), role = LostTextRole.QUESTION)
-        LostText(stringResource(R.string.onboarding_location_body), color = SemanticTokens.Text.secondary)
+        LostText(
+            stringResource(R.string.onboarding_location_body),
+            role = LostTextRole.CAPTION,
+            color = SemanticTokens.Text.secondary
+        )
         LostPrimaryButton(label = stringResource(R.string.onboarding_allow), onClick = onAllow)
         LostSecondaryButton(
             label = stringResource(R.string.onboarding_not_now),

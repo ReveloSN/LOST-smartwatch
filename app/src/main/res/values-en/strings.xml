@@ -16,7 +16,7 @@
     <string name="onboarding_welcome_title">Hi, I’m LOST</string>
     <string name="onboarding_welcome_body">I learn your routes and help if you get lost.</string>
     <string name="onboarding_start">Start</string>
-    <string name="onboarding_location_title">Can we use your location?</string>
+    <string name="onboarding_location_title">Can I use your location?</string>
     <string name="onboarding_location_body">That’s how I learn your routes. They stay on your watch.</string>
     <string name="onboarding_allow">Allow</string>
     <string name="onboarding_not_now">Not now</string>
@@ -37,10 +37,6 @@
     <string name="home_new_place">Exploring a new place</string>
 
     <string name="learning_progress">%1$d of %2$d</string>
-    <plurals name="learning_seen">
-        <item quantity="one">We’ve seen this route %d time.</item>
-        <item quantity="other">We’ve seen this route %d times.</item>
-    </plurals>
     <plurals name="learning_remaining">
         <item quantity="one">One more and we’ll save it as your usual route.</item>
         <item quantity="other">%d more and we’ll save it as your usual route.</item>
@@ -119,7 +115,7 @@
     <string name="cd_navigation_arrow">Arrow pointing %1$s</string>
 
     <string name="newplace_chip">New place</string>
-    <string name="newplace_body">I don’t know this place. I’ll tell you if you walk in circles or come back to the same spot.</string>
+    <string name="newplace_body">I’ll let you know if you go in circles.</string>
     <string name="newplace_start">Start</string>
     <string name="newplace_arrived">You’ve arrived at %1$s</string>
     <string name="newplace_save_destination">Save as place</string>

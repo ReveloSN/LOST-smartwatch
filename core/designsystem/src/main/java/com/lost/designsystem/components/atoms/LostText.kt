@@ -32,7 +32,7 @@ fun LostText(
         modifier = modifier,
         style = role.style.copy(
             lineBreak = LineBreak.Paragraph,
-            hyphens = Hyphens.Auto
+            hyphens = Hyphens.None
         ),
         color = color,
         textAlign = textAlign,
