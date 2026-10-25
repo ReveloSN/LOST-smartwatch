@@ -64,7 +64,8 @@ LOST/
 ├── domain/              Kotlin puro: modelos, puertos, casos de uso, máquina de estados
 ├── ai/                  Kotlin puro: motor de detección y aprendizaje
 ├── data/                Room, DataStore, GPS, háptica, contactos, métricas, demo
-├── sample-routes/       GPX de la demo + generate_routes.py
+├── sample-routes/       GPX de la demo (calles reales)
+├── tools/               generate_osm_routes.py (regenera los GPX con OSRM)
 ├── config/detekt.yml    Reglas de calidad
 └── docs/                Diseño, investigación, IA, contenido, marca, métricas y ADRs
 ```
