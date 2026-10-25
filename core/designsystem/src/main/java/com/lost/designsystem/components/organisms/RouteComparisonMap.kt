@@ -7,7 +7,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -25,20 +25,19 @@ import com.lost.designsystem.tokens.ComponentTokens.RouteLine
 import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.designsystem.tokens.StatusTone
 
-/** Ruta de siempre en gris al 28 %, hoy en el color del estado y un pulso donde se separan. */
+/**
+ * Ruta de siempre en gris al 28 %, hoy en el color del estado y un pulso donde se separan.
+ * El pulso solo se anima si hay un punto de separación y se lee al dibujar (no recompone).
+ */
 @Composable
 fun RouteComparisonMap(content: RouteComparisonContent, modifier: Modifier = Modifier) {
-    val pulse by rememberInfiniteTransition(label = "divergencePulse").animateFloat(
-        initialValue = 1f,
-        targetValue = 2f,
-        animationSpec = infiniteRepeatable(tween(SemanticTokens.Motion.BREATHE_MILLIS / 2), RepeatMode.Reverse),
-        label = "pulseScale"
-    )
+    val pulseState = if (content.divergence != null) rememberPulse() else null
     val todayColor = SemanticTokens.Route.today(content.tone)
     Canvas(modifier = modifier.semantics { contentDescription = content.description }) {
         drawPolyline(content.habitual, SemanticTokens.Route.habitual, RouteLine.habitualWidth.toPx())
         drawPolyline(content.today, todayColor, RouteLine.todayWidth.toPx())
         content.divergence?.let { point ->
+            val pulse = pulseState?.value ?: 1f
             drawCircle(
                 todayColor.copy(alpha = 1f / pulse),
                 RouteLine.divergencePulseRadius.toPx() * pulse,
@@ -50,6 +49,14 @@ fun RouteComparisonMap(content: RouteComparisonContent, modifier: Modifier = Mod
         }
     }
 }
+
+@Composable
+private fun rememberPulse(): State<Float> = rememberInfiniteTransition(label = "divergencePulse").animateFloat(
+    initialValue = 1f,
+    targetValue = 2f,
+    animationSpec = infiniteRepeatable(tween(SemanticTokens.Motion.BREATHE_MILLIS / 2), RepeatMode.Reverse),
+    label = "pulseScale"
+)
 
 private fun DrawScope.scaled(point: Offset) = Offset(point.x * size.width, point.y * size.height)
 

@@ -56,12 +56,18 @@ private fun SettingsContent(
 ) {
     ListTemplate(title = stringResource(R.string.nav_settings)) {
         preferenceRows(state, onOpen, onEvent)
-        item { Row(Icons.Rounded.Translate, R.string.settings_language, currentLanguageName(), onOpenLanguage) }
-        item { Row(Icons.Rounded.Lock, R.string.settings_privacy, null) { onOpen(LostDestination.Privacy) } }
-        if (state.isDemoAvailable) {
-            item { Row(Icons.Rounded.PlayCircle, R.string.settings_demo, null) { onOpen(LostDestination.Demo) } }
+        item(key = "language") {
+            Row(Icons.Rounded.Translate, R.string.settings_language, currentLanguageName(), onOpenLanguage)
         }
-        item { Row(Icons.Rounded.Info, R.string.settings_about, null) { onOpen(LostDestination.About) } }
+        item(key = "privacy") {
+            Row(Icons.Rounded.Lock, R.string.settings_privacy, null) { onOpen(LostDestination.Privacy) }
+        }
+        if (state.isDemoAvailable) {
+            item(key = "demo") {
+                Row(Icons.Rounded.PlayCircle, R.string.settings_demo, null) { onOpen(LostDestination.Demo) }
+            }
+        }
+        item(key = "about") { Row(Icons.Rounded.Info, R.string.settings_about, null) { onOpen(LostDestination.About) } }
     }
 }
 
@@ -71,22 +77,22 @@ private fun ScalingLazyListScope.preferenceRows(
     onOpen: (LostDestination) -> Unit,
     onEvent: (SettingsUiEvent) -> Unit
 ) {
-    item {
+    item(key = "sensitivity") {
         Row(Icons.Rounded.Tune, R.string.settings_sensitivity, stringResource(SettingsLabels.of(state.sensitivity))) {
             onOpen(LostDestination.Sensitivity)
         }
     }
-    item {
+    item(key = "vibration") {
         Row(Icons.Rounded.Vibration, R.string.settings_vibration, stringResource(SettingsLabels.of(state.vibration))) {
             onEvent(SettingsUiEvent.ToggleVibration)
         }
     }
-    item {
+    item(key = "large-text") {
         Toggle(Icons.Rounded.TextFields, R.string.settings_large_text, state.isLargeTextEnabled) {
             onEvent(SettingsUiEvent.ToggleLargeText)
         }
     }
-    item {
+    item(key = "real-map") {
         Toggle(Icons.Rounded.Map, R.string.settings_real_map, state.isRealMapEnabled) {
             onEvent(SettingsUiEvent.ToggleRealMap)
         }
