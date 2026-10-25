@@ -9,9 +9,11 @@ import com.lost.watch.ui.map.MapUiState
 import com.lost.watch.ui.map.MapUiStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
@@ -22,8 +24,10 @@ class MonitoringViewModel @Inject constructor(
     walkingRoute: WalkingRouteGuide,
     mapStates: MapUiStateFlow
 ) : ViewModel() {
+    /** Proyectar cientos de puntos en cada actualización no se hace en el hilo de la UI. */
     val uiState: StateFlow<MonitoringUiState> = session.snapshot
         .map(mapper::map)
+        .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), MonitoringUiState.IDLE)
 
     /** En rutina: la ruta de siempre; en lugar nuevo: la ruta a pie sugerida (si se pidió). */
