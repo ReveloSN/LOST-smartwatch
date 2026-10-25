@@ -319,6 +319,10 @@ en **`docs/diseno/simplificacion.md`** (qué había, qué se quitó, qué pasó 
   (cabe en el círculo, 52 dp de área táctil); preguntas de hasta 3 líneas (en `en-XA` ya no se cortan);
   sin guiones de corte (partían "reco-rridos").
 - Textos más cortos en es/en/pt (`TranslationsTest` en verde) y tabla antes/después en `docs/contenido/glosario-voz.md`.
+- **Corona**: con Texto grande la alerta no cabía y "Estoy bien" quedaba debajo, pero las pantallas con
+  `WatchScreenTemplate` no escuchaban la corona (solo las listas). Ahora se desplazan con la corona
+  (`rotaryScrollable`) y muestran el indicador curvo; con grupos de foco jerárquicos solo la sección visible
+  —o la alerta, si está— recibe la corona. Probado con `input rotaryencoder` en el emulador.
 
 ### Mapa real (Paso 2) — ver `docs/adr/004-mapa-openstreetmap.md`
 
@@ -395,7 +399,8 @@ políticas de batería.
 | Brújula en un reloj real | El emulador no simula bien el sensor de rotación. | Probar la guía caminando con un reloj físico. |
 | Baseline Profile generado | El actual es escrito a mano (reglas con comodines). | Módulo `baselineprofile` con Macrobenchmark en un reloj. |
 | Servidor de teselas propio | tile.openstreetmap.org es comunitario; sirve para la demo, no para producción. | Proveedor propio o de pago con el mismo `MapTileSource`. |
-| Texto grande (+30 %) en las pantallas nuevas | Se revisó `en-XA`, no el modo Texto grande de Ajustes. | Activar Texto grande y recorrer las pantallas. |
+| Texto grande (+30 %): revisar todas las pantallas | Se revisaron Inicio, Monitoreo y la alerta (caben o se desplazan con la corona); faltan las demás. | Activar Texto grande y recorrer el resto con la corona. |
+| TalkBack en el emulador | No se recorrió la app con TalkBack. | Activar TalkBack y comprobar el orden de lectura del chip tocable y del mapa. |
 
 ### Qué revisar tú
 
