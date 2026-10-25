@@ -17,7 +17,7 @@
     <string name="onboarding_welcome_body">I learn your routes and help if you get lost.</string>
     <string name="onboarding_start">Start</string>
     <string name="onboarding_location_title">Can I use your location?</string>
-    <string name="onboarding_location_body">That’s how I learn your routes. They stay on your watch.</string>
+    <string name="onboarding_location_body">That’s how I learn your routes, which stay on your watch.</string>
     <string name="onboarding_allow">Allow</string>
     <string name="onboarding_not_now">Not now</string>
     <string name="onboarding_contact_title">Who should I tell if you need help?</string>
@@ -116,6 +116,7 @@
 
     <string name="newplace_chip">New place</string>
     <string name="newplace_body">I’ll let you know if you go in circles.</string>
+    <string name="newplace_route_privacy">For the walking route, I send start and destination to OpenStreetMap.</string>
     <string name="newplace_start">Start</string>
     <string name="newplace_arrived">You’ve arrived at %1$s</string>
     <string name="newplace_save_destination">Save as place</string>
@@ -124,6 +125,9 @@
     <string name="destinations_voice_example">“Take me home”</string>
     <string name="destinations_suggested">Suggested</string>
     <string name="destinations_recent">Recent</string>
+    <string name="destinations_results">Places found</string>
+    <string name="destinations_searching">Searching…</string>
+    <string name="destinations_search_privacy">Only what you said is sent.</string>
     <string name="destinations_not_found">I couldn’t find “%1$s” in your places.</string>
     <string name="destinations_empty">You don’t have saved places yet.</string>
     <string name="cd_voice_search">Search a place by voice</string>
@@ -150,11 +154,16 @@
     <string name="settings_on">On</string>
     <string name="settings_off">Off</string>
     <string name="settings_language">Language</string>
+    <string name="settings_real_map">Real map (uses internet)</string>
     <string name="settings_privacy">Privacy</string>
     <string name="settings_demo">Demo</string>
+    <string name="settings_about">About</string>
+    <string name="about_map">Maps, search and walking routes: OpenStreetMap.</string>
+    <string name="about_license">Data under the ODbL license.</string>
 
     <string name="privacy_on_device">Your routes stay on your watch.</string>
     <string name="privacy_sharing">Your location is only shared when you allow it.</string>
+    <string name="privacy_map">The map only requests areas and what you search.</string>
     <string name="privacy_delete">Delete what I learned</string>
     <string name="privacy_delete_hint">Press and hold for 2 seconds</string>
     <string name="privacy_deleted">Done. LOST will start learning again.</string>
@@ -202,6 +211,10 @@
     <string name="error_no_routines_todo">Walk as usual and LOST will learn.</string>
     <string name="error_storage_what">We couldn’t save your data.</string>
     <string name="error_storage_todo">Try again in a moment.</string>
+    <string name="error_map_what">We couldn’t load the map.</string>
+    <string name="error_map_todo">I’ll show your route without streets.</string>
+    <string name="error_search_what">We couldn’t search for that place.</string>
+    <string name="error_search_todo">Pick a saved destination or try later.</string>
 
     <string name="demo_title">Demo routes</string>
     <string name="demo_normal">Usual route</string>

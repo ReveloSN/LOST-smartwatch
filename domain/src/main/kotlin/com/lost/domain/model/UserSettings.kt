@@ -6,7 +6,9 @@ data class UserSettings(
     val vibrationIntensity: VibrationIntensity,
     val isLargeTextEnabled: Boolean,
     val isOnboardingCompleted: Boolean,
-    val thresholds: PersonalThresholds
+    val thresholds: PersonalThresholds,
+    /** Mapa real de OpenStreetMap (usa internet para las teselas). Apagado → mapa simple sin calles. */
+    val isRealMapEnabled: Boolean = true
 ) {
     companion object {
         val DEFAULT = UserSettings(

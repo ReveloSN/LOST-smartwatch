@@ -17,7 +17,7 @@
     <string name="onboarding_welcome_body">Aprendo seus percursos e te ajudo se você se perder.</string>
     <string name="onboarding_start">Começar</string>
     <string name="onboarding_location_title">Posso usar sua localização?</string>
-    <string name="onboarding_location_body">Assim aprendo seus percursos. Eles ficam no seu relógio.</string>
+    <string name="onboarding_location_body">Assim aprendo seus percursos, que ficam no seu relógio.</string>
     <string name="onboarding_allow">Permitir</string>
     <string name="onboarding_not_now">Agora não</string>
     <string name="onboarding_contact_title">Quem eu aviso se você precisar de ajuda?</string>
@@ -121,6 +121,7 @@
 
     <string name="newplace_chip">Lugar novo</string>
     <string name="newplace_body">Te aviso se você der voltas por aqui.</string>
+    <string name="newplace_route_privacy">Para a rota a pé, envio origem e destino ao OpenStreetMap.</string>
     <string name="newplace_start">Começar</string>
     <string name="newplace_arrived">Você chegou a %1$s</string>
     <string name="newplace_save_destination">Salvar como destino</string>
@@ -129,6 +130,9 @@
     <string name="destinations_voice_example">“Me leve para casa”</string>
     <string name="destinations_suggested">Sugerido</string>
     <string name="destinations_recent">Recente</string>
+    <string name="destinations_results">Lugares encontrados</string>
+    <string name="destinations_searching">Buscando…</string>
+    <string name="destinations_search_privacy">Só é enviado o que você ditou.</string>
     <string name="destinations_not_found">Não encontrei “%1$s” nos seus destinos.</string>
     <string name="destinations_empty">Você ainda não tem destinos salvos.</string>
     <string name="cd_voice_search">Buscar destino por voz</string>
@@ -155,11 +159,16 @@
     <string name="settings_on">Ativado</string>
     <string name="settings_off">Desativado</string>
     <string name="settings_language">Idioma</string>
+    <string name="settings_real_map">Mapa real (usa internet)</string>
     <string name="settings_privacy">Privacidade</string>
     <string name="settings_demo">Demonstração</string>
+    <string name="settings_about">Sobre</string>
+    <string name="about_map">Mapas, busca e rotas a pé: OpenStreetMap.</string>
+    <string name="about_license">Dados sob a licença ODbL.</string>
 
     <string name="privacy_on_device">Seus percursos ficam no seu relógio.</string>
     <string name="privacy_sharing">Sua localização só é compartilhada quando você autoriza.</string>
+    <string name="privacy_map">O mapa só pede áreas e o que você busca.</string>
     <string name="privacy_delete">Apagar o que aprendi</string>
     <string name="privacy_delete_hint">Mantenha pressionado por 2 segundos</string>
     <string name="privacy_deleted">Pronto. O LOST vai começar a aprender de novo.</string>
@@ -209,6 +218,10 @@
     <string name="error_no_routines_todo">Caminhe como sempre e o LOST vai aprender.</string>
     <string name="error_storage_what">Não conseguimos salvar seus dados.</string>
     <string name="error_storage_todo">Tente de novo em um momento.</string>
+    <string name="error_map_what">Não conseguimos carregar o mapa.</string>
+    <string name="error_map_todo">Mostro sua rota sem as ruas.</string>
+    <string name="error_search_what">Não conseguimos buscar esse lugar.</string>
+    <string name="error_search_todo">Escolha um destino salvo ou tente depois.</string>
 
     <string name="demo_title">Percursos de demonstração</string>
     <string name="demo_normal">Rota de sempre</string>

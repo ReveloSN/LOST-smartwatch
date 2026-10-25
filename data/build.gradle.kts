@@ -56,6 +56,8 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.mockk)
+    // org.json real en las pruebas JVM (en Android lo trae el sistema).
+    testImplementation(libs.org.json)
     testImplementation(libs.turbine)
     testImplementation(libs.coroutines.test)
 }

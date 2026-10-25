@@ -14,5 +14,7 @@ class UpdateSettingsUseCase @Inject constructor(private val writer: SettingsWrit
 
     suspend fun changeLargeText(isEnabled: Boolean) = writer.update { it.copy(isLargeTextEnabled = isEnabled) }
 
+    suspend fun changeRealMap(isEnabled: Boolean) = writer.update { it.copy(isRealMapEnabled = isEnabled) }
+
     suspend fun completeOnboarding() = writer.update { it.copy(isOnboardingCompleted = true) }
 }

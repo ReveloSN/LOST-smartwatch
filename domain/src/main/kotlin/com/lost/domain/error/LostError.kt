@@ -18,4 +18,10 @@ sealed interface LostError {
     data object NoRoutinesYet : LostError
 
     data class StorageFailure(val detail: String) : LostError
+
+    /** El mapa real no se pudo cargar (sin conexión o servidor caído): se usa el mapa simple. */
+    data object MapUnavailable : LostError
+
+    /** No se pudo buscar un lugar real (sin conexión o servidor caído). */
+    data object SearchUnavailable : LostError
 }

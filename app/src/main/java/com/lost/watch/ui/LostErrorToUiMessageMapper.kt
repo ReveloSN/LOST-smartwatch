@@ -27,5 +27,11 @@ class LostErrorToUiMessageMapper @Inject constructor() {
 
         is LostError.StorageFailure ->
             UiMessage(R.string.error_storage_what, null, R.string.error_storage_todo)
+
+        LostError.MapUnavailable ->
+            UiMessage(R.string.error_map_what, R.string.error_connection_why, R.string.error_map_todo)
+
+        LostError.SearchUnavailable ->
+            UiMessage(R.string.error_search_what, R.string.error_connection_why, R.string.error_search_todo)
     }
 }
