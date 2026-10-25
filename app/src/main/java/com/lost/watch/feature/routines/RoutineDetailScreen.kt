@@ -21,15 +21,16 @@ import com.lost.designsystem.components.atoms.LostText
 import com.lost.designsystem.components.atoms.LostTextRole
 import com.lost.designsystem.components.atoms.SecondaryButtonStyle
 import com.lost.designsystem.components.organisms.RouteComparisonContent
-import com.lost.designsystem.components.organisms.RouteComparisonMap
 import com.lost.designsystem.components.templates.WatchScreenTemplate
 import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.designsystem.tokens.StatusTone
 import com.lost.watch.R
 import com.lost.watch.ui.RouteProjector
+import com.lost.watch.ui.map.AdaptiveMapSizing
+import com.lost.watch.ui.map.AdaptiveRouteMap
 import com.lost.watch.ui.scheduleText
 
-private const val MAP_WIDTH_FRACTION = 0.6f
+private const val MAP_WIDTH_FRACTION = 0.75f
 
 /** B.3 · Detalle del recorrido: trayectoria de referencia y acciones (guardar, renombrar por voz, borrar). */
 @Composable
@@ -61,15 +62,17 @@ private fun RoutineDetailContent(
     val title = item.name ?: stringResource(R.string.routine_new)
     val projected = remember(state.path) { RouteProjector().project(state.path, emptyList()) }
     WatchScreenTemplate {
-        RouteComparisonMap(
-            RouteComparisonContent(
+        val square = Modifier.fillMaxWidth(MAP_WIDTH_FRACTION).aspectRatio(1f)
+        AdaptiveRouteMap(
+            state = state.map,
+            simple = RouteComparisonContent(
                 projected.habitual,
                 emptyList(),
                 null,
                 StatusTone.ON_ROUTE,
                 stringResource(R.string.cd_routine_map, title)
             ),
-            modifier = Modifier.fillMaxWidth(MAP_WIDTH_FRACTION).aspectRatio(1f)
+            sizing = AdaptiveMapSizing(real = square, simple = square)
         )
         LostText(title, role = LostTextRole.TITLE)
         LostText(

@@ -39,6 +39,13 @@ private fun NewPlaceContent(state: NewPlaceUiState, onStart: () -> Unit) {
             role = LostTextRole.CAPTION,
             color = SemanticTokens.Text.secondary
         )
+        if (state.sendsWalkingRoute) {
+            LostText(
+                stringResource(R.string.newplace_route_privacy),
+                role = LostTextRole.CAPTION,
+                color = SemanticTokens.Text.secondary
+            )
+        }
         LostPrimaryButton(stringResource(R.string.newplace_start), onStart)
     }
 }

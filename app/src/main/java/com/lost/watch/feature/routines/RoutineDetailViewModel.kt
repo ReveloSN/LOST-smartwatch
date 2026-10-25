@@ -8,12 +8,15 @@ import com.lost.domain.usecase.DeleteRoutineUseCase
 import com.lost.domain.usecase.ObserveRoutinesUseCase
 import com.lost.domain.usecase.RenameRoutineUseCase
 import com.lost.watch.navigation.LostDestination
+import com.lost.watch.ui.map.MapRoutes
+import com.lost.watch.ui.map.MapUiStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -22,18 +25,22 @@ class RoutineDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     observeRoutines: ObserveRoutinesUseCase,
     private val actions: RoutineActions,
-    mapper: RoutineItemMapper
+    mapper: RoutineItemMapper,
+    mapStates: MapUiStateFlow
 ) : ViewModel() {
     private val routineId: String = checkNotNull(savedStateHandle[LostDestination.RoutineDetail.ARG_ROUTINE_ID])
     private val deletion = MutableStateFlow(DeletionStep.IDLE)
 
-    val uiState: StateFlow<RoutineDetailUiState> = combine(observeRoutines(), deletion) { routines, step ->
-        val routine = routines.firstOrNull { it.id == routineId }
+    private val routine = observeRoutines().map { routines -> routines.firstOrNull { it.id == routineId } }
+    private val mapState = mapStates.of(routine.map { MapRoutes(it?.path.orEmpty(), emptyList()) })
+
+    val uiState: StateFlow<RoutineDetailUiState> = combine(routine, deletion, mapState) { routine, step, map ->
         RoutineDetailUiState(
             item = routine?.let(mapper::map),
             path = routine?.path.orEmpty(),
             isDeleteArmed = step == DeletionStep.ARMED,
-            isDeleted = step == DeletionStep.DONE
+            isDeleted = step == DeletionStep.DONE,
+            map = map
         )
     }.stateIn(
         viewModelScope,
