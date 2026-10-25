@@ -67,11 +67,11 @@ Las rutas de demo se regeneran con `python tools/generate_osm_routes.py` cambian
 | Módulo | Pruebas |
 |---|---|
 | `core/designsystem` | 8 (contraste WCAG) |
-| `domain` | 64 (máquina de estados, cadena de respuesta, temporizadores, monitor, casos de uso, métricas) |
-| `ai` | 34 (las 5 de escenario de la sección 8.5 + geometría, DTW, señales, aprendizaje) |
-| `data` | 21 (mappers, repositorios, DataStore, GPX, demo, háptica) |
-| `app` | 40 (mappers de UI, ViewModel, demo GPX de punta a punta, traducciones, accesibilidad) |
-| **Total** | **167** |
+| `domain` | 91 (máquina de estados, cadena de respuesta, temporizadores, monitor, casos de uso, métricas, mapa, batería) |
+| `ai` | 38 (las 5 de escenario de la sección 8.5 + geometría, DTW, señales, aprendizaje, rendimiento) |
+| `data` | 29 (mappers, repositorios, DataStore, GPX, demo, háptica, caché de teselas, Nominatim, OSRM) |
+| `app` | 45 (mappers de UI, ViewModel, demo GPX de punta a punta, traducciones, accesibilidad, búsqueda de destinos) |
+| **Total** | **211** |
 
 ## Estructura
 
