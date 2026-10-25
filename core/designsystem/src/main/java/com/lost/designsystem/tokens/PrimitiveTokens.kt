@@ -57,6 +57,7 @@ object PrimitiveTokens {
         const val ALPHA_14 = 0.14f
         const val ALPHA_28 = 0.28f
         const val ALPHA_60 = 0.60f
+        const val ALPHA_70 = 0.70f
     }
 
     object Motion {

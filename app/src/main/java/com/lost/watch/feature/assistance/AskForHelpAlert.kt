@@ -48,10 +48,10 @@ fun AskForHelpAlert(state: AssistanceUiState.AskForHelp, onEvent: (AssistanceUiE
     }
 }
 
-/** En un lugar nuevo no hay "ruta de siempre": el contexto es la razón concreta. */
+/** En un lugar nuevo no hay "ruta de siempre": el contexto es la razón principal (una sola, para que quepa). */
 @Composable
 private fun alertContext(state: AssistanceUiState.AskForHelp): String? =
-    if (state.isNewPlace) explanationSentence(state.reasons) else state.tone.context?.let { stringResource(it) }
+    if (state.isNewPlace) explanationSentence(state.reasons.take(1)) else state.tone.context?.let { stringResource(it) }
 
 @LostDevicePreviews
 @Composable

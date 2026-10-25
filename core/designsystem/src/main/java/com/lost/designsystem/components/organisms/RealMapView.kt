@@ -41,7 +41,10 @@ fun RealMapView(content: RealMapContent, modifier: Modifier = Modifier) {
     Box(modifier = modifier.clipToBounds()) {
         Canvas(modifier = Modifier.fillMaxSize().semantics { contentDescription = content.description }) {
             content.tiles.forEach { drawTile(it) }
-            drawRoute(content.habitual, SemanticTokens.Route.habitual, RouteLine.habitualWidth.toPx())
+            val casing = RealMap.casingExtraWidth.toPx()
+            drawRoute(content.habitual, SemanticTokens.Route.casing, RealMap.habitualWidth.toPx() + casing)
+            drawRoute(content.habitual, SemanticTokens.Route.habitualOnMap, RealMap.habitualWidth.toPx())
+            drawRoute(content.today, SemanticTokens.Route.casing, RealMap.todayWidth.toPx() + casing)
             drawRoute(content.today, SemanticTokens.Route.today(content.tone), RealMap.todayWidth.toPx())
             content.today.lastOrNull()?.let { user ->
                 drawCircle(SemanticTokens.Text.primary, RouteLine.userDotRadius.toPx(), at(user))
