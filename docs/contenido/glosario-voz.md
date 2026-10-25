@@ -67,6 +67,10 @@ El tono lo decide `ToneResolver` (`app/.../ui/ToneResolver.kt`) a partir del `As
 | Network error | No pudimos avisar a tu contacto. |
 | Location permission denied | LOST no tiene permiso para usar tu ubicación. |
 | Purge training data | Borrar lo aprendido |
+| Tile server unreachable | No pudimos cargar el mapa. Te muestro tu ruta sin calles. |
+| Geocoding API error | No pudimos buscar ese lugar. Elige un destino guardado o intenta luego. |
+| Online map toggle | Mapa real (usa internet) |
+| Geocoding / routing request | "Solo se envía lo que dictaste." · "Para la ruta a pie, envío origen y destino a OpenStreetMap." |
 
 ## Mensajes de error: qué pasó · por qué · qué hacer
 

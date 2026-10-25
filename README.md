@@ -12,6 +12,9 @@ App nativa para **Wear OS** que aprende tus recorridos habituales y nota cuándo
 - **Ayuda escalonada**: vibrar y preguntar → guiar con una flecha → compartir la ubicación (cuenta de 5 s cancelable).
 - **Aprende de ti**: "Estoy bien" hace que pregunte menos en casos así.
 - **Lugar nuevo** (hospital, aeropuerto): sin rutina, detecta vueltas y regresos al mismo punto.
+- **Mapa real** de OpenStreetMap (sin llave de API): tu ruta de siempre y la de hoy sobre calles reales; sin internet, mini-mapa simple.
+- **Destinos reales por voz**: si no está guardado, lo busca en OpenStreetMap y lo guarda con sus coordenadas.
+- **Flecha con brújula**: en la guía, la flecha gira según hacia dónde miras.
 - Español, inglés y portugués; texto grande; TalkBack; contraste WCAG AA verificado por prueba.
 
 ## Requisitos
@@ -25,7 +28,7 @@ App nativa para **Wear OS** que aprende tus recorridos habituales y nota cuándo
 ./gradlew :app:installDebug
 ```
 
-La compilación *debug* corre en **modo demo**: GPS simulado con los GPX de `sample-routes/`, aviso al contacto simulado (nunca envía un SMS real) y datos de ejemplo (rutina "Casa → U", Laura como contacto, destinos del campus).
+La compilación *debug* corre en **modo demo**: GPS simulado con los GPX de `sample-routes/` (calles reales alrededor de la Universidad Nacional de Colombia, Bogotá), aviso al contacto simulado (nunca envía un SMS real) y datos de ejemplo (rutina "Casa → U", Laura como contacto, destinos del campus y la Clínica Palermo).
 
 ### Demo de la historia de Sebastián
 
@@ -39,6 +42,21 @@ La compilación *debug* corre en **modo demo**: GPS simulado con los GPX de `sam
 4. Desliza entre secciones para ver **Mis recorridos**, **Destinos**, **Contactos**, **Ajustes** y **Tu semana** (métricas).
 
 La reproducción va 10× más rápido que caminar, pero conserva los tiempos reales para el motor.
+
+## Mapa real y privacidad
+
+El mapa usa **OpenStreetMap** con un renderizador propio (ver `docs/adr/004-mapa-openstreetmap.md`). Se puede apagar en
+**Ajustes → Mapa real (usa internet)**; apagado, LOST no hace ninguna petición a internet.
+
+| Qué sale del reloj | Cuándo |
+|---|---|
+| La zona del mapa (tesela z/x/y) | Al ver Monitoreo o el detalle de una rutina. |
+| El texto buscado (sin "llévame a…") | Al enviar un dictado que no coincide con un destino guardado. |
+| Origen y destino de una ruta a pie | Al empezar "Lugar nuevo" (la pantalla lo avisa antes). |
+| **Nunca** | Los recorridos aprendidos, el historial ni el contacto. |
+
+Atribución: © OpenStreetMap contributors (bajo el estado en Monitoreo y en Ajustes → Acerca de).
+Las rutas de demo se regeneran con `python tools/generate_osm_routes.py` cambiando una sola constante (`CENTER`).
 
 ## Verificar
 
@@ -82,7 +100,8 @@ LOST/
 | Voz, tono, glosario y errores | `docs/contenido/glosario-voz.md` |
 | Personalidad de la marca | `docs/marca/personalidad.md` |
 | Métricas y cuestionario SUS | `docs/metricas/` |
-| Decisiones (ADR) | `docs/adr/` |
+| Decisiones (ADR) | `docs/adr/` (001 arquitectura · 002 DTW · 003 máquina de estados · 004 mapa OpenStreetMap) |
+| Simplificación de la interfaz (antes/después) | `docs/diseno/simplificacion.md` |
 | Mockups | `docs/design/LOST v2.dc.html` |
 
 ## Stack
