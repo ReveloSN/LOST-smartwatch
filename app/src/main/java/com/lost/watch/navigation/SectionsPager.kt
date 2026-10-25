@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.wear.compose.foundation.hierarchicalFocusGroup
 import com.lost.designsystem.components.molecules.PageIndicator
 import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.watch.R
@@ -28,7 +29,10 @@ fun SectionsPager(navigator: LostNavigator) {
     val pagerState = rememberPagerState { sections.size }
     Box(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-            SectionPage(sections[page], navigator)
+            // Solo la sección visible recibe la corona (las vecinas se componen durante el deslizamiento).
+            Box(Modifier.fillMaxSize().hierarchicalFocusGroup(active = page == pagerState.currentPage)) {
+                SectionPage(sections[page], navigator)
+            }
         }
         val current = sections[pagerState.currentPage]
         PageIndicator(
