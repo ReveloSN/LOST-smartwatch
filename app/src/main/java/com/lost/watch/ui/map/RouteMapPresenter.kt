@@ -32,13 +32,13 @@ class RouteMapPresenter @Inject constructor(
 ) {
     private val images = LruCache<TileKey, ImageBitmap>(DECODED_TILES)
 
-    suspend fun present(habitual: List<GeoPoint>, today: List<GeoPoint>): LostResult<RouteMapPicture> {
+    suspend fun present(routes: MapRoutes): LostResult<RouteMapPicture> {
         val screenPx = context.resources.displayMetrics.widthPixels
         val viewportPx = (screenPx / ComponentTokens.RealMap.TILE_DISPLAY_SCALE).toInt()
-        val frame = ViewportFrame(viewportPx, viewportPx, ComponentTokens.RealMap.FIT_MARGIN_FRACTION)
-        return when (val result = loadRouteMap(habitual + today, frame)) {
+        val frame = ViewportFrame(viewportPx, viewportPx, routes.marginFraction)
+        return when (val result = loadRouteMap(routes.habitual + routes.today, frame)) {
             is LostResult.Failure -> result
-            is LostResult.Success -> LostResult.Success(picture(result.value, habitual, today))
+            is LostResult.Success -> LostResult.Success(picture(result.value, routes.habitual, routes.today))
         }
     }
 

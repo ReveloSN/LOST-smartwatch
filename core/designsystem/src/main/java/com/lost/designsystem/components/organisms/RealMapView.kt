@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -37,7 +38,7 @@ import com.lost.designsystem.tokens.StatusTone
  */
 @Composable
 fun RealMapView(content: RealMapContent, modifier: Modifier = Modifier) {
-    Box(modifier = modifier) {
+    Box(modifier = modifier.clipToBounds()) {
         Canvas(modifier = Modifier.fillMaxSize().semantics { contentDescription = content.description }) {
             content.tiles.forEach { drawTile(it) }
             drawRoute(content.habitual, SemanticTokens.Route.habitual, RouteLine.habitualWidth.toPx())

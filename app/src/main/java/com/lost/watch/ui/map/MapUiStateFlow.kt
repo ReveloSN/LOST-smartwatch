@@ -27,9 +27,8 @@ class MapUiStateFlow @Inject constructor(
             .map { (enabled, request) -> if (enabled && !request.isEmpty) load(request) else MapUiState.Simple }
     }
 
-    private suspend fun load(routes: MapRoutes): MapUiState =
-        when (val result = presenter.present(routes.habitual, routes.today)) {
-            is LostResult.Success -> MapUiState.Real(result.value)
-            is LostResult.Failure -> MapUiState.Unavailable(errors.map(result.error))
-        }
+    private suspend fun load(routes: MapRoutes): MapUiState = when (val result = presenter.present(routes)) {
+        is LostResult.Success -> MapUiState.Real(result.value)
+        is LostResult.Failure -> MapUiState.Unavailable(errors.map(result.error))
+    }
 }

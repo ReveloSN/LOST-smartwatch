@@ -3,6 +3,7 @@ package com.lost.watch.feature.routines
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lost.designsystem.tokens.ComponentTokens
 import com.lost.domain.usecase.ConfirmRoutineUseCase
 import com.lost.domain.usecase.DeleteRoutineUseCase
 import com.lost.domain.usecase.ObserveRoutinesUseCase
@@ -32,7 +33,11 @@ class RoutineDetailViewModel @Inject constructor(
     private val deletion = MutableStateFlow(DeletionStep.IDLE)
 
     private val routine = observeRoutines().map { routines -> routines.firstOrNull { it.id == routineId } }
-    private val mapState = mapStates.of(routine.map { MapRoutes(it?.path.orEmpty(), emptyList()) })
+    private val mapState = mapStates.of(
+        routine.map {
+            MapRoutes(it?.path.orEmpty(), emptyList(), ComponentTokens.RealMap.SMALL_MAP_FIT_MARGIN_FRACTION)
+        }
+    )
 
     val uiState: StateFlow<RoutineDetailUiState> = combine(routine, deletion, mapState) { routine, step, map ->
         RoutineDetailUiState(

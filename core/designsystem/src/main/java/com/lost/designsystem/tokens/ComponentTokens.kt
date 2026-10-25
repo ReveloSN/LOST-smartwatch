@@ -81,6 +81,9 @@ object ComponentTokens {
 
         /** Margen del encuadre: las rutas quedan en el centro, lejos del chip y del titular. */
         const val FIT_MARGIN_FRACTION: Double = 0.3
+
+        /** En un mapa pequeño (detalle de rutina) no hay textos encima: la ruta puede llenarlo. */
+        const val SMALL_MAP_FIT_MARGIN_FRACTION: Double = 0.12
         val attributionPadding: Dp = SemanticTokens.Spacing.xs
     }
 
