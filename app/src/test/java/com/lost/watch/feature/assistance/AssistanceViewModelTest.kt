@@ -7,11 +7,13 @@ import com.lost.domain.detection.AssistanceLevel
 import com.lost.domain.port.ContactReader
 import com.lost.domain.session.TripSession
 import com.lost.domain.usecase.ObserveAuthorizedContactUseCase
+import com.lost.domain.usecase.ObserveCompassHeadingUseCase
 import com.lost.watch.AppFixtures
 import com.lost.watch.MainDispatcherExtension
 import com.lost.watch.integration.ShareOutcomeStore
 import com.lost.watch.ui.LostErrorToUiMessageMapper
 import com.lost.watch.ui.ToneResolver
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -24,7 +26,8 @@ class AssistanceViewModelTest {
         session = session,
         observeContact = ObserveAuthorizedContactUseCase(ContactReader { flowOf(null) }),
         shareOutcome = ShareOutcomeStore(),
-        mapper = AssistanceUiStateMapper(LostErrorToUiMessageMapper(), ToneResolver())
+        mapper = AssistanceUiStateMapper(LostErrorToUiMessageMapper(), ToneResolver()),
+        observeHeading = ObserveCompassHeadingUseCase { emptyFlow() }
     )
 
     private fun askForHelp() {

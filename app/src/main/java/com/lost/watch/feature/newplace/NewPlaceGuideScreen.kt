@@ -40,7 +40,7 @@ private fun GuideContent(state: NewPlaceGuideUiState, onStop: () -> Unit) {
             DistanceContent(
                 distance = state.distanceMeters?.let { formatDistance(it) }.orEmpty(),
                 detail = state.destinationName.orEmpty(),
-                arrowRotationDegrees = state.bearingDegrees,
+                arrowRotationDegrees = state.arrowDegrees,
                 arrowDescription = arrowDescription(state.bearingDegrees)
             )
         )

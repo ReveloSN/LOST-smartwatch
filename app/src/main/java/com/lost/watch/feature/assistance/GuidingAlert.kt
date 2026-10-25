@@ -31,7 +31,7 @@ fun GuidingAlert(state: AssistanceUiState.Guiding) {
             DistanceContent(
                 distance = formatDistance(meters),
                 detail = pluralStringResource(R.plurals.assist_walk_minutes, minutes, minutes),
-                arrowRotationDegrees = state.bearingDegrees,
+                arrowRotationDegrees = state.arrowDegrees,
                 arrowDescription = arrowDescription(state.bearingDegrees)
             )
         )
