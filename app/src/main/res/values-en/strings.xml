@@ -162,7 +162,7 @@
     <string name="about_license">Data under the ODbL license.</string>
 
     <string name="privacy_on_device">Your routes stay on your watch.</string>
-    <string name="privacy_sharing">Your location is only shared when you allow it.</string>
+    <string name="privacy_sharing">Your location is shared only if you allow it.</string>
     <string name="privacy_map">The map only requests areas and what you search.</string>
     <string name="privacy_delete">Delete what I learned</string>
     <string name="privacy_delete_hint">Press and hold for 2 seconds</string>

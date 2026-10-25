@@ -167,7 +167,7 @@
     <string name="about_license">Dados sob a licença ODbL.</string>
 
     <string name="privacy_on_device">Seus percursos ficam no seu relógio.</string>
-    <string name="privacy_sharing">Sua localização só é compartilhada quando você autoriza.</string>
+    <string name="privacy_sharing">Só compartilho sua localização se você permitir.</string>
     <string name="privacy_map">O mapa só pede áreas e o que você busca.</string>
     <string name="privacy_delete">Apagar o que aprendi</string>
     <string name="privacy_delete_hint">Mantenha pressionado por 2 segundos</string>

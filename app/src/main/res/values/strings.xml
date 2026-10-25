@@ -185,7 +185,7 @@
 
     <!-- Privacidad -->
     <string name="privacy_on_device">Tus recorridos se quedan en tu reloj.</string>
-    <string name="privacy_sharing">Solo se comparte tu ubicación cuando lo autorizas.</string>
+    <string name="privacy_sharing">Tu ubicación se comparte solo si lo autorizas.</string>
     <string name="privacy_map">El mapa solo pide zonas y lo que buscas.</string>
     <string name="privacy_delete">Borrar lo aprendido</string>
     <string name="privacy_delete_hint">Mantén presionado 2 segundos</string>
