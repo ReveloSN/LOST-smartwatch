@@ -4,27 +4,27 @@ import com.lost.domain.error.LostResult
 import com.lost.domain.port.SettingsReader
 import com.lost.watch.ui.LostErrorToUiMessageMapper
 import javax.inject.Inject
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 
 /**
  * Convierte "qué rutas mostrar" en el [MapUiState] de una pantalla. Si el usuario apagó
- * el mapa real no se pide nada a la red; si llega una ruta nueva se cancela la carga anterior.
+ * el mapa real no se pide nada a la red. Cada carga termina (no se cancela con cada punto GPS:
+ * si no, con puntos frecuentes el mapa nunca llegaría) y luego se toma solo la ruta más reciente.
  */
 class MapUiStateFlow @Inject constructor(
     private val settings: SettingsReader,
     private val presenter: RouteMapPresenter,
     private val errors: LostErrorToUiMessageMapper
 ) {
-    @OptIn(ExperimentalCoroutinesApi::class)
     fun of(routes: Flow<MapRoutes>): Flow<MapUiState> {
         val isEnabled = settings.observeSettings().map { it.isRealMapEnabled }.distinctUntilChanged()
         return combine(isEnabled, routes.distinctUntilChanged()) { enabled, request -> enabled to request }
-            .mapLatest { (enabled, request) -> if (enabled && !request.isEmpty) load(request) else MapUiState.Simple }
+            .conflate()
+            .map { (enabled, request) -> if (enabled && !request.isEmpty) load(request) else MapUiState.Simple }
     }
 
     private suspend fun load(routes: MapRoutes): MapUiState =
