@@ -4,15 +4,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Vibration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.lost.designsystem.components.atoms.LostText
-import com.lost.designsystem.components.atoms.LostTextRole
 import com.lost.designsystem.components.molecules.ActionButtonContent
 import com.lost.designsystem.components.molecules.DualActionButtons
 import com.lost.designsystem.components.templates.AlertHeader
 import com.lost.designsystem.components.templates.AlertTemplate
 import com.lost.designsystem.preview.LostDevicePreviews
 import com.lost.designsystem.theme.LostTheme
-import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.domain.detection.DeviationReason
 import com.lost.domain.model.units.Meters
 import com.lost.watch.R
@@ -26,6 +23,7 @@ private const val HIGH_ARC = 1f
 /**
  * F.2 / E.3 · Vibrar y preguntar. El tono cambia con el nivel: atento ("¿Necesitas ayuda?")
  * o firme y claro ("Creo que necesitas ayuda. Te guío y aviso a tu contacto.").
+ * Solo el contexto corto y la pregunta: las dos respuestas caben sin desplazar.
  */
 @Composable
 fun AskForHelpAlert(state: AssistanceUiState.AskForHelp, onEvent: (AssistanceUiEvent) -> Unit) {
@@ -47,13 +45,6 @@ fun AskForHelpAlert(state: AssistanceUiState.AskForHelp, onEvent: (AssistanceUiE
                 onEvent(AssistanceUiEvent.ImFine)
             }
         )
-        if (state.reasons.isNotEmpty() && !state.isNewPlace) {
-            LostText(
-                explanationSentence(state.reasons),
-                role = LostTextRole.CAPTION,
-                color = SemanticTokens.Text.secondary
-            )
-        }
     }
 }
 

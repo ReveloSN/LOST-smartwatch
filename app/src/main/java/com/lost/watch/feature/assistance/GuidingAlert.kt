@@ -20,18 +20,11 @@ import kotlin.math.ceil
 private const val WALKING_METERS_PER_MINUTE = 84.0
 private const val GUIDE_ARC = 1f
 
-/** F.3 · Volver a tu ruta de siempre: flecha grande, distancia y tiempo caminando. */
+/** F.3 · Volver a tu ruta: a dónde (título), flecha con la distancia y el tiempo caminando. Nada repetido. */
 @Composable
 fun GuidingAlert(state: AssistanceUiState.Guiding) {
     WatchScreenTemplate(ring = { ProbabilityArc(StatusTone.ON_ROUTE, GUIDE_ARC) }) {
-        val title = if (state.destinationName !=
-            null
-        ) {
-            state.destinationName
-        } else {
-            stringResource(R.string.assist_back_to_route)
-        }
-        LostText(title, role = LostTextRole.CAPTION)
+        LostText(state.destinationName ?: stringResource(R.string.assist_back_to_route), role = LostTextRole.TITLE)
         val meters = state.distanceMeters ?: 0.0
         val minutes = ceil(meters / WALKING_METERS_PER_MINUTE).toInt().coerceAtLeast(1)
         DistanceIndicator(
@@ -42,9 +35,6 @@ fun GuidingAlert(state: AssistanceUiState.Guiding) {
                 arrowDescription = arrowDescription(state.bearingDegrees)
             )
         )
-        val toward = state.destinationName?.let { stringResource(R.string.assist_toward_destination, it) }
-            ?: stringResource(R.string.assist_toward_route)
-        LostText(toward, role = LostTextRole.CAPTION)
     }
 }
 

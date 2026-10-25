@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CalendarToday
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.material.icons.rounded.TextFields
@@ -28,7 +27,7 @@ import com.lost.domain.model.VibrationIntensity
 import com.lost.watch.R
 import com.lost.watch.navigation.LostDestination
 
-/** 04.1 · Ajustes en lista circular. Contactos vive en su propia sección global. */
+/** 04.1 · Ajustes en lista circular. Contactos y Tu semana viven en su propia sección (sin duplicar entradas). */
 @Composable
 fun SettingsScreen(onOpen: (LostDestination) -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -74,7 +73,6 @@ private fun SettingsContent(
         }
         item { Row(Icons.Rounded.Translate, R.string.settings_language, language, onOpenLanguage) }
         item { Row(Icons.Rounded.Lock, R.string.settings_privacy, null) { onOpen(LostDestination.Privacy) } }
-        item { Row(Icons.Rounded.CalendarToday, R.string.settings_week, null) { onOpen(LostDestination.Insights) } }
         if (state.isDemoAvailable) {
             item { Row(Icons.Rounded.PlayCircle, R.string.settings_demo, null) { onOpen(LostDestination.Demo) } }
         }

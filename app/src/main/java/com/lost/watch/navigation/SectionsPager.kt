@@ -50,10 +50,7 @@ fun SectionsPager(navigator: LostNavigator) {
 @Composable
 private fun SectionPage(section: GlobalSection, navigator: LostNavigator) {
     when (section) {
-        GlobalSection.HOME -> HomeScreen(
-            onOpenMonitoring = { navigator.open(LostDestination.Monitoring) },
-            onOpenDemo = { navigator.open(LostDestination.Demo) }
-        )
+        GlobalSection.HOME -> HomeScreen(onOpenMonitoring = { navigator.open(LostDestination.Monitoring) })
 
         GlobalSection.ROUTINES -> RoutinesScreen(
             onOpenRoutine = navigator::openRoutine,
