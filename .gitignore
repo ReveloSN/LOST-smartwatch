@@ -17,3 +17,5 @@ local.properties
 .kotlin/
 .claude/settings.local.json
 build/
+ai/bin/
+domain/bin/
