@@ -135,7 +135,7 @@
     <!-- Lugar nuevo y navegación -->
     <string name="newplace_chip">Lugar nuevo</string>
     <string name="newplace_body">Te aviso si das vueltas por aquí.</string>
-    <string name="newplace_route_privacy">Para la ruta a pie, envío origen y destino a OpenStreetMap.</string>
+    <string name="newplace_route_privacy">Envío inicio y destino a OpenStreetMap.</string>
     <string name="newplace_start">Empezar</string>
     <string name="newplace_arrived">Llegaste a %1$s</string>
     <string name="newplace_save_destination">Guardar como destino</string>

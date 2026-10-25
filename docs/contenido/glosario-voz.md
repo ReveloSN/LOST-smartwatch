@@ -70,7 +70,7 @@ El tono lo decide `ToneResolver` (`app/.../ui/ToneResolver.kt`) a partir del `As
 | Tile server unreachable | No pudimos cargar el mapa. Te muestro tu ruta sin calles. |
 | Geocoding API error | No pudimos buscar ese lugar. Elige un destino guardado o intenta luego. |
 | Online map toggle | Mapa real (usa internet) |
-| Geocoding / routing request | "Solo se envía lo que dictaste." · "Para la ruta a pie, envío origen y destino a OpenStreetMap." |
+| Geocoding / routing request | "Solo se envía lo que dictaste." · "Envío inicio y destino a OpenStreetMap." (en Lugar nuevo) |
 
 ## Mensajes de error: qué pasó · por qué · qué hacer
 

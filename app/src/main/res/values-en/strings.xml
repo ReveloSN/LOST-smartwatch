@@ -116,7 +116,7 @@
 
     <string name="newplace_chip">New place</string>
     <string name="newplace_body">I’ll let you know if you go in circles.</string>
-    <string name="newplace_route_privacy">For the walking route, I send start and destination to OpenStreetMap.</string>
+    <string name="newplace_route_privacy">I send start and destination to OpenStreetMap.</string>
     <string name="newplace_start">Start</string>
     <string name="newplace_arrived">You’ve arrived at %1$s</string>
     <string name="newplace_save_destination">Save as place</string>
