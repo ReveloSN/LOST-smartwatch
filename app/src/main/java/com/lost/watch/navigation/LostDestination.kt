@@ -47,6 +47,10 @@ sealed interface LostDestination {
         override val route = "settings/privacy"
     }
 
+    data object About : LostDestination {
+        override val route = "settings/about"
+    }
+
     data object Demo : LostDestination {
         override val route = "demo"
     }

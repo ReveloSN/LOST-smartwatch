@@ -18,6 +18,7 @@ import com.lost.watch.feature.onboarding.ContactSetupScreen
 import com.lost.watch.feature.onboarding.LocationPermissionScreen
 import com.lost.watch.feature.onboarding.WelcomeScreen
 import com.lost.watch.feature.routines.RoutineDetailScreen
+import com.lost.watch.feature.settings.AboutScreen
 import com.lost.watch.feature.settings.PrivacyScreen
 import com.lost.watch.feature.settings.SensitivityScreen
 
@@ -69,4 +70,5 @@ private fun NavGraphBuilder.settingsRoutes(navigator: LostNavigator) {
     composable(LostDestination.Metrics.route) { MetricsScreen() }
     composable(LostDestination.Sensitivity.route) { SensitivityScreen() }
     composable(LostDestination.Privacy.route) { PrivacyScreen() }
+    composable(LostDestination.About.route) { AboutScreen() }
 }

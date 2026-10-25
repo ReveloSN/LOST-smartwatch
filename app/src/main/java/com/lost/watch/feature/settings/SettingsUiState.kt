@@ -13,5 +13,6 @@ data class SettingsUiState(
     val isLargeTextEnabled: Boolean,
     val habitualRoutineMinutes: Int?,
     val isDemoAvailable: Boolean,
-    val hasDeletedLearning: Boolean
+    val hasDeletedLearning: Boolean,
+    val isRealMapEnabled: Boolean = true
 )

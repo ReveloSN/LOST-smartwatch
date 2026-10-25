@@ -41,7 +41,8 @@ class SettingsViewModel @Inject constructor(
             isLargeTextEnabled = settings.isLargeTextEnabled,
             habitualRoutineMinutes = routines.firstOrNull { it.isConfirmed }?.duration?.meanMinutes?.roundToInt(),
             isDemoAvailable = DemoMode.isEnabled,
-            hasDeletedLearning = deleted
+            hasDeletedLearning = deleted,
+            isRealMapEnabled = settings.isRealMapEnabled
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), initialState())
 
@@ -53,6 +54,8 @@ class SettingsViewModel @Inject constructor(
                 SettingsUiEvent.ToggleVibration -> updateSettings.changeVibration(current.vibrationIntensity.toggled())
 
                 SettingsUiEvent.ToggleLargeText -> updateSettings.changeLargeText(!current.isLargeTextEnabled)
+
+                SettingsUiEvent.ToggleRealMap -> updateSettings.changeRealMap(!current.isRealMapEnabled)
 
                 SettingsUiEvent.DeleteLearnedData -> {
                     deleteLearnedData()

@@ -47,17 +47,23 @@ fun MapScreenTemplate(
         contentAlignment = Alignment.Center
     ) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center, content = map)
-        EdgeColumn(Alignment.TopCenter, Modifier.padding(top = MapScreen.edgePadding), top)
-        EdgeColumn(Alignment.BottomCenter, Modifier.padding(bottom = MapScreen.edgePadding), bottom)
+        EdgeColumn(
+            Alignment.TopCenter,
+            Modifier.padding(top = MapScreen.edgePadding).fillMaxWidth(MapScreen.TOP_WIDTH_FRACTION),
+            top
+        )
+        EdgeColumn(
+            Alignment.BottomCenter,
+            Modifier.padding(bottom = MapScreen.edgePadding).fillMaxWidth(MapScreen.TEXT_WIDTH_FRACTION),
+            bottom
+        )
     }
 }
 
 @Composable
 private fun BoxScope.EdgeColumn(alignment: Alignment, modifier: Modifier, content: @Composable ColumnScope.() -> Unit) {
     Column(
-        modifier = modifier
-            .align(alignment)
-            .fillMaxWidth(MapScreen.TEXT_WIDTH_FRACTION),
+        modifier = modifier.align(alignment),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(SemanticTokens.Spacing.xs),
         content = content
