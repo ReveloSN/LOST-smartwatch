@@ -19,7 +19,6 @@ import com.lost.designsystem.theme.LostTheme
 import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.domain.model.PlaceKind
 import com.lost.watch.R
-import com.lost.watch.ui.PlaceIcons
 
 /** H.1 · Modo lugar nuevo: "No conozco este lugar. Te aviso si das vueltas o vuelves al mismo punto." */
 @Composable

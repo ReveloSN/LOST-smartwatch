@@ -19,8 +19,28 @@ El tono lo decide `ToneResolver` (`app/.../ui/ToneResolver.kt`) a partir del `As
 | Nivel | Tono | Texto principal | Contexto | Vibración |
 |---|---|---|---|---|
 | Bajo / desvío voluntario | Relajado | "¿Vas a otro lado hoy?" | — | Suave (1 × 40 ms) |
-| Medio | Atento | "¿Necesitas ayuda?" | "Te saliste de tu ruta de siempre." | Doble (2 × 80 ms) |
+| Medio | Atento | "¿Necesitas ayuda?" | "Te saliste de tu ruta." | Doble (2 × 80 ms) |
 | Alto | Firme y claro | "Creo que necesitas ayuda" | "Te guío y aviso a tu contacto." | Insistente (3 × 150 ms) |
+
+## Reglas de longitud (simplificación del 25 de octubre)
+
+- Títulos de 3–4 palabras ("Vas por tu ruta", "Ya no es tu ruta", "Vuelve a tu ruta").
+- Frases de apoyo de 8–10 palabras como máximo ("Así aprendo tus recorridos. Se quedan en tu reloj.").
+- Lo que no cabe pasa a un segundo nivel: tocar el chip de estado abre el detalle.
+- Sin guiones de corte: una palabra nunca se parte entre dos líneas.
+- Antes/después y razones en `docs/diseno/simplificacion.md`.
+
+| Antes | Ahora |
+|---|---|
+| Tu recorrido ya no se parece a tu ruta de siempre | Ya no es tu ruta |
+| Vas por tu ruta de siempre | Vas por tu ruta |
+| Lugar nuevo: no hay una ruta de siempre para comparar. | Lugar nuevo, sin ruta habitual |
+| Volver a tu ruta de siempre · hacia tu ruta de siempre | Vuelve a tu ruta |
+| Para aprender tus recorridos necesitamos tu ubicación. Tus datos se quedan en tu reloj. | Así aprendo tus recorridos. Se quedan en tu reloj. |
+| Aprendo tus recorridos y te ayudo si te desorientas, antes de que lo pidas. | Aprendo tus recorridos y te ayudo si te desorientas. |
+| Empieza a caminar y LOST reconocerá tu recorrido. | Camina y reconoceré tu recorrido. |
+| Esta semana hiciste 6 recorridos y aprendí 1 rutinas. | 6 recorridos · 1 rutina (con plurales) |
+| No conozco este lugar. Te aviso si das vueltas o vuelves al mismo punto. | Te aviso si das vueltas por aquí. |
 
 ## Glosario: lenguaje del sistema → lenguaje del usuario
 
@@ -36,7 +56,7 @@ El tono lo decide `ToneResolver` (`app/.../ui/ToneResolver.kt`) a partir del `As
 | Distance to destination increasing | Te estás alejando de tu destino |
 | Dwell time anomaly | Te detuviste donde nunca te detienes |
 | ETA delta +12 min | Llevas 12 minutos más de lo normal |
-| Recalcular | Volver a tu ruta de siempre |
+| Recalcular | Vuelve a tu ruta |
 | SOS trigger | Pedir ayuda / Aviso a Laura |
 | Umbral de anomalía | Sensibilidad (Baja · Media · Alta) |
 | False positive feedback | "Estoy bien" / "Voy a otro lado" |
