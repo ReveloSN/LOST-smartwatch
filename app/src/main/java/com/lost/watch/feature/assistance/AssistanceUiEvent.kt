@@ -12,5 +12,8 @@ sealed interface AssistanceUiEvent {
 
     data object KeepGuiding : AssistanceUiEvent
 
+    /** "Ya sé dónde estoy": salir de la guía sin haber vuelto a la ruta. */
+    data object EndGuidance : AssistanceUiEvent
+
     data object DismissBackOnRoute : AssistanceUiEvent
 }

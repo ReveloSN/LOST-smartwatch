@@ -111,6 +111,7 @@
     <string name="assist_shared_title">%1$s já sabe onde você está.</string>
     <string name="assist_shared_body">Siga a seta. Você está indo bem.</string>
     <string name="assist_keep_guiding">Continuar me guiando</string>
+    <string name="assist_end_guidance">Sei onde estou</string>
     <string name="assist_understood">Entendido.</string>
     <string name="assist_will_learn">O LOST vai aprender com isso.</string>
     <string name="assist_ask_less">Vou perguntar menos em casos assim.</string>

@@ -124,6 +124,7 @@
     <string name="assist_shared_title">%1$s ya sabe dónde estás.</string>
     <string name="assist_shared_body">Sigue la flecha. Vas bien.</string>
     <string name="assist_keep_guiding">Seguir guiándome</string>
+    <string name="assist_end_guidance">Ya sé dónde estoy</string>
     <string name="assist_understood">Entendido.</string>
     <string name="assist_will_learn">LOST aprenderá de esto.</string>
     <string name="assist_ask_less">Te preguntaré menos en casos así.</string>

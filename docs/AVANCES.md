@@ -384,6 +384,8 @@ políticas de batería.
 - **Renderizador propio en vez de Google Maps u osmdroid** (ADR 004): sin llave, sin gestos que choquen y estilo desde tokens.
 - **Mapa real encendido por defecto**, con el interruptor a la vista en Ajustes y la verdad en Privacidad.
 - **Interruptor único** para todo lo que usa internet (mapa, búsqueda y ruta a pie): apagado, nada sale del reloj.
+- **La guía siempre tiene salida**: "Ya sé dónde estoy" termina la guía aunque no haya vuelto a la ruta (antes
+  la pantalla no se podía cerrar). Cuenta como "Estoy bien": LOST aprende y no vuelve a preguntar de inmediato.
 - **Segunda respuesta solo con texto** en las alertas (el mockup la dibuja como píldora gris; en el reloj redondo chocaba con la curva).
 - **Atribución bajo el chip** en Monitoreo: abajo el círculo es demasiado estrecho para que quepa en una línea.
 - **GPX deterministas**: el hospital se elige como el más cercano a `CENTER` entre los resultados de Nominatim.

@@ -69,6 +69,8 @@ class AssistanceViewModel @Inject constructor(
 
             AssistanceUiEvent.ImFine -> session.dispatch(AssistanceEvent.UserIsFine)
 
+            AssistanceUiEvent.EndGuidance -> session.dispatch(AssistanceEvent.UserEndedGuidance)
+
             AssistanceUiEvent.CancelSharing -> session.dispatch(AssistanceEvent.CountdownCancelled)
 
             AssistanceUiEvent.DismissBackOnRoute -> isBackOnRoute.value = false

@@ -7,6 +7,7 @@ import com.lost.domain.assistance.AssistanceEvent.DestinationReached
 import com.lost.domain.assistance.AssistanceEvent.DetectionUpdated
 import com.lost.domain.assistance.AssistanceEvent.ResponseTimedOut
 import com.lost.domain.assistance.AssistanceEvent.RouteRecovered
+import com.lost.domain.assistance.AssistanceEvent.UserEndedGuidance
 import com.lost.domain.assistance.AssistanceEvent.UserIsFine
 import com.lost.domain.assistance.AssistanceEvent.UserIsGoingElsewhere
 import com.lost.domain.assistance.AssistanceEvent.UserRequestedGuidance
@@ -129,6 +130,12 @@ class AssistanceStateMachineTest {
         @Test
         fun `al recuperar la ruta vuelve a la calma`() {
             assertEquals(Calm, machine.next(Guiding, RouteRecovered))
+        }
+
+        @Test
+        fun `ya se donde estoy termina la guia y cuenta como estoy bien`() {
+            assertEquals(Acknowledged(UserFeedback.IM_FINE), machine.next(Guiding, UserEndedGuidance))
+            assertEquals(Acknowledged(UserFeedback.IM_FINE), machine.next(LocationShared, UserEndedGuidance))
         }
 
         @Test

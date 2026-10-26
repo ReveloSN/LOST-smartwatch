@@ -50,4 +50,12 @@ class AssistanceViewModelTest {
         viewModel.onEvent(AssistanceUiEvent.ImFine)
         assertEquals(AssistanceState.Acknowledged(UserFeedback.IM_FINE), session.snapshot.value.assistance)
     }
+
+    @Test
+    fun `ya se donde estoy sale de la guia`() {
+        askForHelp()
+        viewModel.onEvent(AssistanceUiEvent.GuideMe)
+        viewModel.onEvent(AssistanceUiEvent.EndGuidance)
+        assertEquals(AssistanceState.Acknowledged(UserFeedback.IM_FINE), session.snapshot.value.assistance)
+    }
 }

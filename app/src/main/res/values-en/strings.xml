@@ -106,6 +106,7 @@
     <string name="assist_shared_title">%1$s knows where you are.</string>
     <string name="assist_shared_body">Follow the arrow. You’re doing well.</string>
     <string name="assist_keep_guiding">Keep guiding me</string>
+    <string name="assist_end_guidance">I know where I am</string>
     <string name="assist_understood">Got it.</string>
     <string name="assist_will_learn">LOST will learn from this.</string>
     <string name="assist_ask_less">I’ll ask less in cases like this.</string>

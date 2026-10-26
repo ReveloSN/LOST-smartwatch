@@ -35,6 +35,7 @@ flowchart TD
         ASK --> COUNT[Aviso a Laura en 5 s] --> SHARED[Laura ya sabe dónde estás]
         ASK --> ACK[Entendido. LOST aprenderá]
         GUIDING --> BACK[Ya estás en tu ruta]
+        GUIDING -- Ya sé dónde estoy --> ACK
     end
 ```
 
