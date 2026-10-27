@@ -139,7 +139,7 @@
     <string name="cd_voice_search">Buscar destino por voz</string>
 
     <string name="contact_authorized">%1$s · contato autorizado</string>
-    <string name="contact_sees_location">Vê sua localização só quando o LOST está te ajudando.</string>
+    <string name="contact_sees_location">Vê sua localização só quando o LOST te ajuda.</string>
     <string name="contact_pending">Esperando que aceite o convite.</string>
     <string name="contact_call">Ligar</string>
     <string name="contact_revoke">Remover permissão</string>
