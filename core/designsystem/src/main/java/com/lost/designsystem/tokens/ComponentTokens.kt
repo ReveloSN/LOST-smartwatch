@@ -66,6 +66,10 @@ object ComponentTokens {
         val hero: Dp = 48.dp
     }
 
+    object IconBadge {
+        val size: Dp = 56.dp
+    }
+
     object StatusDot {
         val size: Dp = 8.dp
     }
