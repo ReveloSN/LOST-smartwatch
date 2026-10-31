@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.lost.designsystem.components.atoms.InitialAvatar
 import com.lost.designsystem.components.atoms.LostIcon
 import com.lost.designsystem.components.atoms.LostPrimaryButton
 import com.lost.designsystem.components.atoms.LostSecondaryButton
@@ -39,8 +40,8 @@ fun ContactsScreen(viewModel: ContactsViewModel = hiltViewModel()) {
 @Composable
 private fun ContactsContent(state: ContactsUiState, onCall: (String) -> Unit, onEvent: (ContactsUiEvent) -> Unit) {
     WatchScreenTemplate {
-        LostIcon(Icons.Rounded.Group, null, tint = SemanticTokens.Status.onRoute)
         if (!state.hasContact) {
+            LostIcon(Icons.Rounded.Group, null, tint = SemanticTokens.Status.onRoute)
             LostText(stringResource(R.string.contact_empty), role = LostTextRole.TITLE)
             LostText(
                 stringResource(R.string.error_no_contact_todo),
@@ -49,6 +50,7 @@ private fun ContactsContent(state: ContactsUiState, onCall: (String) -> Unit, on
             )
             return@WatchScreenTemplate
         }
+        InitialAvatar(state.name.orEmpty())
         LostText(state.name.orEmpty(), role = LostTextRole.QUESTION)
         LostText(stringResource(R.string.contact_authorized, state.relationship.orEmpty()), role = LostTextRole.CAPTION)
         val note = if (state.hasAcceptedInvitation) R.string.contact_sees_location else R.string.contact_pending
