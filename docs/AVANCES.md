@@ -414,14 +414,156 @@ políticas de batería.
 
 ---
 
+## Pulido del 27 de octubre
+
+Trabajo en la rama **`mejoras-ui-mapa`** (sin merge a `main`), desde el tag **`v2-mapa-ui`**. Empezó el 27 de
+octubre y terminó el 31. Cada commit pasó `./gradlew ktlintCheck detekt test assembleDebug`; cada corrección trae
+una prueba que fallaba antes y pasa después. Emulador: Wear OS Large Round (454 × 454, API 37).
+
+### 1. Fuente Manrope — [`docs/diseno/tipografia-manrope.md`](diseno/tipografia-manrope.md)
+
+- Manrope (SIL OFL 1.1, licencia en `docs/licencias/`) en `core/designsystem/src/main/res/font/`: 4 pesos fijos y
+  solo glifos latinos. `LostTypography.brandFamily` la usa en toda la escala. **APK release: 3,60 → 3,70 MB (+97 KB).**
+- Textos cortados que aparecieron y se corrigieron: Contactos en pt y, con Texto grande, textos de apoyo en los
+  tres idiomas (`LostTextRole.maxLinesAt`: las líneas crecen con la letra). `CaptionFitTest` mide los textos con la
+  propia Manrope.
+
+### 2. Fidelidad con los mockups — [`docs/diseno/fidelidad-mockups.md`](diseno/fidelidad-mockups.md)
+
+Comparación pantalla por pantalla con `docs/design/LOST v2.dc.html`; capturas en `docs/capturas/pulido/`.
+Cada diferencia quedó como **(a) corregida**, **(b) decisión consciente** o **(c) pendiente**.
+
+- **(a)** Con Manrope "¿Necesitas ayuda?" pasaba a dos líneas y **"Estoy bien" quedaba fuera de la pantalla**: la
+  pregunta baja a 17 sp. Cuenta regresiva y "Laura ya sabe dónde estás" como en F.4/F.4b (icono coral, sin tarjeta)
+  y con los botones dentro del círculo. "Entendido" con el check en un círculo relleno.
+- **(b)** Lo decidido el 25 de octubre (Inicio en 4 elementos, segunda respuesta solo con texto, mapa real en
+  Monitoreo…). La inicial del contacto se probó y se quitó: empujaba "Quitar permiso" bajo el borde.
+- **(c)** Tu semana con un segmento por día, "Lugares donde más te desorientas", complicación y errores en el emulador.
+
+### 3. Accesibilidad — [`docs/diseno/accesibilidad-revision.md`](diseno/accesibilidad-revision.md)
+
+- **Texto grande:** al activarlo la app volvía a Inicio (`LargeTextScale` cambiaba el árbol de composición):
+  corregido. Sin cortes en es y pt.
+- **en-XA:** el relleno real es ~50 % (medido con `aapt2`); títulos y textos de apoyo admiten 3 líneas. Sin "…".
+- **Auditoría con uiautomator** (≥ 48 dp, etiquetas, orden de lectura): todo en regla salvo un hallazgo — con una
+  alerta encima, las filas de la pantalla de abajo seguían para TalkBack como tocables sin etiqueta. `AlertLayers`
+  las oculta mientras hay alerta.
+- **TalkBack:** se activó en el emulador; habla al aparecer cada alerta y recorre la pantalla en orden. No se pudo
+  verificar palabra por palabra (sin audio en el emulador).
+
+### 4. IA ante el ruido del GPS — [`docs/ia/robustez-ruido-gps.md`](ia/robustez-ruido-gps.md)
+
+Los 4 escenarios de la demo con ruido realista (σ 5 m, σ 10 m, rebotes de 40 m, 20 % de puntos perdidos):
+
+| | Ruta de siempre | Desvío voluntario | Calle cerrada | Hospital |
+|---|---|---|---|---|
+| Antes (con cualquier ruido realista) | **pedía ayuda ✗** | **pedía ayuda ✗** | ✓ | ✓ |
+| Después | solo observa ✓ | pregunta suave ✓ | ✓ | ✓ |
+
+- Causa: el remuestreo sumaba el temblor como distancia (+54 % de puntos), eso desbordaba la banda del DTW y el
+  temblor parecía giros bruscos. Ajustar umbrales no alcanzaba.
+- Cambio: remuestreo por avance en línea recta, promedio de los últimos 15 s, descarte de saltos aislados (> 5 m/s),
+  giros medidos entre cuerdas de 40 m y `erraticBaselineRatio` 0,15 → 0,25. **Los pesos de la regresión no cambiaron.**
+- Siguen en verde las 5 pruebas de la sección 8.5 y los 4 escenarios GPX. Fuera de lo realista (σ 20 m con saltos
+  de 60 m) la ruta de siempre todavía pide ayuda: queda pendiente.
+
+### 5. SUS — [`docs/metricas/guia-aplicacion-sus.md`](metricas/guia-aplicacion-sus.md)
+
+Guía de la sesión, plantilla `docs/metricas/plantilla-sus.csv` y `tools/calcular_sus.py` (puntaje, nota de Sauro y
+Lewis, promedio, mediana e intervalo de confianza del 95 % con t de Student; 17 pruebas con `unittest`).
+`sus.md` deja los resultados **pendientes**: todavía no hay sesiones con usuarios y no se inventaron datos.
+
+### 6. Pruebas instrumentadas
+
+| Módulo | Prueba | Qué cubre |
+|---|---|---|
+| `data` | `LostDatabaseTest` (6) | Room contra el SQLite real: rutinas, recorridos de la semana, métricas, destinos. |
+| `app` | `AlertsFitOnRoundScreenTest` (4) | Las respuestas de las alertas se ven sin desplazar y dentro del círculo. |
+| `app` | `AlertLayersTest` (2) | Con alerta, la pantalla de abajo no se toca ni la lee TalkBack. |
+| `app` | `LargeTextScaleTest` (1) | Cambiar Texto grande conserva el estado. |
+| `app` | `ScreensTest` (4) | Inicio, Ajustes y Monitoreo sin internet (mini-mapa y qué hacer). |
+
+```bash
+./gradlew :data:connectedDebugAndroidTest :app:connectedDebugAndroidTest
+```
+
+(`:app:connectedDebugAndroidTest` desinstala la app al final; para conservar los datos de la demo se puede instalar
+con `installDebug installDebugAndroidTest` y correr `adb shell am instrument`).
+
+### 7. Baseline Profile
+
+Módulo **`baselineprofile`** (Macrobenchmark 1.5): `BaselineProfileGenerator` abre LOST y pasa por las cinco
+secciones; el perfil generado (`app/src/release/generated/baselineProfiles/`) tiene **8 452 reglas** (el escrito a
+mano tenía 8 con comodines; se conserva y AGP los combina). `StartupBenchmark` compara el arranque en frío
+(5 iteraciones, emulador):
+
+| | Sin perfil | Con Baseline Profile |
+|---|---|---|
+| Tiempo al primer cuadro, mínimo | 1 083 ms | 1 078 ms |
+| Tiempo al primer cuadro, mediana | 1 156 ms | 1 258 ms (una iteración de 2,7 s la sube) |
+| CPU por cuadro, P90 / P99 | 71 / 401 ms | 68 / 229 ms |
+
+En el emulador el arranque **no mejora de forma clara**; los cuadros lentos (P99) sí bajan. El emulador no sirve
+para medir arranque con precisión: hay que repetirlo en un reloj.
+
+```bash
+./gradlew :app:generateBaselineProfile
+./gradlew :baselineprofile:connectedBenchmarkReleaseAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.lost.baselineprofile.StartupBenchmark
+```
+
+(Generar el perfil instala una variante release con el mismo paquete: borra los datos de la app de depuración.)
+
+### Capturas finales — `docs/capturas/final/`
+
+El recorrido completo después de todo el pulido: onboarding, Inicio, "¿Necesitas ayuda?", cuenta regresiva,
+aviso enviado, guía, "Entendido" y las secciones. Hoja resumen en `00-resumen.png`.
+
+### Pruebas
+
+**244 pruebas JVM en verde** (antes 211): designsystem 11 · domain 92 · ai 43 · data 29 · app 69. Además
+**17 instrumentadas** (data 6 · app 11) y **17 de Python** (`tools/`).
+
+### Decisiones
+
+- **Corregir el motor y no solo los umbrales** ante el ruido del GPS: con 7 combinaciones de umbrales los 4
+  escenarios seguían fallando; la causa estaba en cómo se mide.
+- **Pregunta de las alertas a 17 sp** (antes 18): con Manrope es lo que permite que la segunda respuesta se vea.
+- **Títulos y textos de apoyo con 3 líneas** como máximo: en español siguen usando 1–2.
+- **Sin inicial en Contactos:** se prefiere que "Quitar permiso" se vea sin desplazar.
+- **No se inventaron resultados de SUS.**
+
+### Pendientes
+
+| Pendiente | Cómo cerrarlo |
+|---|---|
+| Aplicar el SUS con 5 personas | Seguir `docs/metricas/guia-aplicacion-sus.md` y pegar el informe del script en `sus.md`. |
+| GPS en cañón urbano (σ 20 m) | Usar `Location.accuracy` para ignorar los puntos malos. |
+| Escuchar TalkBack palabra por palabra y Accessibility Scanner | En un reloj físico. |
+| Tu semana con un segmento por día; "Lugares donde más te desorientas" | Ver la sección (c) de `fidelidad-mockups.md`. |
+| Recorridos reales con el reloj | Repetir la tabla de `robustez-ruido-gps.md` con datos grabados. |
+| Arranque con Baseline Profile en un reloj | Repetir `StartupBenchmark` en hardware real. |
+| LOST vuelve a preguntar segundos después de "Ya sé dónde estoy" | En la demo "Calle cerrada" la persona sigue dando vueltas y la alerta vuelve casi enseguida (ver qué revisar). |
+
+### Qué revisar tú
+
+1. **Decisión tuya — pesos de la IA:** no cambié `ScoringWeights`; sí cambié el remuestreo, la medición de giros y
+   `erraticBaselineRatio` (0,15 → 0,25), lo que permite el paso 4. Revisa `docs/ia/robustez-ruido-gps.md`.
+2. La pregunta de las alertas a 17 sp y las capturas de `docs/capturas/pulido/` frente a los mockups.
+3. Si quieres aplicar ya el SUS con la guía.
+4. **Decisión tuya — pausa después de "Ya sé dónde estoy":** hoy LOST puede volver a preguntar a los pocos segundos
+   si la persona sigue dando vueltas. ¿Quieres una pausa (por ejemplo, 2 minutos) antes de volver a preguntar?
+5. Si quieres hacer el merge de `mejoras-ui-mapa` a `main` (no lo hice).
+
+---
+
 ## Pendientes generales
 
 | Pendiente | Por qué quedó pendiente | Cómo cerrarlo |
 |---|---|---|
-| ~~Ver las pantallas en un emulador de Wear OS~~ | Hecho el 25 de octubre (capturas en `docs/capturas/`). | Falta revisar TalkBack en el emulador o en un reloj. |
-| Pruebas con usuarios y SUS | Requiere personas reales. | Seguir `docs/metricas/metricas.md` y llenar la tabla de `sus.md`. |
+| ~~Ver las pantallas en un emulador de Wear OS~~ | Hecho el 25 de octubre; TalkBack revisado en el emulador el 27. | Escucharlo palabra por palabra en un reloj. |
+| Pruebas con usuarios y SUS | Requiere personas reales. La guía, la plantilla y el script ya están (27 de octubre). | Seguir `docs/metricas/guia-aplicacion-sus.md`. |
 | Calibrar los pesos de la IA con recorridos reales | Los pesos se ajustaron con recorridos sintéticos y los GPX de la demo. | Grabar recorridos reales y ajustar `DetectionConfig` / `ScoringWeights`. |
-| Fuente Manrope | Se usa la sans del sistema detrás del token `LostTypography.brandFamily`. | Agregar el archivo de fuente (OFL) en `res/font` y cambiar una línea. |
+| ~~Fuente Manrope~~ | Hecho el 27 de octubre (`docs/diseno/tipografia-manrope.md`). | — |
 | ~~Flecha con brújula~~ | Hecho el 25 de octubre (`AndroidCompassHeadingSource`). | Probarla en un reloj físico. |
 | Selector de contacto real | En el reloj no hay un selector estándar; la demo usa a Laura. | Elegirlo desde el teléfono vinculado (Data Layer). |
-| Pruebas instrumentadas (Room, Compose UI) | Necesitan emulador. | `androidTest` con un emulador de Wear OS. |
+| ~~Pruebas instrumentadas (Room, Compose UI)~~ | Hecho el 27 de octubre: 17 pruebas en el emulador. | — |

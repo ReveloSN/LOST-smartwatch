@@ -66,12 +66,31 @@ Las rutas de demo se regeneran con `python tools/generate_osm_routes.py` cambian
 
 | Módulo | Pruebas |
 |---|---|
-| `core/designsystem` | 8 (contraste WCAG) |
-| `domain` | 91 (máquina de estados, cadena de respuesta, temporizadores, monitor, casos de uso, métricas, mapa, batería) |
-| `ai` | 38 (las 5 de escenario de la sección 8.5 + geometría, DTW, señales, aprendizaje, rendimiento) |
+| `core/designsystem` | 11 (contraste WCAG, líneas por rol de texto) |
+| `domain` | 92 (máquina de estados, cadena de respuesta, temporizadores, monitor, casos de uso, métricas, mapa, batería) |
+| `ai` | 43 (las 5 de escenario de la sección 8.5 + geometría, remuestreo con ruido de GPS, DTW, señales, aprendizaje, rendimiento) |
 | `data` | 29 (mappers, repositorios, DataStore, GPX, demo, háptica, caché de teselas, Nominatim, OSRM) |
-| `app` | 45 (mappers de UI, ViewModel, demo GPX de punta a punta, traducciones, accesibilidad, búsqueda de destinos) |
-| **Total** | **211** |
+| `app` | 69 (mappers de UI, ViewModel, demo GPX de punta a punta, ruido de GPS, traducciones, textos que caben con Manrope, accesibilidad) |
+| **Total JVM** | **244** |
+
+En el emulador de Wear OS (17 pruebas instrumentadas: Room contra SQLite real, alertas en la pantalla redonda,
+TalkBack, Texto grande y pantallas sin internet):
+
+```bash
+./gradlew :data:connectedDebugAndroidTest :app:connectedDebugAndroidTest
+```
+
+Baseline Profile (genera el perfil y mide el arranque; borra los datos de la app de depuración):
+
+```bash
+./gradlew :app:generateBaselineProfile
+```
+
+Herramientas en Python (cálculo del SUS):
+
+```bash
+python -m unittest discover -s tools -p "test_*.py"
+```
 
 ## Estructura
 
@@ -83,7 +102,8 @@ LOST/
 ├── ai/                  Kotlin puro: motor de detección y aprendizaje
 ├── data/                Room, DataStore, GPS, háptica, contactos, métricas, demo
 ├── sample-routes/       GPX de la demo (calles reales)
-├── tools/               generate_osm_routes.py (regenera los GPX con OSRM)
+├── baselineprofile/     Generador del Baseline Profile y benchmark de arranque (Macrobenchmark)
+├── tools/               generate_osm_routes.py (GPX con OSRM) · calcular_sus.py (puntaje SUS)
 ├── config/detekt.yml    Reglas de calidad
 └── docs/                Diseño, investigación, IA, contenido, marca, métricas y ADRs
 ```
@@ -92,7 +112,7 @@ LOST/
 
 | Tema | Archivo |
 |---|---|
-| Avances por fase, decisiones y pendientes | `docs/AVANCES.md` |
+| Avances por fase, decisiones y pendientes | `docs/AVANCES.md` (último: "Pulido del 27 de octubre") |
 | Arquitectura, SOLID, patrones y estructuras de datos | `docs/arquitectura.md` |
 | Arquitectura de información | `docs/ia/arquitectura-informacion.md` |
 | Motor de IA | `docs/ia/motor-ia.md` |
@@ -102,6 +122,11 @@ LOST/
 | Métricas y cuestionario SUS | `docs/metricas/` |
 | Decisiones (ADR) | `docs/adr/` (001 arquitectura · 002 DTW · 003 máquina de estados · 004 mapa OpenStreetMap) |
 | Simplificación de la interfaz (antes/después) | `docs/diseno/simplificacion.md` |
+| Tipografía Manrope (licencia y peso) | `docs/diseno/tipografia-manrope.md` |
+| Fidelidad con los mockups | `docs/diseno/fidelidad-mockups.md` |
+| Revisión de accesibilidad (Texto grande, en-XA, TalkBack) | `docs/diseno/accesibilidad-revision.md` |
+| Robustez de la IA ante el ruido del GPS | `docs/ia/robustez-ruido-gps.md` |
+| Guía para aplicar el SUS | `docs/metricas/guia-aplicacion-sus.md` |
 | Mockups | `docs/design/LOST v2.dc.html` |
 
 ## Stack
