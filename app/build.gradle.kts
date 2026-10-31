@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
@@ -17,6 +18,7 @@ android {
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -25,8 +27,10 @@ android {
             isPseudoLocalesEnabled = true
         }
         release {
+            // R8: reduce, optimiza y ofusca el código y quita los recursos que no se usan
+            // (los iconos de material-icons-extended pesan casi todo el APK sin esto).
             optimization {
-                enable = false
+                enable = true
             }
         }
     }
@@ -67,6 +71,8 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.compose.ui.tooling)
     implementation(libs.core.splashscreen)
+    implementation(libs.profileinstaller)
+    baselineProfile(project(":baselineprofile"))
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.guava)
@@ -90,6 +96,9 @@ dependencies {
 
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.espresso.core)
     debugImplementation(libs.tiles.renderer)
     debugImplementation(libs.tiles.tooling)
     debugImplementation(libs.ui.test.manifest)

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lost.domain.model.Destination
 import com.lost.domain.usecase.ObserveDestinationsUseCase
+import com.lost.domain.usecase.ObserveSettingsUseCase
 import com.lost.domain.usecase.SaveDestinationUseCase
 import com.lost.watch.integration.MonitoringController
 import com.lost.watch.navigation.LostDestination
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 class NewPlaceViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     observeDestinations: ObserveDestinationsUseCase,
+    observeSettings: ObserveSettingsUseCase,
     private val saveDestination: SaveDestinationUseCase,
     private val monitoringController: MonitoringController
 ) : ViewModel() {
@@ -28,9 +30,13 @@ class NewPlaceViewModel @Inject constructor(
     private val isStarted = MutableStateFlow(false)
     private val destination = MutableStateFlow<Destination?>(null)
 
-    val uiState: StateFlow<NewPlaceUiState?> = combine(observeDestinations(), isStarted) { destinations, started ->
+    val uiState: StateFlow<NewPlaceUiState?> = combine(
+        observeDestinations(),
+        observeSettings(),
+        isStarted
+    ) { destinations, settings, started ->
         destinations.firstOrNull { it.id == destinationId }?.also { destination.value = it }
-            ?.let { NewPlaceUiState(it.name, it.kind, started) }
+            ?.let { NewPlaceUiState(it.name, it.kind, started, sendsWalkingRoute = settings.isRealMapEnabled) }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), null)
 
     fun onEvent(event: NewPlaceUiEvent) {

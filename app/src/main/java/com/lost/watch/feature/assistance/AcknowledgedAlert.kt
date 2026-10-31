@@ -11,14 +11,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
-import com.lost.designsystem.components.atoms.LostIcon
 import com.lost.designsystem.components.atoms.LostText
 import com.lost.designsystem.components.atoms.LostTextRole
+import com.lost.designsystem.components.atoms.StatusIconBadge
 import com.lost.designsystem.components.templates.WatchScreenTemplate
 import com.lost.designsystem.preview.LostDevicePreviews
 import com.lost.designsystem.theme.LostTheme
-import com.lost.designsystem.tokens.ComponentTokens
 import com.lost.designsystem.tokens.SemanticTokens
+import com.lost.designsystem.tokens.StatusTone
 import com.lost.domain.assistance.UserFeedback
 import com.lost.watch.R
 
@@ -30,13 +30,7 @@ fun AcknowledgedAlert(state: AssistanceUiState.Acknowledged) {
     val scale = remember { Animatable(POP_START_SCALE) }
     LaunchedEffect(Unit) { scale.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy)) }
     WatchScreenTemplate {
-        LostIcon(
-            Icons.Rounded.Check,
-            null,
-            modifier = Modifier.scale(scale.value),
-            tint = SemanticTokens.Status.onRoute,
-            size = ComponentTokens.Icon.hero
-        )
+        StatusIconBadge(Icons.Rounded.Check, StatusTone.ON_ROUTE, Modifier.scale(scale.value), isFilled = true)
         LostText(stringResource(R.string.assist_understood), role = LostTextRole.QUESTION)
         LostText(stringResource(R.string.assist_will_learn), role = LostTextRole.BODY)
         if (state.feedback == UserFeedback.IM_FINE) {

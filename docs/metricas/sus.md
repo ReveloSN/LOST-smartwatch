@@ -1,6 +1,7 @@
 # Cuestionario SUS (System Usability Scale) para LOST
 
 Se aplica al terminar cada sesión de prueba con usuarios (ver `metricas.md`). Meta: **SUS ≥ 80**.
+Paso a paso de la sesión en [`guia-aplicacion-sus.md`](guia-aplicacion-sus.md).
 
 ## Instrucciones para la persona participante
 
@@ -28,16 +29,33 @@ Se aplica al terminar cada sesión de prueba con usuarios (ver `metricas.md`). M
 
 Interpretación habitual: < 68 por debajo del promedio · 68–80 bueno · **> 80 excelente (meta de LOST)**.
 
-## Plantilla de resultados
+## Registro de respuestas
 
-| Participante | Persona (perfil) | Escenario | P1 | P2 | P3 | P4 | P5 | P6 | P7 | P8 | P9 | P10 | SUS |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| P01 | Sebastián (estudiante) | Calle cerrada | | | | | | | | | | | |
-| P02 | Don Jorge (adulto mayor) | Hospital | | | | | | | | | | | |
-| P03 | Andrés (viajero) | Destino por voz | | | | | | | | | | | |
-| P04 | | | | | | | | | | | | | |
-| P05 | | | | | | | | | | | | | |
-| **Promedio** | | | | | | | | | | | | | |
+Las respuestas se pasan a [`plantilla-sus.csv`](plantilla-sus.csv) (una fila por persona, `p1`–`p10` del 1 al 5
+tal como se marcaron) y el puntaje lo calcula `tools/calcular_sus.py`:
+
+```bash
+python tools/calcular_sus.py docs/metricas/resultados-sus.csv
+```
+
+El script invierte las pares, suma, multiplica por 2,5, asigna la nota de Sauro y Lewis y calcula promedio,
+mediana, desviación e intervalo de confianza del 95 %. Está probado (`tools/test_calcular_sus.py`).
+
+## Resultados
+
+**Pendiente de aplicar.** Todavía no se han hecho sesiones con usuarios; no hay puntajes que reportar. Al aplicar
+el cuestionario, pegar aquí el informe que genera el script:
+
+| Participante | Perfil | Escenario | SUS | Nota |
+|---|---|---|---|---|
+| P01 | Sebastián (estudiante) | Calle cerrada | — | — |
+| P02 | Don Jorge (adulto mayor) | Hospital | — | — |
+| P03 | Andrés (viajero) | Destino por voz | — | — |
+| P04 | | | — | — |
+| P05 | | | — | — |
+
+- Participantes: — · Promedio: — · Intervalo de confianza del 95 %: —
+- Meta de LOST (SUS ≥ 80): —
 
 ## Preguntas abiertas (después del SUS)
 

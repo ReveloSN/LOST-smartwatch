@@ -16,15 +16,18 @@ import javax.inject.Inject
 class SessionMonitoringController @Inject constructor(
     @ApplicationContext private val context: Context,
     private val session: TripSession,
-    private val runner: TripMonitorRunner
+    private val runner: TripMonitorRunner,
+    private val walkingRoute: WalkingRouteGuide
 ) : MonitoringController {
     override fun start(destination: Destination?) {
         session.start(destination)
         runner.start()
+        destination?.let(walkingRoute::requestFor)
         if (hasLocationPermission()) LocationTrackingService.start(context)
     }
 
     override fun stop() {
+        walkingRoute.clear()
         LocationTrackingService.stop(context)
         runner.stop(onFinished = session::stop)
     }

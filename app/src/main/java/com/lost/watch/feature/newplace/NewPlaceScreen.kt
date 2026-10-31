@@ -19,7 +19,6 @@ import com.lost.designsystem.theme.LostTheme
 import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.domain.model.PlaceKind
 import com.lost.watch.R
-import com.lost.watch.ui.PlaceIcons
 
 /** H.1 · Modo lugar nuevo: "No conozco este lugar. Te aviso si das vueltas o vuelves al mismo punto." */
 @Composable
@@ -34,13 +33,19 @@ fun NewPlaceScreen(onStarted: () -> Unit, viewModel: NewPlaceViewModel = hiltVie
 private fun NewPlaceContent(state: NewPlaceUiState, onStart: () -> Unit) {
     WatchScreenTemplate {
         LostChip(stringResource(R.string.newplace_chip), icon = Icons.Rounded.Explore)
-        LostIcon(PlaceIcons.of(state.kind), null, tint = SemanticTokens.Status.onRoute)
         LostText(state.destinationName, role = LostTextRole.TITLE)
         LostText(
             stringResource(R.string.newplace_body),
             role = LostTextRole.CAPTION,
             color = SemanticTokens.Text.secondary
         )
+        if (state.sendsWalkingRoute) {
+            LostText(
+                stringResource(R.string.newplace_route_privacy),
+                role = LostTextRole.CAPTION,
+                color = SemanticTokens.Text.secondary
+            )
+        }
         LostPrimaryButton(stringResource(R.string.newplace_start), onStart)
     }
 }

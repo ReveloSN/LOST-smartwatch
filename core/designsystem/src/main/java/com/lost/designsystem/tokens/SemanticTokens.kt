@@ -27,6 +27,12 @@ object SemanticTokens {
     object Route {
         val habitual: Color = Palette.neutral50.copy(alpha = Alpha.ALPHA_28)
 
+        /** Sobre el mapa real las calles ya son grises: la ruta de siempre necesita más presencia. */
+        val habitualOnMap: Color = Palette.neutral400.copy(alpha = Alpha.ALPHA_70)
+
+        /** Borde oscuro bajo las rutas del mapa real para separarlas de las calles. */
+        val casing: Color = Palette.neutral0.copy(alpha = Alpha.ALPHA_70)
+
         /** La ruta de hoy siempre toma el color del estado actual. */
         fun today(tone: StatusTone): Color = Status.of(tone)
     }

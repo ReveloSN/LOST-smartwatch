@@ -1,8 +1,6 @@
 package com.lost.designsystem.components.templates
 
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Vibration
 import androidx.compose.runtime.Composable
@@ -43,7 +41,7 @@ fun AlertTemplate(
             imageVector = header.icon,
             contentDescription = null,
             tint = SemanticTokens.Status.of(header.tone),
-            size = ComponentTokens.Icon.large
+            size = ComponentTokens.Icon.medium
         )
         header.context?.let {
             LostText(text = it, role = LostTextRole.CAPTION, color = SemanticTokens.Text.secondary)
@@ -53,7 +51,6 @@ fun AlertTemplate(
             role = LostTextRole.QUESTION,
             modifier = Modifier.semantics { liveRegion = LiveRegionMode.Assertive }
         )
-        Spacer(modifier = Modifier.height(SemanticTokens.Spacing.xs))
         actions()
     }
 }

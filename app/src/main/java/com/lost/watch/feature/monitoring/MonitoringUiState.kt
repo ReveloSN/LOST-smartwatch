@@ -8,7 +8,6 @@ import com.lost.watch.ui.StatusPresentation
 data class MonitoringUiState(
     val headline: MonitoringHeadline,
     val status: StatusPresentation,
-    val probabilityFraction: Float,
     val routes: ProjectedRoutes,
     val reasons: List<DeviationReason>
 ) {
@@ -16,7 +15,6 @@ data class MonitoringUiState(
         val IDLE = MonitoringUiState(
             headline = MonitoringHeadline.IDLE,
             status = StatusPresentation.ON_ROUTE,
-            probabilityFraction = 0f,
             routes = ProjectedRoutes(emptyList(), emptyList(), null),
             reasons = emptyList()
         )

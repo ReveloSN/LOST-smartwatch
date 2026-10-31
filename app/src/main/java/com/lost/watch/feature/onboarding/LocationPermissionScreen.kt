@@ -3,20 +3,15 @@ package com.lost.watch.feature.onboarding
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.lost.designsystem.components.atoms.LostIcon
-import com.lost.designsystem.components.atoms.LostPrimaryButton
-import com.lost.designsystem.components.atoms.LostSecondaryButton
 import com.lost.designsystem.components.atoms.LostText
 import com.lost.designsystem.components.atoms.LostTextRole
-import com.lost.designsystem.components.atoms.SecondaryButtonStyle
+import com.lost.designsystem.components.molecules.ActionButtonContent
+import com.lost.designsystem.components.molecules.DualActionButtons
 import com.lost.designsystem.components.templates.WatchScreenTemplate
 import com.lost.designsystem.preview.LostDevicePreviews
 import com.lost.designsystem.theme.LostTheme
-import com.lost.designsystem.tokens.ComponentTokens
 import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.watch.R
 
@@ -46,19 +41,15 @@ fun LocationPermissionScreen(onContinue: () -> Unit) {
 @Composable
 private fun LocationPermissionContent(onAllow: () -> Unit, onNotNow: () -> Unit) {
     WatchScreenTemplate {
-        LostIcon(
-            Icons.Rounded.LocationOn,
-            null,
-            tint = SemanticTokens.Status.onRoute,
-            size = ComponentTokens.Icon.large
-        )
         LostText(stringResource(R.string.onboarding_location_title), role = LostTextRole.QUESTION)
-        LostText(stringResource(R.string.onboarding_location_body), color = SemanticTokens.Text.secondary)
-        LostPrimaryButton(label = stringResource(R.string.onboarding_allow), onClick = onAllow)
-        LostSecondaryButton(
-            label = stringResource(R.string.onboarding_not_now),
-            onClick = onNotNow,
-            style = SecondaryButtonStyle.TEXT_ONLY
+        LostText(
+            stringResource(R.string.onboarding_location_body),
+            role = LostTextRole.CAPTION,
+            color = SemanticTokens.Text.secondary
+        )
+        DualActionButtons(
+            primary = ActionButtonContent(stringResource(R.string.onboarding_allow), onAllow),
+            secondary = ActionButtonContent(stringResource(R.string.onboarding_not_now), onNotNow)
         )
     }
 }

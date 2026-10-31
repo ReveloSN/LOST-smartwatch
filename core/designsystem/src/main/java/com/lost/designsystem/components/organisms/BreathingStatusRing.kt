@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -51,7 +54,8 @@ fun BreathingStatusRing(
         RingArcPainter(StatusRing.strokeWidth.toPx(), StatusRing.inset.toPx())
     }
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Canvas(modifier = Modifier.fillMaxSize().graphicsLayer { alpha = breathingAlpha }) {
+        // El alfa se lee dentro de graphicsLayer: respirar solo cambia la capa, sin recomponer ni redibujar.
+        Canvas(modifier = Modifier.fillMaxSize().graphicsLayer { alpha = breathingAlpha.value }) {
             with(painter) {
                 drawArc(RingArc(color.copy(alpha = StatusRing.TRACK_OPACITY)))
                 drawArc(RingArc(color, sweepAngle = sweep))
@@ -67,10 +71,10 @@ private fun sweepFor(tone: StatusTone, progress: Float): Float = when (tone) {
 }
 
 @Composable
-private fun rememberBreathingAlpha(isBreathing: Boolean): Float {
-    if (!isBreathing) return 1f
+private fun rememberBreathingAlpha(isBreathing: Boolean): State<Float> {
+    if (!isBreathing) return remember { mutableFloatStateOf(1f) }
     val transition = rememberInfiniteTransition(label = "breathe")
-    val alpha by transition.animateFloat(
+    return transition.animateFloat(
         initialValue = SemanticTokens.Motion.BREATHE_MIN_ALPHA,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
@@ -79,7 +83,6 @@ private fun rememberBreathingAlpha(isBreathing: Boolean): Float {
         ),
         label = "breatheAlpha"
     )
-    return alpha
 }
 
 @LostDevicePreviews

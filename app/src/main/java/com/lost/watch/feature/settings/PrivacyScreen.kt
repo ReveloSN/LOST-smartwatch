@@ -41,6 +41,11 @@ private fun PrivacyContent(state: SettingsUiState, onDelete: () -> Unit) {
             role = LostTextRole.CAPTION,
             color = SemanticTokens.Text.secondary
         )
+        LostText(
+            stringResource(R.string.privacy_map),
+            role = LostTextRole.CAPTION,
+            color = SemanticTokens.Text.secondary
+        )
         DeleteLearningAction(state.hasDeletedLearning, onDelete)
     }
 }

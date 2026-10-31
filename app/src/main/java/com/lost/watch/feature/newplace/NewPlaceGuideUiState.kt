@@ -5,5 +5,7 @@ data class NewPlaceGuideUiState(
     val destinationName: String?,
     val distanceMeters: Double?,
     val bearingDegrees: Float,
-    val hasArrived: Boolean
+    val hasArrived: Boolean,
+    /** Giro de la flecha en pantalla: con brújula, relativo a hacia dónde mira el usuario. */
+    val arrowDegrees: Float = bearingDegrees
 )

@@ -11,9 +11,11 @@ import com.lost.data.persistence.RoomDestinationRepository
 import com.lost.data.persistence.RoomRoutineRepository
 import com.lost.data.persistence.RoomTripRepository
 import com.lost.data.preferences.DataStoreSettingsRepository
+import com.lost.data.sensors.AndroidCompassHeadingSource
 import com.lost.data.system.AndroidDeviceStatusReader
 import com.lost.data.system.SystemTimeSource
 import com.lost.data.system.UuidIdGenerator
+import com.lost.domain.port.CompassHeadingSource
 import com.lost.domain.port.ContactNotifier
 import com.lost.domain.port.ContactReader
 import com.lost.domain.port.ContactWriter
@@ -79,4 +81,6 @@ abstract class DataBindingsModule {
     @Binds abstract fun deviceStatusReader(impl: AndroidDeviceStatusReader): DeviceStatusReader
 
     @Binds abstract fun gpxAssetOpener(impl: AndroidGpxAssetOpener): GpxAssetOpener
+
+    @Binds abstract fun compassHeadingSource(impl: AndroidCompassHeadingSource): CompassHeadingSource
 }

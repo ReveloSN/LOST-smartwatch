@@ -6,6 +6,7 @@ import com.lost.data.R
 import com.lost.domain.model.AuthorizedContact
 import com.lost.domain.model.Destination
 import com.lost.domain.model.DurationStatistics
+import com.lost.domain.model.GeoPoint
 import com.lost.domain.model.PlaceKind
 import com.lost.domain.model.Routine
 import com.lost.domain.model.RoutineSchedule
@@ -38,11 +39,15 @@ class DemoDataSeeder @Inject constructor(
             destinationKind = PlaceKind.UNIVERSITY,
             path = path,
             schedule = RoutineSchedule(RoutineSchedule.WEEKDAYS, DEPARTURE_6_40),
-            duration = DurationStatistics(count = 5, meanMinutes = 13.1, m2 = 2.0),
+            duration = DurationStatistics(count = 5, meanMinutes = minutesOf(path), m2 = 2.0),
             timesObserved = 5,
             isConfirmed = true
         )
     }
+
+    /** La duración habitual sale del GPX: si se regeneran las rutas, la demo sigue cuadrando. */
+    private fun minutesOf(path: List<GeoPoint>): Double =
+        (path.last().timestampMillis - path.first().timestampMillis) / MILLIS_PER_MINUTE
 
     private fun laura() = AuthorizedContact(
         id = CONTACT_ID,
@@ -52,11 +57,18 @@ class DemoDataSeeder @Inject constructor(
         hasAcceptedInvitation = true
     )
 
-    private fun demoDestinations(): List<Destination> = DemoDestinations.all(context)
+    private fun demoDestinations(): List<Destination> = DemoDestinations.all(
+        context,
+        campus = arrivalOf(DemoScenario.NORMAL_ROUTINE),
+        clinic = arrivalOf(DemoScenario.NEW_PLACE)
+    )
+
+    private fun arrivalOf(scenario: DemoScenario): GeoPoint = opener.open(scenario.assetName).use(reader::read).last()
 
     private companion object {
         const val HABITUAL_ROUTINE_ID = "demo-casa-u"
         const val CONTACT_ID = "demo-laura"
         const val DEPARTURE_6_40 = 400
+        const val MILLIS_PER_MINUTE = 60_000.0
     }
 }

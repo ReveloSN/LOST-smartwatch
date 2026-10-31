@@ -12,4 +12,5 @@ internal object SettingsKeys {
     val onboardingCompleted = booleanPreferencesKey("onboarding_completed")
     val thresholdMedium = doublePreferencesKey("threshold_medium")
     val thresholdHigh = doublePreferencesKey("threshold_high")
+    val realMap = booleanPreferencesKey("real_map")
 }
