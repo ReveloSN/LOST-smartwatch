@@ -11,13 +11,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class DestinationsViewModel @Inject constructor(
     observeDestinations: ObserveDestinationsUseCase,
-    private val matcher: DestinationMatcher
+    private val voiceSearch: DestinationVoiceSearch
 ) : ViewModel() {
-    private val voice = MutableStateFlow(VoiceResult(null, null))
+    private val search = MutableStateFlow(DestinationSearchState())
     private val items = observeDestinations().map { destinations ->
         destinations.mapIndexed { index, destination ->
             DestinationItem(
@@ -30,24 +31,32 @@ class DestinationsViewModel @Inject constructor(
         }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    val uiState: StateFlow<DestinationsUiState> = combine(items, voice) { list, result ->
-        DestinationsUiState(list, result.notFound, result.matchedId)
-    }.stateIn(
+    val uiState: StateFlow<DestinationsUiState> = combine(items, search, ::DestinationsUiState).stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
-        DestinationsUiState(emptyList(), null, null)
+        DestinationsUiState(emptyList(), DestinationSearchState())
     )
 
     fun onEvent(event: DestinationsUiEvent) {
-        voice.value = when (event) {
-            is DestinationsUiEvent.VoiceQuery -> matcher.match(event.spokenText, items.value)
-                ?.let { VoiceResult(it.id, null) } ?: VoiceResult(null, event.spokenText)
+        when (event) {
+            is DestinationsUiEvent.VoiceQuery -> onVoiceQuery(event.spokenText)
 
-            DestinationsUiEvent.MatchConsumed -> VoiceResult(null, null)
+            is DestinationsUiEvent.ChoosePlace -> viewModelScope.launch {
+                search.value = voiceSearch.choose(event.place)
+            }
+
+            DestinationsUiEvent.MatchConsumed -> search.value = DestinationSearchState()
         }
     }
 
-    private data class VoiceResult(val matchedId: String?, val notFound: String?)
+    private fun onVoiceQuery(spokenText: String) {
+        voiceSearch.matchSaved(spokenText, items.value)?.let {
+            search.value = it
+            return
+        }
+        search.value = DestinationSearchState(isSearching = true)
+        viewModelScope.launch { search.value = voiceSearch.searchOnline(spokenText) }
+    }
 
     private companion object {
         const val STOP_TIMEOUT_MILLIS = 5_000L

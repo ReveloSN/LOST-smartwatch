@@ -46,7 +46,7 @@ class LostEngineAssembly(private val config: DetectionConfig = DetectionConfig.D
     fun detectionEngine(signals: List<DeviationSignal> = signals()): LostDetectionEngine {
         val scorer = CompositeAnomalyScorer(signals, config.confusionWeights)
         return LostDetectionEngine(
-            resampler = resampler,
+            resampler = resampler.incremental(),
             modeFactory = DetectionModeFactory(matcher, scorer, config),
             classifier = AssistanceLevelClassifier(),
             voluntaryDetector = VoluntaryDetourDetector(config),

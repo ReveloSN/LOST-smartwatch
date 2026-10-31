@@ -45,13 +45,19 @@ class GpxDemoEndToEndTest {
     private fun gpx(scenario: DemoScenario): List<GeoPoint> =
         File("../sample-routes/${scenario.assetName}").inputStream().use(reader::read)
 
+    private val normalRoute = gpx(DemoScenario.NORMAL_ROUTINE)
+
     private val casaU = Routine(
         id = "casa-u",
         name = "Casa → U",
         destinationKind = PlaceKind.UNIVERSITY,
-        path = gpx(DemoScenario.NORMAL_ROUTINE),
+        path = normalRoute,
         schedule = RoutineSchedule(RoutineSchedule.WEEKDAYS, 400),
-        duration = DurationStatistics(5, 13.1, 2.0),
+        duration = DurationStatistics(
+            5,
+            (normalRoute.last().timestampMillis - normalRoute.first().timestampMillis) / 60_000.0,
+            2.0
+        ),
         timesObserved = 5,
         isConfirmed = true
     )

@@ -46,6 +46,7 @@ object PrimitiveTokens {
         val size12 = 12.sp
         val size14 = 14.sp
         val size16 = 16.sp
+        val size17 = 17.sp
         val size18 = 18.sp
         val size28 = 28.sp
         val size44 = 44.sp
@@ -57,6 +58,7 @@ object PrimitiveTokens {
         const val ALPHA_14 = 0.14f
         const val ALPHA_28 = 0.28f
         const val ALPHA_60 = 0.60f
+        const val ALPHA_70 = 0.70f
     }
 
     object Motion {

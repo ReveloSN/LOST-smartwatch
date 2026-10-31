@@ -18,8 +18,8 @@ class OnboardingViewModel @Inject constructor(
     private val updateSettings: UpdateSettingsUseCase
 ) : ViewModel() {
     val uiState: StateFlow<OnboardingUiState> = observeContact()
-        .map { OnboardingUiState(it?.name, it?.relationship) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), OnboardingUiState(null, null))
+        .map { OnboardingUiState(it?.name) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), OnboardingUiState(null))
 
     fun onEvent(event: OnboardingUiEvent) {
         when (event) {

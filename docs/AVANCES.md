@@ -6,10 +6,11 @@ las decisiones tomadas y lo que queda pendiente.
 ## Resumen para la entrega
 
 - **Las 10 fases del plan están completas** y publicadas en `main`.
-- **167 pruebas automáticas en verde** (designsystem 8 · domain 64 · ai 34 · data 21 · app 40), más ktlint y detekt sin alertas. Comando: `./gradlew ktlintCheck detekt test assembleDebug`.
+- **211 pruebas automáticas en verde** (designsystem 8 · domain 91 · ai 38 · data 29 · app 45), más ktlint y detekt sin alertas. Comando: `./gradlew ktlintCheck detekt test assembleDebug`.
 - **Demo con GPX** verificada de punta a punta por prueba: rutina normal (silencio), desvío voluntario (pregunta suave), calle cerrada (pregunta → guía → ruta recuperada) y hospital (pregunta → llegada).
 - **Diseño** fiel a los mockups: tokens en 3 niveles, Atomic Design, previews redondo/cuadrado, voz y tono, 3 idiomas, accesibilidad verificada por prueba.
-- **Lo que falta** (ver "Pendientes generales" al final): verificación visual en un emulador de Wear OS, prueba con usuarios (SUS) y calibrar la IA con recorridos reales.
+- **Mejoras del 25 de octubre** (rama `mejoras-ui-mapa`): interfaz simplificada y verificada en un emulador de Wear OS, **mapa real de OpenStreetMap**, destinos reales por voz, demo sobre calles reales, flecha con brújula y optimización (APK de 57 MB a 3,6 MB, GPS adaptativo).
+- **Lo que falta** (ver "Pendientes generales" al final): prueba con usuarios (SUS), calibrar la IA con recorridos reales y probar voz y brújula en un reloj físico.
 
 ## Resumen de fases
 
@@ -294,14 +295,133 @@ En el reloj: compilar *debug*, Ajustes → Demostración (o "Demostración" en I
 
 ---
 
+## Mejoras del 25 de octubre
+
+Trabajo en la rama **`mejoras-ui-mapa`** (sin merge a `main`). El estado anterior quedó marcado con el tag
+**`v1-entrega-avances`**. Cada commit pasó `./gradlew ktlintCheck detekt test assembleDebug`.
+Esta vez sí hubo **emulador de Wear OS** (Wear OS Large Round, 454 × 454): capturas antes/después en
+`docs/capturas/antes/` y `docs/capturas/despues/`.
+
+### Diseño: interfaz menos cargada (Paso 1)
+
+Orden de los PDF: contenido → jerarquía → estructura → estilo. Auditoría completa, pantalla por pantalla,
+en **`docs/diseno/simplificacion.md`** (qué había, qué se quitó, qué pasó a un segundo nivel y por qué).
+
+- **Problemas reales encontrados en el emulador**: el permiso de ubicación cortaba el texto con "…", la segunda
+  respuesta de las alertas ("Estoy bien", "Guíame", "Ahora no") quedaba fuera de la pantalla redonda, el
+  titular de Monitoreo se cortaba y Tu semana tenía más de 12 líneas.
+- **Una idea por pantalla**: Inicio en recorrido pasó de 8 a 4 elementos (chip de estado · hora de llegada ·
+  destino · Terminar recorrido); Monitoreo es el mapa con un titular de 3–4 palabras; las métricas pasan a una
+  pantalla **Métricas** (segundo nivel de Tu semana); sin entradas duplicadas (Tu semana y Demostración).
+- **Revelación progresiva**: el chip de estado es la puerta al detalle (Inicio → Monitoreo → ¿Por qué te pregunto?).
+- **Design system**: `WatchScreenTemplate` centra el contenido corto; `LostChip` puede ser tocable (flecha "›",
+  48 dp); nueva plantilla `MapScreenTemplate`; la segunda respuesta de `DualActionButtons` va solo con texto
+  (cabe en el círculo, 52 dp de área táctil); preguntas de hasta 3 líneas (en `en-XA` ya no se cortan);
+  sin guiones de corte (partían "reco-rridos").
+- Textos más cortos en es/en/pt (`TranslationsTest` en verde) y tabla antes/después en `docs/contenido/glosario-voz.md`.
+- **Corona**: con Texto grande la alerta no cabía y "Estoy bien" quedaba debajo, pero las pantallas con
+  `WatchScreenTemplate` no escuchaban la corona (solo las listas). Ahora se desplazan con la corona
+  (`rotaryScrollable`) y muestran el indicador curvo; con grupos de foco jerárquicos solo la sección visible
+  —o la alerta, si está— recibe la corona. Probado con `input rotaryencoder` en el emulador.
+
+### Mapa real (Paso 2) — ver `docs/adr/004-mapa-openstreetmap.md`
+
+- **OpenStreetMap sin llave de API y con renderizador propio** (no hizo falta osmdroid):
+  - `domain`: `WebMercator`, `MapViewport`, `ViewportFitter` (encuadre automático), `LruCache` y los puertos
+    `MapTileSource`, `DestinationSearchService`, `WalkingRouteService`, `CompassHeadingSource`. Kotlin puro, con pruebas.
+  - `data`: `NetworkTileSource` (User-Agent propio) + `CachedMapTileSource` (memoria LRU → disco una semana → red),
+    `NominatimDestinationSearch` (solo al enviar, sin autocompletar), `OsrmWalkingRouteService` (a pie),
+    `AndroidCompassHeadingSource`. Sin dependencias nuevas (`HttpURLConnection` + `org.json`).
+  - Design system: `RealMapView` (teselas oscurecidas con `ColorFilter`, ruta de siempre en gris con borde oscuro,
+    hoy en el color del estado, punto del usuario). **No interactivo**: no choca con el pager ni con deslizar-para-volver.
+- **Monitoreo y detalle de rutina** muestran el mapa real; sin internet o con el mapa apagado vuelven al mini-mapa
+  vectorial y dicen qué hace LOST (mensaje de tres partes `MapUnavailable`).
+- **Atribución** "© OpenStreetMap contributors" bajo el estado en Monitoreo, bajo el mapa en el detalle y en Ajustes → **Acerca de**.
+- **Privacidad**: interruptor **"Mapa real (usa internet)"** en Ajustes; textos de privacidad y bienvenida corregidos.
+  Solo salen las zonas del mapa, el texto buscado y (al empezar Lugar nuevo, con aviso en pantalla) inicio y destino.
+  Nunca los recorridos aprendidos ni el contacto.
+- **Destinos reales por voz**: lo dictado se busca primero en los destinos guardados; si no está, en Nominatim
+  ("Llévame a la biblioteca" → "biblioteca") y el lugar elegido se guarda con sus coordenadas.
+- **Demo sobre calles reales**: `tools/generate_osm_routes.py` regenera los 4 GPX con OSRM a pie alrededor de una
+  sola constante, `CENTER` (Universidad Nacional de Colombia, Bogotá). El hospital es la clínica más cercana según
+  Nominatim (Clínica Palermo). La duración de la rutina y los destinos de ejemplo se calculan desde los GPX.
+  Los **4 escenarios de `GpxDemoEndToEndTest`** y las **5 pruebas de la sección 8.5** siguen en verde.
+- **Flecha con brújula**: gira según hacia dónde mira el usuario; sin sensor, rumbo absoluto. La brújula solo se
+  escucha mientras LOST guía.
+
+### Optimización (Paso 3): números antes → después
+
+| Qué | Antes | Después | Cómo se midió |
+|---|---|---|---|
+| APK release | 57,4 MB | **3,6 MB** (−94 %) | `assembleRelease` con R8 (`optimization.enable = true`) |
+| Evaluación del motor (2 151 puntos a 1 Hz) | 3,61 ms | **2,46 ms** | `EvaluationPerformanceTest` (JVM de escritorio) |
+| Seguir el recorrido completo evaluando cada 5 s | 431 ms | **384 ms** | ídem |
+| Evaluaciones del motor con GPS a 1 Hz y en calma | 1 por segundo | **1 cada 4 s** (−75 %) | `EvaluationThrottle` (prueba `BatteryPoliciesTest`) |
+| Puntos GPS en la ruta de siempre (17 min, en calma) | 208 (cada 5 s) | **69** (cada 15 s, −67 %) | `LocationCadencePolicy`; cada 5 s si algo no cuadra, cada 2 s guiando |
+| Inicio en reposo, 10 s (emulador) | p50 27 ms · p90 32 ms · p99 250 ms · tirones 4,3 % | **p50 22 ms · p90 27 ms · p99 46 ms · tirones 1,9 %** | `adb shell dumpsys gfxinfo` |
+
+- **Motor**: remuestreo incremental (`IncrementalTrajectoryResampler`, idéntico al completo), tope de 7 200 puntos en
+  memoria (`TripPointsCap`), monitor en `Dispatchers.Default` y proyección de rutas de Monitoreo fuera del hilo de la UI.
+- **Batería**: GPS adaptativo, evaluación con límite de frecuencia, brújula y mapa solo mientras se ven
+  (`WhileSubscribed`); con la pantalla apagada solo sigue el servicio de ubicación.
+- **Compose**: la respiración del anillo y el pulso del mini-mapa se leen en la fase de dibujo (sin recomponer);
+  el pulso solo existe si hay un punto de separación; claves estables en las listas; el mapa no cancela cargas con cada
+  punto GPS (`conflate`).
+- **Room**: las consultas frecuentes ya tenían índice (`metric_events.timestamp`, `trips.started_at`, claves primarias).
+- **Release**: R8 + recursos sin uso eliminados; Baseline Profile escrito a mano (`app/src/main/baseline-prof.txt`).
+  Probado: la versión release (firmada con la llave de depuración solo para instalarla) arranca, recorre las
+  secciones, usa el GPS real y muestra el mapa real.
+
+### Pruebas
+
+**211 pruebas en verde** (antes 167): designsystem 8 · domain 91 · ai 38 · data 29 · app 45.
+Nuevas: Web Mercator, viewport, encuadre, LRU, carga del mapa, búsqueda de lugares, parsers de Nominatim y OSRM,
+caché en memoria y disco, búsqueda de destinos por voz, brújula, remuestreo incremental, rendimiento del motor y
+políticas de batería.
+
+### Decisiones
+
+- **Renderizador propio en vez de Google Maps u osmdroid** (ADR 004): sin llave, sin gestos que choquen y estilo desde tokens.
+- **Mapa real encendido por defecto**, con el interruptor a la vista en Ajustes y la verdad en Privacidad.
+- **Interruptor único** para todo lo que usa internet (mapa, búsqueda y ruta a pie): apagado, nada sale del reloj.
+- **La guía siempre tiene salida**: "Ya sé dónde estoy" termina la guía aunque no haya vuelto a la ruta (antes
+  la pantalla no se podía cerrar). Cuenta como "Estoy bien": LOST aprende y no vuelve a preguntar de inmediato.
+- **Segunda respuesta solo con texto** en las alertas (el mockup la dibuja como píldora gris; en el reloj redondo chocaba con la curva).
+- **Atribución bajo el chip** en Monitoreo: abajo el círculo es demasiado estrecho para que quepa en una línea.
+- **GPX deterministas**: el hospital se elige como el más cercano a `CENTER` entre los resultados de Nominatim.
+- **Manzana de las vueltas que nunca toca la ruta**: si la tocaba, LOST "recuperaba la ruta" a mitad de las vueltas.
+- **Push con `gh`**: el administrador de credenciales de Git pedía iniciar sesión de forma interactiva; se usó
+  `gh auth git-credential` solo para el push, sin cambiar la configuración.
+
+### Pendientes
+
+| Pendiente | Por qué | Cómo cerrarlo |
+|---|---|---|
+| Probar la búsqueda por voz en el reloj | El emulador no tiene micrófono configurado; está cubierta por pruebas unitarias. | Dictar "Llévame a la biblioteca central" en un reloj y elegir el resultado. |
+| Brújula en un reloj real | El emulador no simula bien el sensor de rotación. | Probar la guía caminando con un reloj físico. |
+| Baseline Profile generado | El actual es escrito a mano (reglas con comodines). | Módulo `baselineprofile` con Macrobenchmark en un reloj. |
+| Servidor de teselas propio | tile.openstreetmap.org es comunitario; sirve para la demo, no para producción. | Proveedor propio o de pago con el mismo `MapTileSource`. |
+| Texto grande (+30 %): revisar todas las pantallas | Se revisaron Inicio, Monitoreo y la alerta (caben o se desplazan con la corona); faltan las demás. | Activar Texto grande y recorrer el resto con la corona. |
+| TalkBack en el emulador | No se recorrió la app con TalkBack. | Activar TalkBack y comprobar el orden de lectura del chip tocable y del mapa. |
+
+### Qué revisar tú
+
+1. Las capturas antes/después (`docs/diseno/simplificacion.md`) y si el chip de estado tocable se entiende como "toca para saber más".
+2. Si te parece bien la demo en la **Universidad Nacional** y la **Clínica Palermo** (se cambia con `CENTER` en `tools/generate_osm_routes.py`).
+3. El texto de privacidad del mapa (Ajustes → Privacidad) y el aviso de Lugar nuevo.
+4. Si prefieres el mapa real **apagado** por defecto (hoy está encendido).
+5. Si quieres hacer el merge de `mejoras-ui-mapa` a `main` (no lo hice).
+
+---
+
 ## Pendientes generales
 
 | Pendiente | Por qué quedó pendiente | Cómo cerrarlo |
 |---|---|---|
-| Ver las pantallas en un emulador de Wear OS y compararlas con los mockups | En este equipo solo hay una imagen de teléfono (Pixel 8); la app exige hardware de reloj. | Android Studio → Device Manager → Wear OS Large Round → `./gradlew :app:installDebug`. Revisar también `en-XA` y TalkBack. |
+| ~~Ver las pantallas en un emulador de Wear OS~~ | Hecho el 25 de octubre (capturas en `docs/capturas/`). | Falta revisar TalkBack en el emulador o en un reloj. |
 | Pruebas con usuarios y SUS | Requiere personas reales. | Seguir `docs/metricas/metricas.md` y llenar la tabla de `sus.md`. |
 | Calibrar los pesos de la IA con recorridos reales | Los pesos se ajustaron con recorridos sintéticos y los GPX de la demo. | Grabar recorridos reales y ajustar `DetectionConfig` / `ScoringWeights`. |
 | Fuente Manrope | Se usa la sans del sistema detrás del token `LostTypography.brandFamily`. | Agregar el archivo de fuente (OFL) en `res/font` y cambiar una línea. |
-| Flecha con brújula | La flecha apunta al rumbo absoluto (norte arriba). | Combinar con el sensor de orientación del reloj. |
+| ~~Flecha con brújula~~ | Hecho el 25 de octubre (`AndroidCompassHeadingSource`). | Probarla en un reloj físico. |
 | Selector de contacto real | En el reloj no hay un selector estándar; la demo usa a Laura. | Elegirlo desde el teléfono vinculado (Data Layer). |
 | Pruebas instrumentadas (Room, Compose UI) | Necesitan emulador. | `androidTest` con un emulador de Wear OS. |

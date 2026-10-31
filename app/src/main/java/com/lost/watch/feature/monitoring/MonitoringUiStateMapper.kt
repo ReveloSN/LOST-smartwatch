@@ -18,7 +18,6 @@ class MonitoringUiStateMapper @Inject constructor() {
         return MonitoringUiState(
             headline = headlineFor(snapshot),
             status = StatusPresentation.of(detection.level),
-            probabilityFraction = detection.probability.value.toFloat(),
             routes = projector.project(snapshot.routine?.path.orEmpty(), snapshot.trip?.points.orEmpty()),
             reasons = detection.reasons
         )

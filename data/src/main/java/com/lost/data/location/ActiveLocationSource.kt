@@ -13,4 +13,7 @@ class ActiveLocationSource @Inject constructor(
     private val simulated: SimulatedLocationSource
 ) : LocationSource {
     override fun locations(): Flow<GeoPoint> = if (BuildConfig.DEMO_MODE) simulated.locations() else fused.locations()
+
+    override fun locations(intervalMillis: Flow<Long>): Flow<GeoPoint> =
+        if (BuildConfig.DEMO_MODE) simulated.locations() else fused.locations(intervalMillis)
 }

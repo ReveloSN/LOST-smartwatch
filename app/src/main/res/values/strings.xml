@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">LOST</string>
+    <!-- Atribución obligatoria de OpenStreetMap (licencia ODbL): no se traduce. -->
+    <string name="map_attribution" translatable="false">© OpenStreetMap contributors</string>
 
     <!-- Navegación global (arquitectura de información: 5 secciones) -->
     <string name="nav_home">Inicio</string>
@@ -14,17 +16,15 @@
     <string name="status_on_route">Todo en orden</string>
     <string name="status_deviation">Posible desorientación</string>
     <string name="status_help">Creo que necesitas ayuda</string>
-    <string name="status_on_route_detail">Vas en tu rutina o caminas seguro a otro lugar.</string>
     <string name="status_help_detail">Te guío y aviso a tu contacto.</string>
-    <string name="status_tap_for_why">Toca para saber por qué</string>
     <string name="cd_status">Estado: %1$s</string>
 
     <!-- Bienvenida -->
     <string name="onboarding_welcome_title">Hola, soy LOST</string>
-    <string name="onboarding_welcome_body">Aprendo tus recorridos y te ayudo si te desorientas, antes de que lo pidas.</string>
+    <string name="onboarding_welcome_body">Aprendo tus recorridos y te ayudo si te desorientas.</string>
     <string name="onboarding_start">Empezar</string>
-    <string name="onboarding_location_title">¿Podemos usar tu ubicación?</string>
-    <string name="onboarding_location_body">Para aprender tus recorridos necesitamos tu ubicación. Tus datos se quedan en tu reloj.</string>
+    <string name="onboarding_location_title">¿Usamos tu ubicación?</string>
+    <string name="onboarding_location_body">Así aprendo tus recorridos, que se quedan en tu reloj.</string>
     <string name="onboarding_allow">Permitir</string>
     <string name="onboarding_not_now">Ahora no</string>
     <string name="onboarding_contact_title">¿A quién aviso si necesitas ayuda?</string>
@@ -35,24 +35,17 @@
 
     <!-- Inicio -->
     <string name="home_heading_to">Vas a %1$s</string>
-    <string name="home_arrival">llegada</string>
-    <string name="home_progress">llegada · %1$d de %2$d min</string>
+    <string name="home_arriving_at">Llegas a %1$s</string>
     <string name="home_idle_title">LOST está atento</string>
-    <string name="home_idle_body">Empieza a caminar y LOST reconocerá tu recorrido.</string>
+    <string name="home_idle_body">Camina y reconoceré tu recorrido.</string>
     <string name="home_start_trip">Empezar recorrido</string>
     <string name="home_stop_trip">Terminar recorrido</string>
     <string name="home_walking_safely">Caminas seguro a otro lugar</string>
     <string name="home_only_observing">Solo observo</string>
     <string name="home_new_place">Explorando un lugar nuevo</string>
-    <string name="home_see_why">Ver qué noto</string>
 
     <!-- Aprendiendo tu rutina -->
     <string name="learning_progress">%1$d de %2$d</string>
-    <plurals name="learning_seen">
-        <item quantity="one">Hemos visto este recorrido %d vez.</item>
-        <item quantity="many">Hemos visto este recorrido %d veces.</item>
-        <item quantity="other">Hemos visto este recorrido %d veces.</item>
-    </plurals>
     <plurals name="learning_remaining">
         <item quantity="one">Una más y lo guardamos como tu ruta de siempre.</item>
         <item quantity="many">%d más y lo guardamos como tu ruta de siempre.</item>
@@ -78,36 +71,15 @@
     <string name="cd_routine_map">Ruta de siempre de %1$s</string>
 
     <!-- Monitoreo: hoy vs. siempre -->
-    <string name="monitoring_on_route">Vas por tu ruta de siempre</string>
+    <string name="monitoring_on_route">Vas por tu ruta</string>
     <string name="monitoring_other_street">Hoy tomaste otra calle</string>
     <string name="monitoring_drifting">Te estás apartando</string>
-    <string name="monitoring_not_similar">Tu recorrido ya no se parece a tu ruta de siempre</string>
-    <string name="monitoring_what_i_notice">Lo que noto hoy</string>
-    <string name="monitoring_new_place">Lugar nuevo: no hay una ruta de siempre para comparar.</string>
+    <string name="monitoring_not_similar">Ya no es tu ruta</string>
+    <string name="monitoring_new_place">Lugar nuevo, sin ruta habitual</string>
     <string name="monitoring_idle">No hay un recorrido en curso.</string>
     <string name="cd_route_comparison">Ruta de siempre en gris y la de hoy en color</string>
 
     <!-- Razones (IA explicable, sin porcentajes) -->
-    <string name="reason_left_route_headline">Te saliste</string>
-    <string name="reason_left_route_detail">%1$s de tu ruta de siempre</string>
-    <plurals name="reason_repeated_headline">
-        <item quantity="one">%d vez</item>
-        <item quantity="many">%d veces</item>
-        <item quantity="other">%d veces</item>
-    </plurals>
-    <string name="reason_repeated_detail">por la misma cuadra</string>
-    <plurals name="reason_taking_longer_headline">
-        <item quantity="one">%d minuto más</item>
-        <item quantity="many">%d minutos más</item>
-        <item quantity="other">%d minutos más</item>
-    </plurals>
-    <string name="reason_taking_longer_detail">de lo normal</string>
-    <string name="reason_moving_away_headline">Te alejas</string>
-    <string name="reason_moving_away_detail">de tu destino</string>
-    <string name="reason_erratic_headline">Cambias de rumbo</string>
-    <string name="reason_erratic_detail">varias veces</string>
-    <string name="reason_unusual_stop_headline">Te detuviste</string>
-    <string name="reason_unusual_stop_detail">donde nunca te detienes</string>
 
     <string name="explanation_title">¿Por qué te pregunto?</string>
     <string name="explanation_one">%1$s.</string>
@@ -132,13 +104,11 @@
     <string name="assist_soft_ask_title">¿Vas a otro lado hoy?</string>
     <string name="assist_going_elsewhere">Sí, voy a otro lado</string>
     <string name="assist_guide_me">Guíame</string>
-    <string name="assist_left_route">Te saliste de tu ruta de siempre.</string>
+    <string name="assist_left_route">Te saliste de tu ruta.</string>
     <string name="assist_need_help">¿Necesitas ayuda?</string>
     <string name="assist_yes_guide">Sí, guíame</string>
     <string name="assist_im_fine">Estoy bien</string>
-    <string name="assist_back_to_route">Volver a tu ruta de siempre</string>
-    <string name="assist_toward_route">hacia tu ruta de siempre</string>
-    <string name="assist_toward_destination">hacia %1$s</string>
+    <string name="assist_back_to_route">Vuelve a tu ruta</string>
     <plurals name="assist_walk_minutes">
         <item quantity="one">≈ %d min caminando</item>
         <item quantity="many">≈ %d min caminando</item>
@@ -154,6 +124,7 @@
     <string name="assist_shared_title">%1$s ya sabe dónde estás.</string>
     <string name="assist_shared_body">Sigue la flecha. Vas bien.</string>
     <string name="assist_keep_guiding">Seguir guiándome</string>
+    <string name="assist_end_guidance">Ya sé dónde estoy</string>
     <string name="assist_understood">Entendido.</string>
     <string name="assist_will_learn">LOST aprenderá de esto.</string>
     <string name="assist_ask_less">Te preguntaré menos en casos así.</string>
@@ -164,7 +135,8 @@
 
     <!-- Lugar nuevo y navegación -->
     <string name="newplace_chip">Lugar nuevo</string>
-    <string name="newplace_body">No conozco este lugar. Te aviso si das vueltas o vuelves al mismo punto.</string>
+    <string name="newplace_body">Te aviso si das vueltas por aquí.</string>
+    <string name="newplace_route_privacy">Envío inicio y destino a OpenStreetMap.</string>
     <string name="newplace_start">Empezar</string>
     <string name="newplace_arrived">Llegaste a %1$s</string>
     <string name="newplace_save_destination">Guardar como destino</string>
@@ -174,6 +146,9 @@
     <string name="destinations_voice_example">“Llévame a casa”</string>
     <string name="destinations_suggested">Sugerido</string>
     <string name="destinations_recent">Reciente</string>
+    <string name="destinations_results">Lugares encontrados</string>
+    <string name="destinations_searching">Buscando…</string>
+    <string name="destinations_search_privacy">Solo se envía lo que dictaste.</string>
     <string name="destinations_not_found">No encontré “%1$s” en tus destinos.</string>
     <string name="destinations_empty">Aún no tienes destinos guardados.</string>
     <string name="cd_voice_search">Buscar destino por voz</string>
@@ -202,20 +177,36 @@
     <string name="settings_on">Activado</string>
     <string name="settings_off">Desactivado</string>
     <string name="settings_language">Idioma</string>
+    <string name="settings_real_map">Mapa real (usa internet)</string>
     <string name="settings_privacy">Privacidad</string>
-    <string name="settings_week">Tu semana</string>
     <string name="settings_demo">Demostración</string>
+    <string name="settings_about">Acerca de</string>
+    <string name="about_map">Mapas, búsqueda y rutas a pie: OpenStreetMap.</string>
+    <string name="about_license">Datos con licencia ODbL.</string>
 
     <!-- Privacidad -->
     <string name="privacy_on_device">Tus recorridos se quedan en tu reloj.</string>
-    <string name="privacy_sharing">Solo se comparte tu ubicación cuando lo autorizas.</string>
+    <string name="privacy_sharing">Tu ubicación se comparte solo si lo autorizas.</string>
+    <string name="privacy_map">El mapa solo pide zonas y lo que buscas.</string>
     <string name="privacy_delete">Borrar lo aprendido</string>
     <string name="privacy_delete_hint">Mantén presionado 2 segundos</string>
     <string name="privacy_deleted">Listo. LOST empezará a aprender de nuevo.</string>
 
     <!-- Tu semana y métricas -->
-    <string name="insights_days_done">%1$d de %2$d</string>
-    <string name="insights_week_summary">Esta semana hiciste %1$d recorridos y aprendí %2$d rutinas.</string>
+    <string name="insights_days_done">%1$d de %2$d días</string>
+    <string name="insights_week_summary">%1$s · %2$s</string>
+    <plurals name="insights_trips">
+        <item quantity="one">%d recorrido</item>
+        <item quantity="many">%d recorridos</item>
+        <item quantity="other">%d recorridos</item>
+    </plurals>
+    <plurals name="insights_routines">
+        <item quantity="one">%d rutina</item>
+        <item quantity="many">%d rutinas</item>
+        <item quantity="other">%d rutinas</item>
+    </plurals>
+    <string name="insights_see_metrics">Ver métricas</string>
+    <string name="insights_metrics_title">Métricas</string>
     <string name="insights_success">Recuperaste tu ruta</string>
     <string name="insights_decision">Tiempo para decidir</string>
     <string name="insights_recovery">Tiempo para volver</string>
@@ -248,6 +239,10 @@
     <string name="error_no_routines_todo">Camina como siempre y LOST aprenderá.</string>
     <string name="error_storage_what">No pudimos guardar tus datos.</string>
     <string name="error_storage_todo">Intenta de nuevo en un momento.</string>
+    <string name="error_map_what">No pudimos cargar el mapa.</string>
+    <string name="error_map_todo">Te muestro tu ruta sin calles.</string>
+    <string name="error_search_what">No pudimos buscar ese lugar.</string>
+    <string name="error_search_todo">Elige un destino guardado o intenta luego.</string>
 
     <!-- Demostración -->
     <string name="demo_title">Recorridos de demostración</string>

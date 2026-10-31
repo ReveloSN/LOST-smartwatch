@@ -12,6 +12,9 @@ sealed interface AssistanceEvent {
 
     data object UserIsGoingElsewhere : AssistanceEvent
 
+    /** "Ya sé dónde estoy": el usuario deja la guía sin haber vuelto a la ruta. */
+    data object UserEndedGuidance : AssistanceEvent
+
     /** Pasaron 30 s sin respuesta a la pregunta. */
     data class ResponseTimedOut(val hasAuthorizedContact: Boolean) : AssistanceEvent
 

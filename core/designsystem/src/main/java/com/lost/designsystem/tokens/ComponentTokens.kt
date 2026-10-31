@@ -66,8 +66,41 @@ object ComponentTokens {
         val hero: Dp = 48.dp
     }
 
+    object IconBadge {
+        val size: Dp = 48.dp
+    }
+
     object StatusDot {
         val size: Dp = 8.dp
+    }
+
+    object RealMap {
+        /** Teselas invertidas, casi sin color y al 55 % de brillo: el mapa acompaña, la ruta manda. */
+        const val TILE_BRIGHTNESS: Float = 0.55f
+        const val TILE_SATURATION: Float = 0.2f
+        val todayWidth: Dp = 4.dp
+        val habitualWidth: Dp = 4.dp
+        val casingExtraWidth: Dp = 3.dp
+
+        /** Las teselas se ven al 150 %: calles legibles y menos teselas por pantalla (política de OSM). */
+        const val TILE_DISPLAY_SCALE: Float = 1.5f
+
+        /** Margen del encuadre: las rutas quedan en el centro, lejos del chip y del titular. */
+        const val FIT_MARGIN_FRACTION: Double = 0.3
+
+        /** En un mapa pequeño (detalle de rutina) no hay textos encima: la ruta puede llenarlo. */
+        const val SMALL_MAP_FIT_MARGIN_FRACTION: Double = 0.12
+        val attributionPadding: Dp = SemanticTokens.Spacing.xs
+    }
+
+    object MapScreen {
+        /** El mapa ocupa el centro; arriba queda el estado y abajo el mensaje, sin tapar las rutas. */
+        const val MAP_HEIGHT_FRACTION: Float = 0.56f
+        const val TEXT_WIDTH_FRACTION: Float = 0.64f
+
+        /** Arriba el círculo ya es ancho a la altura del subtítulo: la atribución cabe en una línea. */
+        const val TOP_WIDTH_FRACTION: Float = 0.8f
+        val edgePadding: Dp = SemanticTokens.Spacing.xl
     }
 
     object SafeArea {

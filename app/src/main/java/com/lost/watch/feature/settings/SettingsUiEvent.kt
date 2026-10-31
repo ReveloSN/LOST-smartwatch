@@ -10,5 +10,8 @@ sealed interface SettingsUiEvent {
 
     data object ToggleLargeText : SettingsUiEvent
 
+    /** "Mapa real (usa internet)": apagado, LOST no pide nada a OpenStreetMap. */
+    data object ToggleRealMap : SettingsUiEvent
+
     data object DeleteLearnedData : SettingsUiEvent
 }

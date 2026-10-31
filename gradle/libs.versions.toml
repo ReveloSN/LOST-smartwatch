@@ -23,7 +23,11 @@ guava = "33.2.1-android"
 watchfaceComplicationsDataSourceKtx = "1.2.1"
 junit5 = "5.14.4"
 mockk = "1.14.5"
+orgJson = "20240303"
 turbine = "1.2.1"
+androidxTestRunner = "1.7.0"
+androidxTestCore = "1.7.0"
+espresso = "3.7.0"
 detekt = "1.23.8"
 ktlint = "1.8.0"
 
@@ -37,6 +41,9 @@ ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "wearCompose" }
 compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "wearCompose" }
 compose-navigation = { group = "androidx.wear.compose", name = "compose-navigation", version.ref = "wearCompose" }
@@ -73,6 +80,7 @@ junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit5" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+org-json = { group = "org.json", name = "json", version.ref = "orgJson" }
 ktlint-cli = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 

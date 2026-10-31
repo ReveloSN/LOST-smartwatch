@@ -3,6 +3,7 @@ package com.lost.designsystem.components.atoms
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineBreak
@@ -17,7 +18,8 @@ import com.lost.designsystem.tokens.SemanticTokens
 
 /**
  * Texto de LOST. Limita las líneas según el rol (títulos 2, cuerpo 3) y corta con "…"
- * en vez de recortar a mitad de palabra, como piden las reglas de texto de i18n.
+ * en vez de recortar a mitad de palabra, como piden las reglas de texto de i18n. Con texto grande
+ * el límite crece en proporción ([LostTextRole.maxLinesAt]).
  */
 @Composable
 fun LostText(
@@ -32,11 +34,11 @@ fun LostText(
         modifier = modifier,
         style = role.style.copy(
             lineBreak = LineBreak.Paragraph,
-            hyphens = Hyphens.Auto
+            hyphens = Hyphens.None
         ),
         color = color,
         textAlign = textAlign,
-        maxLines = role.maxLines,
+        maxLines = role.maxLinesAt(LocalDensity.current.fontScale),
         overflow = TextOverflow.Ellipsis
     )
 }

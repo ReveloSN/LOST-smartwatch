@@ -37,10 +37,6 @@ private fun LearningContent(state: LearningUiState, onConfirm: () -> Unit) {
             stringResource(R.string.learning_progress, state.timesObserved, state.requiredRepetitions),
             role = LostTextRole.NUMBER
         )
-        LostText(
-            pluralStringResource(R.plurals.learning_seen, state.timesObserved, state.timesObserved),
-            role = LostTextRole.CAPTION
-        )
         if (state.remaining > 0) {
             LostText(
                 pluralStringResource(R.plurals.learning_remaining, state.remaining, state.remaining),
