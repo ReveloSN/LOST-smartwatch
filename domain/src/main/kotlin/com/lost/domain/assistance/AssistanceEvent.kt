@@ -27,4 +27,7 @@ sealed interface AssistanceEvent {
     data object DestinationReached : AssistanceEvent
 
     data object AcknowledgementElapsed : AssistanceEvent
+
+    /** Terminó la pausa que sigue a "Estoy bien": LOST puede volver a preguntar. */
+    data object PauseElapsed : AssistanceEvent
 }

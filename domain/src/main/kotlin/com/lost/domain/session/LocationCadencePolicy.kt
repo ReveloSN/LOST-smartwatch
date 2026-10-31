@@ -16,8 +16,10 @@ object LocationCadencePolicy {
         else -> MonitoringThresholds.GPS_ATTENTIVE_MILLIS
     }
 
-    private fun AssistanceState.isActive(): Boolean =
-        this != AssistanceState.Calm && this !is AssistanceState.SoftAsk && this !is AssistanceState.Acknowledged
+    private fun AssistanceState.isActive(): Boolean = this != AssistanceState.Calm &&
+        this != AssistanceState.Paused &&
+        this !is AssistanceState.SoftAsk &&
+        this !is AssistanceState.Acknowledged
 
     private fun TripSessionSnapshot.isUnremarkable(): Boolean = assistance == AssistanceState.Calm &&
         routine != null &&

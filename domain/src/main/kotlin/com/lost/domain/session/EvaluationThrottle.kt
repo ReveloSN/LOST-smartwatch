@@ -4,7 +4,7 @@ import com.lost.domain.assistance.AssistanceState
 import com.lost.domain.model.GeoPoint
 
 /**
- * Límite de frecuencia del motor: en calma evalúa como mucho una vez cada
+ * Límite de frecuencia del motor: en calma (o en pausa) evalúa como mucho una vez cada
  * [MonitoringThresholds.MIN_EVALUATION_INTERVAL_MILLIS] (según la hora del GPS, no del reloj);
  * si LOST está preguntando o guiando, evalúa cada punto para reaccionar al instante.
  */
@@ -14,7 +14,7 @@ class EvaluationThrottle(private val minIntervalMillis: Long = MonitoringThresho
     fun shouldEvaluate(point: GeoPoint, assistance: AssistanceState): Boolean {
         val last = lastEvaluatedAt
         val isDue = last == null ||
-            assistance != AssistanceState.Calm ||
+            (assistance != AssistanceState.Calm && assistance != AssistanceState.Paused) ||
             point.timestampMillis - last >= minIntervalMillis
         if (isDue) lastEvaluatedAt = point.timestampMillis
         return isDue

@@ -58,10 +58,27 @@ class AssistanceTimersTest {
     @Test
     fun `entendido vuelve a la calma a los 3 s`() = runTest {
         startTimers()
-        session.dispatch(AssistanceEvent.DetectionUpdated(DomainFixtures.result(AssistanceLevel.MEDIUM), true))
-        session.dispatch(AssistanceEvent.UserIsFine)
-        assertEquals(AssistanceState.Acknowledged(UserFeedback.IM_FINE), session.snapshot.value.assistance)
+        session.dispatch(AssistanceEvent.DetectionUpdated(DomainFixtures.result(AssistanceLevel.LOW, true), true))
+        session.dispatch(AssistanceEvent.UserIsGoingElsewhere)
+        assertEquals(AssistanceState.Acknowledged(UserFeedback.GOING_ELSEWHERE), session.snapshot.value.assistance)
         advanceTimeBy(3_001)
         assertEquals(AssistanceState.Calm, session.snapshot.value.assistance)
+    }
+
+    @Test
+    fun `tras estoy bien no vuelve a preguntar durante 2 minutos`() = runTest {
+        startTimers()
+        val medium = AssistanceEvent.DetectionUpdated(DomainFixtures.result(AssistanceLevel.MEDIUM), true)
+        session.dispatch(medium)
+        session.dispatch(AssistanceEvent.UserIsFine)
+        advanceTimeBy(3_001)
+        session.dispatch(medium)
+        assertEquals(AssistanceState.Paused, session.snapshot.value.assistance)
+        advanceTimeBy(119_000)
+        session.dispatch(medium)
+        assertEquals(AssistanceState.Paused, session.snapshot.value.assistance)
+        advanceTimeBy(1_001)
+        session.dispatch(medium)
+        assertEquals(AssistanceState.AskForHelp(DomainFixtures.reasons), session.snapshot.value.assistance)
     }
 }

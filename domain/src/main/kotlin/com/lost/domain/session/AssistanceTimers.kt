@@ -16,7 +16,8 @@ import kotlinx.coroutines.flow.map
 
 /**
  * El paso del tiempo en la escalada: repetir la vibración a los 15 s, 30 s sin respuesta,
- * la cuenta regresiva segundo a segundo y el "Entendido" que se cierra solo a los 3 s.
+ * la cuenta regresiva segundo a segundo, el "Entendido" que se cierra solo a los 3 s
+ * y la pausa de 2 minutos sin preguntas tras "Estoy bien".
  * Cada cambio de estado cancela el temporizador anterior (`collectLatest`).
  */
 class AssistanceTimers @Inject constructor(
@@ -48,6 +49,11 @@ class AssistanceTimers @Inject constructor(
             is AssistanceState.Acknowledged -> {
                 delay(seconds(AssistanceTimings.ACKNOWLEDGEMENT_SECONDS))
                 session.dispatch(AssistanceEvent.AcknowledgementElapsed)
+            }
+
+            AssistanceState.Paused -> {
+                delay(seconds(AssistanceTimings.PAUSE_AFTER_IM_FINE_SECONDS))
+                session.dispatch(AssistanceEvent.PauseElapsed)
             }
 
             else -> Unit
