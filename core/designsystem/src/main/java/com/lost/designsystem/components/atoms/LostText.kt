@@ -17,7 +17,7 @@ import com.lost.designsystem.theme.LostTypography
 import com.lost.designsystem.tokens.SemanticTokens
 
 /**
- * Texto de LOST. Limita las líneas según el rol (títulos 2, cuerpo 3) y corta con "…"
+ * Texto de LOST. Limita las líneas según el rol (títulos y apoyo 3, cuerpo 3) y corta con "…"
  * en vez de recortar a mitad de palabra, como piden las reglas de texto de i18n. Con texto grande
  * el límite crece en proporción ([LostTextRole.maxLinesAt]).
  */

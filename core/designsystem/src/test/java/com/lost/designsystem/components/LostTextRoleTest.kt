@@ -12,7 +12,7 @@ class LostTextRoleTest {
 
     @Test
     fun `con texto grande los textos de varias lineas ganan lineas en vez de cortarse`() {
-        assertEquals(3, LostTextRole.CAPTION.maxLinesAt(1.3f))
+        assertEquals(4, LostTextRole.CAPTION.maxLinesAt(1.3f))
         assertEquals(4, LostTextRole.BODY.maxLinesAt(1.3f))
         assertEquals(4, LostTextRole.QUESTION.maxLinesAt(1.3f))
     }
