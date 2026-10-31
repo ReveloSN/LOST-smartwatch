@@ -57,6 +57,18 @@ class SignalsTest {
     }
 
     @Test
+    fun `caminar recto con el temblor del gps no es erratico`() {
+        val random = kotlin.random.Random(SEED)
+        val walk = SyntheticWalk().to(1_000.0, 0.0).points().map { point ->
+            point.copy(
+                latitude = point.latitude + random.nextDouble(-1.0, 1.0) * JITTER_DEGREES,
+                longitude = point.longitude + random.nextDouble(-1.0, 1.0) * JITTER_DEGREES
+            )
+        }
+        assertEquals(0.0, ErraticHeadingSignal(thresholds).measure(context(Trip("ruido", walk))).score)
+    }
+
+    @Test
     fun `dar vueltas cerradas es erratico`() {
         val trip = SyntheticWalk().square(40.0, times = 3).trip()
         assertTrue(ErraticHeadingSignal(thresholds).measure(context(trip)).score > 0.5)
@@ -93,5 +105,12 @@ class SignalsTest {
         val noRoutine = context(trip).copy(routine = null, routinePath = emptyList())
         assertFalse(OffRouteSignal(thresholds).measure(noRoutine).isApplicable)
         assertFalse(DelaySignal(thresholds).measure(noRoutine).isApplicable)
+    }
+
+    private companion object {
+        const val SEED = 27
+
+        /** ~13 m de temblor como máximo en cada eje (1° de latitud ≈ 111 km), como un GPS en ciudad. */
+        const val JITTER_DEGREES = 0.00012
     }
 }

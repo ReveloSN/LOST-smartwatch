@@ -20,9 +20,9 @@ class IncrementalTrajectoryResampler internal constructor(
         if (points.size < 2) return full.resample(points).also { reset() }
         if (!extendsPrevious(points)) restart(points.first())
         val current = requireNotNull(accumulator)
-        for (i in processed.size until points.size) current.add(points[i - 1], points[i])
+        for (i in processed.size until points.size) current.add(points[i])
         processed = points
-        return current.result(points.last())
+        return current.result()
     }
 
     private fun extendsPrevious(points: List<GeoPoint>): Boolean {

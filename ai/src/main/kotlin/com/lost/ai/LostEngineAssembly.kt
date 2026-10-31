@@ -2,6 +2,7 @@ package com.lost.ai
 
 import com.lost.ai.config.DetectionConfig
 import com.lost.ai.explanation.DeviationExplanationBuilder
+import com.lost.ai.geometry.GpsSmoothing
 import com.lost.ai.geometry.TrajectoryResampler
 import com.lost.ai.guidance.NearestRoutePointGuide
 import com.lost.ai.learning.RoutineConfirmationPolicy
@@ -29,7 +30,7 @@ import com.lost.domain.port.IdGenerator
  */
 class LostEngineAssembly(private val config: DetectionConfig = DetectionConfig.DEFAULT) {
     private val thresholds = config.thresholds
-    private val resampler = TrajectoryResampler(thresholds.resampleSpacingMeters)
+    private val resampler = TrajectoryResampler(thresholds.resampleSpacingMeters, GpsSmoothing.from(thresholds))
     private val comparator = DtwSequenceComparator(thresholds.dtwBandRatio, thresholds.dtwMinBandPoints)
     private val matcher = RoutineMatcher(comparator, resampler, thresholds)
 
