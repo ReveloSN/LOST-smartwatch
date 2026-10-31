@@ -36,6 +36,7 @@ flowchart TD
         ASK --> ACK[Entendido. LOST aprenderá]
         GUIDING --> BACK[Ya estás en tu ruta]
         GUIDING -- Ya sé dónde estoy --> ACK
+        ACK -. 2 min sin preguntar .-> SOFT
     end
 ```
 

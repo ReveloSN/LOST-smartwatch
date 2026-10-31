@@ -97,7 +97,7 @@ las decisiones tomadas y lo que queda pendiente.
 - Tipos seguros `@JvmInline value class`: `Meters`, `Probability` (valida 0..1), `Degrees` (diferencia angular más corta).
 - Detección: `AssistanceLevel`, `DeviationReason` (sealed, sin texto), `DetectionResult`, `DetectionRequest`.
 - Errores explícitos: `sealed interface LostError` + `LostResult` (nunca excepciones hacia la UI).
-- **Patrón State**: `AssistanceState` (Calm, SoftAsk, AskForHelp, Guiding, SharingCountdown, LocationShared, Acknowledged) + `AssistanceStateMachine` pura.
+- **Patrón State**: `AssistanceState` (Calm, SoftAsk, AskForHelp, Guiding, SharingCountdown, LocationShared, Acknowledged, Paused) + `AssistanceStateMachine` pura.
 - **Cadena de responsabilidad**: `AssistanceResponsePolicy` = `VibrateAndAskLink` → `AlternativeRouteLink` → `ShareLocationLink`.
 - **Puertos (ISP)**: `LocationSource`, `HapticNotifier`, `ContactNotifier`, `RoutineReader`/`RoutineWriter`, `TripRecorder`/`TripReader`, `MetricsTracker`/`MetricsReader`, `SettingsReader`/`SettingsWriter`, `ContactReader`/`ContactWriter`, `DestinationReader`/`DestinationWriter`, `TripEvaluator` (el motor de IA visto desde el dominio), `RoutineLearningEngine`, `ThresholdAdjuster`, `TimeSource`, `IdGenerator`.
 - **Casos de uso (verbo + objeto)**: `EvaluateCurrentTripUseCase`, `LearnRoutineFromTripUseCase`, `ShareLocationWithContactUseCase`, `ApplyUserFeedbackUseCase`, `TrackMetricEventUseCase`, `ObserveWeeklyInsightsUseCase`, `ObserveRoutinesUseCase`, `ConfirmRoutineUseCase`, `RenameRoutineUseCase`, `DeleteRoutineUseCase`, `DeleteLearnedDataUseCase`, `ObserveSettingsUseCase`, `UpdateSettingsUseCase`, `ObserveAuthorizedContactUseCase`, `ChooseAuthorizedContactUseCase`, `RevokeAuthorizedContactUseCase`, `ObserveDestinationsUseCase`, `SaveDestinationUseCase`.
@@ -542,7 +542,6 @@ aviso enviado, guía, "Entendido" y las secciones. Hoja resumen en `00-resumen.p
 | Tu semana con un segmento por día; "Lugares donde más te desorientas" | Ver la sección (c) de `fidelidad-mockups.md`. |
 | Recorridos reales con el reloj | Repetir la tabla de `robustez-ruido-gps.md` con datos grabados. |
 | Arranque con Baseline Profile en un reloj | Repetir `StartupBenchmark` en hardware real. |
-| LOST vuelve a preguntar segundos después de "Ya sé dónde estoy" | En la demo "Calle cerrada" la persona sigue dando vueltas y la alerta vuelve casi enseguida (ver qué revisar). |
 
 ### Qué revisar tú
 
@@ -550,8 +549,9 @@ aviso enviado, guía, "Entendido" y las secciones. Hoja resumen en `00-resumen.p
    `erraticBaselineRatio` (0,15 → 0,25), lo que permite el paso 4. Revisa `docs/ia/robustez-ruido-gps.md`.
 2. La pregunta de las alertas a 17 sp y las capturas de `docs/capturas/pulido/` frente a los mockups.
 3. Si quieres aplicar ya el SUS con la guía.
-4. **Decisión tuya — pausa después de "Ya sé dónde estoy":** hoy LOST puede volver a preguntar a los pocos segundos
-   si la persona sigue dando vueltas. ¿Quieres una pausa (por ejemplo, 2 minutos) antes de volver a preguntar?
+4. ~~Decisión tuya — pausa después de "Ya sé dónde estoy"~~ **Hecho (31 de octubre):** tras "Estoy bien" o "Ya sé
+   dónde estoy", LOST no vuelve a preguntar durante 2 minutos (estado `Paused`, ver ADR 003). Sigue observando y
+   llegar al destino termina la pausa.
 5. Si quieres hacer el merge de `mejoras-ui-mapa` a `main` (no lo hice).
 
 ---
