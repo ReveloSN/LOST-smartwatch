@@ -5,6 +5,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material3.AppScaffold
 import com.lost.designsystem.theme.LostTheme
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -12,7 +14,7 @@ import org.junit.Test
 
 /**
  * En el reloj redondo el botón en forma de píldora de una alerta se ve completo sin desplazar: el borde
- * de abajo (sin contar sus extremos redondeados) queda dentro del círculo de la pantalla.
+ * de abajo (sin contar sus extremos redondeados) queda dentro del círculo de la pantalla, con un margen.
  * Las alertas con una segunda respuesta solo de texto (¿Necesitas ayuda?, ¿Vas a otro lado hoy?)
  * no entran: su área táctil sobresale a propósito del texto (decisión del 25 de octubre).
  */
@@ -31,16 +33,24 @@ class AlertsFitOnRoundScreenTest {
     }
 
     private fun assertActionsInsideCircle(alert: @Composable () -> Unit) {
-        compose.setContent { LostTheme { alert() } }
+        // Como en LostApp: AppScaffold reserva arriba el espacio de la hora.
+        compose.setContent { LostTheme { AppScaffold { alert() } } }
         val screen = compose.onRoot().fetchSemanticsNode().boundsInRoot
-        val radius = screen.width / 2
+        // Un margen visible hasta el borde: si el botón llega justo al círculo se ve cortado.
+        val radius = screen.width / 2 - with(compose.density) { EDGE_MARGIN.toPx() }
         compose.onAllNodes(hasClickAction()).fetchSemanticsNodes().forEach { node ->
             val button = node.boundsInRoot
+            // Si el contenido no cabe, la columna se desplaza y recorta el botón: lo visible es más bajo que el botón.
+            assertTrue("botón recortado: ${button.height} de ${node.size.height}", button.height >= node.size.height)
             val corner = button.height / 2
             listOf(button.left + corner, button.right - corner).forEach { x ->
                 val distance = (Offset(x, button.bottom) - screen.center).getDistance()
                 assertTrue("botón en $button sale del círculo de radio $radius", distance <= radius)
             }
         }
+    }
+
+    private companion object {
+        val EDGE_MARGIN = 4.dp
     }
 }

@@ -67,7 +67,7 @@ object ComponentTokens {
     }
 
     object IconBadge {
-        val size: Dp = 56.dp
+        val size: Dp = 48.dp
     }
 
     object StatusDot {

@@ -49,7 +49,7 @@ private fun SharedContent(contact: String) {
         verticalArrangement = Arrangement.spacedBy(SemanticTokens.Spacing.xs)
     ) {
         StatusIconBadge(Icons.Rounded.ShareLocation, StatusTone.HELP)
-        LostText(stringResource(R.string.assist_shared_title, contact), role = LostTextRole.QUESTION)
+        LostText(stringResource(R.string.assist_shared_title, contact), role = LostTextRole.TITLE)
         LostText(
             stringResource(R.string.assist_shared_body),
             role = LostTextRole.CAPTION,
