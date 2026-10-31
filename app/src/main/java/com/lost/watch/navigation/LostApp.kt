@@ -1,13 +1,9 @@
 package com.lost.watch.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.wear.compose.foundation.hierarchicalFocusGroup
 import androidx.wear.compose.material3.AppScaffold
 import com.lost.designsystem.theme.LostTheme
 import com.lost.watch.feature.assistance.AssistanceOverlay
@@ -28,15 +24,11 @@ fun LostApp(viewModel: RootViewModel = hiltViewModel(), assistance: AssistanceVi
         LargeTextScale(isEnabled = state.isLargeTextEnabled) {
             AppScaffold {
                 if (!state.isLoading) {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        // Con una alerta encima, la corona es de la alerta; al cerrarla vuelve a la pantalla de abajo.
-                        Box(Modifier.fillMaxSize().hierarchicalFocusGroup(active = !isAlertVisible)) {
-                            LostNavHost(isOnboardingCompleted = state.isOnboardingCompleted)
-                        }
-                        Box(Modifier.fillMaxSize().hierarchicalFocusGroup(active = isAlertVisible)) {
-                            AssistanceOverlay(assistance)
-                        }
-                    }
+                    AlertLayers(
+                        isAlertVisible = isAlertVisible,
+                        screen = { LostNavHost(isOnboardingCompleted = state.isOnboardingCompleted) },
+                        alert = { AssistanceOverlay(assistance) }
+                    )
                 }
             }
         }
