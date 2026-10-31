@@ -41,7 +41,7 @@ fun MonitoringScreen(onOpenExplanation: () -> Unit, viewModel: MonitoringViewMod
 }
 
 @Composable
-private fun MonitoringContent(state: MonitoringUiState, map: MapUiState, onEvent: (MonitoringUiEvent) -> Unit) {
+internal fun MonitoringContent(state: MonitoringUiState, map: MapUiState, onEvent: (MonitoringUiEvent) -> Unit) {
     val openExplanation = { onEvent(MonitoringUiEvent.OpenExplanation) }
     MapScreenTemplate(
         map = { MonitoringMap(state, map) },

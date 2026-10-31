@@ -48,7 +48,7 @@ fun SettingsScreen(onOpen: (LostDestination) -> Unit, viewModel: SettingsViewMod
 }
 
 @Composable
-private fun SettingsContent(
+internal fun SettingsContent(
     state: SettingsUiState,
     onOpen: (LostDestination) -> Unit,
     onEvent: (SettingsUiEvent) -> Unit,

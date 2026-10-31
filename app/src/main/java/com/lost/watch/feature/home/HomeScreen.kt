@@ -45,7 +45,7 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeContent(state: HomeUiState, onOpenMonitoring: () -> Unit, onEvent: (HomeUiEvent) -> Unit) {
+internal fun HomeContent(state: HomeUiState, onOpenMonitoring: () -> Unit, onEvent: (HomeUiEvent) -> Unit) {
     WatchScreenTemplate(ring = { BreathingStatusRing(state.status.tone, state.ringProgress) }) {
         if (state.isMonitoring) {
             MonitoringStatus(state, onOpenMonitoring)
