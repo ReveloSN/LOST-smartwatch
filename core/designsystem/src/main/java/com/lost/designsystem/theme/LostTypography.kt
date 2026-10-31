@@ -25,7 +25,7 @@ object LostTypography {
 
     val display = TextStyle(fontFamily = brandFamily, fontWeight = FontWeight.Bold, fontSize = FontSize.size44)
     val number = TextStyle(fontFamily = brandFamily, fontWeight = FontWeight.Bold, fontSize = FontSize.size28)
-    val question = TextStyle(fontFamily = brandFamily, fontWeight = FontWeight.SemiBold, fontSize = FontSize.size18)
+    val question = TextStyle(fontFamily = brandFamily, fontWeight = FontWeight.SemiBold, fontSize = FontSize.size17)
     val title = TextStyle(fontFamily = brandFamily, fontWeight = FontWeight.SemiBold, fontSize = FontSize.size16)
     val body = TextStyle(fontFamily = brandFamily, fontWeight = FontWeight.Normal, fontSize = FontSize.size14)
     val caption = TextStyle(fontFamily = brandFamily, fontWeight = FontWeight.Medium, fontSize = FontSize.size12)

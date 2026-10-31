@@ -46,6 +46,7 @@ object PrimitiveTokens {
         val size12 = 12.sp
         val size14 = 14.sp
         val size16 = 16.sp
+        val size17 = 17.sp
         val size18 = 18.sp
         val size28 = 28.sp
         val size44 = 44.sp

@@ -1,8 +1,6 @@
 package com.lost.designsystem.components.templates
 
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Vibration
 import androidx.compose.runtime.Composable
@@ -53,7 +51,6 @@ fun AlertTemplate(
             role = LostTextRole.QUESTION,
             modifier = Modifier.semantics { liveRegion = LiveRegionMode.Assertive }
         )
-        Spacer(modifier = Modifier.height(SemanticTokens.Spacing.xs))
         actions()
     }
 }

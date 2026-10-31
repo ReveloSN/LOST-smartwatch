@@ -8,6 +8,10 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.AppScaffold
 import com.lost.designsystem.theme.LostTheme
+import com.lost.domain.detection.DeviationReason
+import com.lost.domain.model.units.Meters
+import com.lost.watch.ui.StatusPresentation
+import com.lost.watch.ui.Tone
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -30,6 +34,29 @@ class AlertsFitOnRoundScreenTest {
     @Test
     fun ubicacionCompartida() = assertActionsInsideCircle {
         LocationSharedAlert(AssistanceUiState.LocationShared("Laura", null)) {}
+    }
+
+    @Test
+    fun preguntaDeAyudaMuestraLasDosRespuestas() = assertActionsVisibleWithoutScrolling {
+        val reasons = listOf(DeviationReason.LeftUsualRoute(Meters(150.0)))
+        AskForHelpAlert(AssistanceUiState.AskForHelp(StatusPresentation.DEVIATION, Tone.ATTENTIVE, reasons)) {}
+    }
+
+    @Test
+    fun preguntaSuaveMuestraLasDosRespuestas() = assertActionsVisibleWithoutScrolling { SoftAskAlert {} }
+
+    /** Para las alertas con respuesta solo de texto: cada respuesta se ve entera sin desplazar. */
+    private fun assertActionsVisibleWithoutScrolling(alert: @Composable () -> Unit) {
+        compose.setContent { LostTheme { AppScaffold { alert() } } }
+        val actions = compose.onAllNodes(hasClickAction()).fetchSemanticsNodes()
+        assertTrue("se esperaban dos respuestas", actions.size == 2)
+        actions.forEach { node ->
+            val visible = node.boundsInRoot
+            assertTrue(
+                "respuesta recortada: ${visible.height} de ${node.size.height}",
+                visible.height >= node.size.height
+            )
+        }
     }
 
     private fun assertActionsInsideCircle(alert: @Composable () -> Unit) {
