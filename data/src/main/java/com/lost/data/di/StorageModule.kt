@@ -34,6 +34,8 @@ object StorageModule {
 
     @Provides fun destinationDao(database: LostDatabase) = database.destinationDao()
 
+    @Provides fun alertPlaceDao(database: LostDatabase) = database.alertPlaceDao()
+
     @Provides
     @Singleton
     @SettingsStore

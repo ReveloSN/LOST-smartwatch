@@ -24,16 +24,21 @@ import java.time.DayOfWeek
 /**
  * 03.1 · Tu semana: el anillo (un segmento por día hábil, en ámbar el día con desvío), cuántos días,
  * un resumen de una línea y la letra de cada día. Las métricas de éxito pasan a un segundo nivel
- * ([MetricsScreen]). El desvío nunca se dice solo con color: el resumen lo cuenta en palabras.
+ * ([MetricsScreen]). El desvío nunca se dice solo con color: el resumen lo cuenta en palabras. También lleva
+ * a dónde preguntó LOST ([com.lost.watch.feature.places.PlacesScreen]).
  */
 @Composable
-fun InsightsScreen(onOpenMetrics: () -> Unit, viewModel: InsightsViewModel = hiltViewModel()) {
+fun InsightsScreen(
+    onOpenMetrics: () -> Unit,
+    onOpenPlaces: () -> Unit,
+    viewModel: InsightsViewModel = hiltViewModel()
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    state?.let { InsightsContent(it, onOpenMetrics) }
+    state?.let { InsightsContent(it, onOpenMetrics, onOpenPlaces) }
 }
 
 @Composable
-private fun InsightsContent(state: InsightsUiState, onOpenMetrics: () -> Unit) {
+private fun InsightsContent(state: InsightsUiState, onOpenMetrics: () -> Unit, onOpenPlaces: () -> Unit) {
     WatchScreenTemplate(ring = { SegmentedProgressRing(state.days.map { segmentStateOf(it.status) }) }) {
         LostText(
             stringResource(R.string.routines_week),
@@ -53,12 +58,23 @@ private fun InsightsContent(state: InsightsUiState, onOpenMetrics: () -> Unit) {
             role = LostTextRole.CAPTION
         )
         WeekLegend(state.days)
-        LostSecondaryButton(
-            stringResource(R.string.insights_see_metrics),
-            onOpenMetrics,
-            style = SecondaryButtonStyle.TEXT_ONLY
-        )
+        WeekActions(onOpenPlaces, onOpenMetrics)
     }
+}
+
+/** A dónde ir desde Tu semana: los lugares donde LOST preguntó (o su estado vacío) y las métricas. */
+@Composable
+private fun WeekActions(onOpenPlaces: () -> Unit, onOpenMetrics: () -> Unit) {
+    LostSecondaryButton(
+        stringResource(R.string.insights_see_places),
+        onOpenPlaces,
+        style = SecondaryButtonStyle.TEXT_ONLY
+    )
+    LostSecondaryButton(
+        stringResource(R.string.insights_see_metrics),
+        onOpenMetrics,
+        style = SecondaryButtonStyle.TEXT_ONLY
+    )
 }
 
 @Composable
@@ -105,5 +121,5 @@ private fun InsightsPreview() {
         tripsCompleted = 6,
         metrics = emptyList()
     )
-    LostTheme { InsightsContent(state) {} }
+    LostTheme { InsightsContent(state, {}, {}) }
 }

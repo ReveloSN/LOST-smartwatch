@@ -193,6 +193,24 @@
     <string name="weekday_wednesday">Wednesday</string>
     <string name="weekday_thursday">Thursday</string>
     <string name="weekday_friday">Friday</string>
+    <string name="places_title">Where you get lost most</string>
+    <string name="places_near">Near %1$s</string>
+    <string name="places_on_routine">On your route %1$s</string>
+    <string name="places_unknown">A new place</string>
+    <plurals name="places_times">
+        <item quantity="one">%d time</item>
+        <item quantity="other">%d times</item>
+    </plurals>
+    <string name="places_times_with_cause">%1$s · %2$s</string>
+    <string name="places_cause_left_route">you left your route</string>
+    <string name="places_cause_repeated">you went in circles</string>
+    <string name="places_cause_longer">it took longer</string>
+    <string name="places_cause_moving_away">you were moving away</string>
+    <string name="places_cause_erratic">you kept turning</string>
+    <string name="places_cause_stop">you stopped</string>
+    <string name="places_private">Only you can see this.</string>
+    <string name="places_empty">I haven\'t had to ask you anywhere yet.</string>
+    <string name="insights_see_places">Where you get lost</string>
     <string name="insights_see_metrics">See metrics</string>
     <string name="insights_metrics_title">Metrics</string>
     <string name="insights_success">Got back on route</string>

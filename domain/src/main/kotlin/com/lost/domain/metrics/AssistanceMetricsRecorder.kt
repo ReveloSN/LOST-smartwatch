@@ -26,7 +26,7 @@ class AssistanceMetricsRecorder @Inject constructor(
     }
 
     private suspend fun recordAlert(transition: AssistanceTransition, now: Long) {
-        if (isNewAlert(transition)) {
+        if (transition.isNewAlert) {
             alertShownAt = now
             trackMetric(MetricEventType.ALERT_SHOWN)
         }
@@ -45,13 +45,6 @@ class AssistanceMetricsRecorder @Inject constructor(
         if (transition.event == AssistanceEvent.RouteRecovered && transition.from == AssistanceState.Guiding) {
             guidanceStartedAt?.let { trackMetric(MetricEventType.ROUTE_RECOVERED, now - it) }
         }
-    }
-
-    private fun isNewAlert(transition: AssistanceTransition): Boolean {
-        val to = transition.to
-        val from = transition.from
-        return (to is AssistanceState.SoftAsk || to is AssistanceState.AskForHelp) &&
-            from !is AssistanceState.SoftAsk && from !is AssistanceState.AskForHelp
     }
 
     private fun isUserResponse(transition: AssistanceTransition): Boolean = transition.event in USER_RESPONSES &&

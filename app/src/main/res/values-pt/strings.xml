@@ -200,6 +200,25 @@
     <string name="weekday_wednesday">quarta-feira</string>
     <string name="weekday_thursday">quinta-feira</string>
     <string name="weekday_friday">sexta-feira</string>
+    <string name="places_title">Onde você mais se perde</string>
+    <string name="places_near">Perto de %1$s</string>
+    <string name="places_on_routine">Na sua rota %1$s</string>
+    <string name="places_unknown">Um lugar novo</string>
+    <plurals name="places_times">
+        <item quantity="one">%d vez</item>
+        <item quantity="many">%d vezes</item>
+        <item quantity="other">%d vezes</item>
+    </plurals>
+    <string name="places_times_with_cause">%1$s · %2$s</string>
+    <string name="places_cause_left_route">você saiu da rota</string>
+    <string name="places_cause_repeated">você deu voltas</string>
+    <string name="places_cause_longer">demorou mais</string>
+    <string name="places_cause_moving_away">você se afastava</string>
+    <string name="places_cause_erratic">você mudava de direção</string>
+    <string name="places_cause_stop">você parou</string>
+    <string name="places_private">Só você vê isto.</string>
+    <string name="places_empty">Ainda não precisei perguntar em nenhum lugar.</string>
+    <string name="insights_see_places">Onde você se perde</string>
     <string name="insights_see_metrics">Ver métricas</string>
     <string name="insights_metrics_title">Métricas</string>
     <string name="insights_success">Voltou à sua rota</string>

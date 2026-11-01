@@ -39,6 +39,10 @@ sealed interface LostDestination {
         override val route = "insights/metrics"
     }
 
+    data object DisorientationPlaces : LostDestination {
+        override val route = "insights/places"
+    }
+
     data object Sensitivity : LostDestination {
         override val route = "settings/sensitivity"
     }

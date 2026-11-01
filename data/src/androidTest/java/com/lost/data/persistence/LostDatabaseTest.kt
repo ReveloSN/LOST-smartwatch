@@ -5,12 +5,15 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.lost.data.metrics.LocalMetricsTracker
+import com.lost.data.persistence.mapper.AlertPlaceEntityMapper
 import com.lost.data.persistence.mapper.DestinationEntityMapper
 import com.lost.data.persistence.mapper.MetricEventEntityMapper
 import com.lost.data.persistence.mapper.RoutineEntityMapper
 import com.lost.data.persistence.mapper.TripEntityMapper
+import com.lost.domain.detection.DeviationCause
 import com.lost.domain.metrics.MetricEvent
 import com.lost.domain.metrics.MetricEventType
+import com.lost.domain.model.AlertPlace
 import com.lost.domain.model.Destination
 import com.lost.domain.model.DurationStatistics
 import com.lost.domain.model.GeoPoint
@@ -96,6 +99,19 @@ class LostDatabaseTest {
         val week = metrics.observeEventsSince(MONDAY).first()
         assertEquals(listOf(MetricEventType.ALERT_SHOWN, MetricEventType.USER_RESPONDED), week.map { it.type })
         assertEquals(listOf(null, 3_400L), week.map { it.elapsedMillis })
+    }
+
+    @Test
+    fun losLugaresDeAlertaSeGuardanSeLeenDesdeUnaFechaYSeBorran() = runTest {
+        val places = RoomAlertPlaceRepository(database.alertPlaceDao(), AlertPlaceEntityMapper())
+        val old = AlertPlace(GeoPoint(4.6, -74.08), MONDAY - DAY, DeviationCause.LEFT_ROUTE, "Casa → U")
+        val recent = AlertPlace(GeoPoint(4.61, -74.09), MONDAY, DeviationCause.REPEATED_AREA, null)
+        places.record(old)
+        places.record(recent)
+        assertEquals(listOf(DeviationCause.REPEATED_AREA), places.placesSince(MONDAY).map { it.cause })
+        assertEquals(4.61, places.placesSince(MONDAY).single().location.latitude, 1e-9)
+        places.deleteAll()
+        assertEquals(emptyList<AlertPlace>(), places.placesSince(0))
     }
 
     @Test

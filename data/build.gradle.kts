@@ -65,6 +65,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.coroutines.test)
+    androidTestImplementation(libs.room.testing)
     testImplementation(libs.turbine)
     testImplementation(libs.coroutines.test)
 }

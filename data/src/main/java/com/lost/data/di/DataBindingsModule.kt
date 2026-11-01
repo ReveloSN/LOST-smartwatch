@@ -7,6 +7,7 @@ import com.lost.data.demo.GpxAssetOpener
 import com.lost.data.haptics.AndroidHapticNotifier
 import com.lost.data.location.ActiveLocationSource
 import com.lost.data.metrics.LocalMetricsTracker
+import com.lost.data.persistence.RoomAlertPlaceRepository
 import com.lost.data.persistence.RoomDestinationRepository
 import com.lost.data.persistence.RoomRoutineRepository
 import com.lost.data.persistence.RoomTripRepository
@@ -15,6 +16,8 @@ import com.lost.data.sensors.AndroidCompassHeadingSource
 import com.lost.data.system.AndroidDeviceStatusReader
 import com.lost.data.system.SystemTimeSource
 import com.lost.data.system.UuidIdGenerator
+import com.lost.domain.port.AlertPlaceReader
+import com.lost.domain.port.AlertPlaceRecorder
 import com.lost.domain.port.CompassHeadingSource
 import com.lost.domain.port.ContactNotifier
 import com.lost.domain.port.ContactReader
@@ -57,6 +60,10 @@ abstract class DataBindingsModule {
     @Binds abstract fun destinationWriter(impl: RoomDestinationRepository): DestinationWriter
 
     @Binds abstract fun metricsTracker(impl: LocalMetricsTracker): MetricsTracker
+
+    @Binds abstract fun alertPlaceRecorder(impl: RoomAlertPlaceRepository): AlertPlaceRecorder
+
+    @Binds abstract fun alertPlaceReader(impl: RoomAlertPlaceRepository): AlertPlaceReader
 
     @Binds abstract fun metricsReader(impl: LocalMetricsTracker): MetricsReader
 
