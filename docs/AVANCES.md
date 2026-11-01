@@ -656,6 +656,21 @@ sustento:
 - **El refresco de la complicación y la vista rápida** se pide solo cuando cambia el estado, el destino, la llegada o
   un décimo del avance: pedirlo con cada punto GPS gastaría batería sin cambiar nada en pantalla.
 
+### Qué revisar tú (1 de noviembre)
+
+1. **Umbral de giros de la IA** (`erraticBaselineRatio` 0,25 → 0,375, `726596e`): hasta 3 giros bruscos en 160 m ya no
+   cuentan como confusión. Con 20 semillas la desorientación y el hospital se siguen detectando 20/20, pero es un
+   cambio del motor que conviene que apruebes.
+2. **Ventana larga con GPS impreciso** (`7cf327b`, commit aparte): evita falsas alarmas en el cañón urbano a cambio
+   de notar las vueltas del hospital unos 90 s más tarde con esa señal. Si prefieres no pagar ese retraso, se revierte
+   solo ese commit.
+3. **Lugares sin dirección** (ADR 005): "Cerca de Biblioteca Central" en vez de "Avenida 19 con calle 45", para no
+   enviar a nadie dónde se desorientó la persona.
+4. **La notificación vibra un toque de 40 ms** además del patrón de la escalada: sin eso Wear OS no la anuncia.
+5. **"Pausa de 2 minutos"** en Inicio tras "Estoy bien", con el estado como mucho en ámbar.
+6. **Sin subir nada**: la rama `mejoras-ui-mapa` tiene todos los commits del día (y los anteriores) sin merge a
+   `main` ni push.
+
 ---
 
 ## Pendientes generales
