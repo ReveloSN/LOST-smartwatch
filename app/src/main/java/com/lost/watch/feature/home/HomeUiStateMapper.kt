@@ -28,7 +28,8 @@ class HomeUiStateMapper @Inject constructor() {
             // Tras "Voy a otro lado" el motor evalúa como lugar nuevo, pero para el usuario sigue siendo su desvío.
             isNewPlace = snapshot.detection.mode == DetectionModeKind.NEW_PLACE && !snapshot.isGoingElsewhere,
             isVoluntaryDetour = snapshot.detection.isVoluntaryDetour || snapshot.isGoingElsewhere,
-            isDemoAvailable = isDemoAvailable
+            isDemoAvailable = isDemoAvailable,
+            hasWeakLocation = snapshot.hasWeakLocation
         )
     }
 

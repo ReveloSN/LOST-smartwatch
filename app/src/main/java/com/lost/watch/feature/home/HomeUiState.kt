@@ -14,7 +14,8 @@ data class HomeUiState(
     val arrivalMinuteOfDay: Int?,
     val isNewPlace: Boolean,
     val isVoluntaryDetour: Boolean,
-    val isDemoAvailable: Boolean
+    val isDemoAvailable: Boolean,
+    val hasWeakLocation: Boolean = false
 ) {
     companion object {
         fun idle(isDemoAvailable: Boolean) = HomeUiState(

@@ -1,5 +1,7 @@
 package com.lost.ai.config
 
+import com.lost.domain.session.MonitoringThresholds
+
 /**
  * Todos los umbrales del motor en un solo lugar (nada de números mágicos en las señales).
  * Las distancias están en metros y los tiempos en segundos salvo que el nombre diga otra cosa.
@@ -51,7 +53,7 @@ data class DetectionThresholds(
             resampleSpacingMeters = 20.0,
             gpsJumpSpeedMps = 5.0,
             gpsSmoothingSeconds = 15.0,
-            gpsMaxAccuracyMeters = 50.0,
+            gpsMaxAccuracyMeters = MonitoringThresholds.WEAK_LOCATION_ACCURACY_METERS,
             gpsAccuracyFloorMeters = 5.0,
             gpsAccuracyReferenceMeters = 10.0,
             gpsMaxSmoothingFactor = 3.0,

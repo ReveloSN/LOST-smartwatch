@@ -21,4 +21,13 @@ object MonitoringThresholds {
     const val GPS_RELAXED_MILLIS = 15_000L
     const val GPS_ATTENTIVE_MILLIS = 5_000L
     const val GPS_GUIDING_MILLIS = 2_000L
+
+    /** Un punto con precisión peor que esto (metros) no es una ubicación confiable; el motor lo ignora. */
+    const val WEAK_LOCATION_ACCURACY_METERS = 50.0
+
+    /** Sin una ubicación confiable durante este tiempo, LOST avisa "No encontramos tu ubicación". */
+    const val LOCATION_LOST_MILLIS = 60_000L
+
+    /** Cada cuánto se revisa si la ubicación se perdió. */
+    const val LOCATION_CHECK_MILLIS = 5_000L
 }

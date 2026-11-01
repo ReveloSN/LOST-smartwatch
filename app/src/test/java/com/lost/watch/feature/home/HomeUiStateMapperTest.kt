@@ -43,6 +43,12 @@ class HomeUiStateMapperTest {
     }
 
     @Test
+    fun `sin ubicacion confiable inicio lo dice`() {
+        val snapshot = AppFixtures.monitoring(AppFixtures.detection(AssistanceLevel.LOW)).copy(hasWeakLocation = true)
+        assertTrue(mapper.map(snapshot, false).hasWeakLocation)
+    }
+
+    @Test
     fun `nivel medio se ve como posible desorientacion`() {
         val state = mapper.map(AppFixtures.monitoring(AppFixtures.detection(AssistanceLevel.MEDIUM)), false)
         assertEquals(StatusPresentation.DEVIATION, state.status)

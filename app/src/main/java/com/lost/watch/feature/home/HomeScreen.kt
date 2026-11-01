@@ -1,8 +1,14 @@
 package com.lost.watch.feature.home
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.LocationOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lost.designsystem.components.atoms.LostChip
@@ -48,7 +54,7 @@ fun HomeScreen(
 internal fun HomeContent(state: HomeUiState, onOpenMonitoring: () -> Unit, onEvent: (HomeUiEvent) -> Unit) {
     WatchScreenTemplate(ring = { BreathingStatusRing(state.status.tone, state.ringProgress) }) {
         if (state.isMonitoring) {
-            MonitoringStatus(state, onOpenMonitoring)
+            if (state.hasWeakLocation) WeakLocationStatus() else MonitoringStatus(state, onOpenMonitoring)
             LostSecondaryButton(stringResource(R.string.home_stop_trip), {
                 onEvent(HomeUiEvent.StopTrip)
             }, style = SecondaryButtonStyle.TEXT_ONLY)
@@ -85,6 +91,26 @@ private fun MonitoringStatus(state: HomeUiState, onOpenMonitoring: () -> Unit) {
     LostText(supportLine(state, hasArrival = arrival != null), role = LostTextRole.CAPTION)
 }
 
+/**
+ * Sin una ubicación confiable LOST no puede comparar ni guiar, y lo dice en vez de mostrar un estado viejo:
+ * qué pasó y qué hacer (el porqué se omite porque no cabe y no cambia lo que hay que hacer). TalkBack lo
+ * anuncia al aparecer.
+ */
+@Composable
+private fun WeakLocationStatus() {
+    LostIcon(Icons.Rounded.LocationOff, null, tint = SemanticTokens.Status.deviation)
+    LostText(
+        stringResource(R.string.error_gps_what),
+        modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+        role = LostTextRole.TITLE
+    )
+    LostText(
+        stringResource(R.string.error_gps_todo),
+        role = LostTextRole.CAPTION,
+        color = SemanticTokens.Text.secondary
+    )
+}
+
 @Composable
 private fun supportLine(state: HomeUiState, hasArrival: Boolean): String = when {
     state.isVoluntaryDetour -> stringResource(R.string.home_walking_safely)
@@ -108,6 +134,13 @@ private fun HomeMonitoringPreview() {
         routineName = "U",
         arrivalMinuteOfDay = 435
     )
+    LostTheme { HomeContent(state, {}, {}) }
+}
+
+@LostDevicePreviews
+@Composable
+private fun HomeWeakLocationPreview() {
+    val state = HomeUiState.idle(false).copy(isMonitoring = true, ringProgress = 0.3f, hasWeakLocation = true)
     LostTheme { HomeContent(state, {}, {}) }
 }
 

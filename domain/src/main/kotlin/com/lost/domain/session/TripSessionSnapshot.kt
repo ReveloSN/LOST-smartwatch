@@ -13,6 +13,7 @@ import com.lost.domain.model.Trip
  * @property guidance a dónde volver (punto más cercano de la ruta de siempre o el destino).
  * @property isGoingElsewhere el usuario respondió "Voy a otro lado": el resto del recorrido ya no se compara
  * con la ruta de siempre.
+ * @property hasWeakLocation hace más de un minuto que no llega una ubicación confiable ([LocationSignalWatchdog]).
  */
 data class TripSessionSnapshot(
     val isMonitoring: Boolean,
@@ -23,7 +24,8 @@ data class TripSessionSnapshot(
     val destination: Destination?,
     val guidance: Guidance?,
     val hasArrived: Boolean,
-    val isGoingElsewhere: Boolean
+    val isGoingElsewhere: Boolean,
+    val hasWeakLocation: Boolean
 ) {
     val currentLocation: GeoPoint? get() = trip?.lastPoint
 
@@ -37,7 +39,8 @@ data class TripSessionSnapshot(
             destination = null,
             guidance = null,
             hasArrived = false,
-            isGoingElsewhere = false
+            isGoingElsewhere = false,
+            hasWeakLocation = false
         )
     }
 }
