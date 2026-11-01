@@ -16,10 +16,10 @@ Mapa para la sustentación: cada concepto del plan apunta a la clase real que lo
 
 | Principio | Dónde se ve |
 |---|---|
-| **S** — Responsabilidad única | El motor está partido en piezas de una sola tarea: `TrajectoryResampler`, `DtwSequenceComparator`, `RoutineLearner`, cada `DeviationSignal`, `CompositeAnomalyScorer`, `AssistanceLevelClassifier`, `DeviationExplanationBuilder`. Los efectos de la asistencia también: `AssistanceHapticPolicy`, `AssistanceMetricsRecorder`, `AssistanceFeedbackLearner`, `LocationSharingEffect`. |
+| **S** — Responsabilidad única | El motor está partido en piezas de una sola tarea: `TrajectoryResampler`, `DtwSequenceComparator`, `RoutineLearner`, cada `DeviationSignal`, `CompositeAnomalyScorer`, `AssistanceLevelClassifier`, `DeviationExplanationBuilder`. Los efectos de la asistencia también: `AssistanceHapticPolicy`, `AssistanceMetricsRecorder`, `AssistanceFeedbackLearner`, `LocationSharingEffect`, `AlertPlaceLogger`. La limpieza del GPS se reparte en `GpsSmoothing` (reglas), `GpsWindowAverage` (promedio ponderado por precisión) y `ResampleAccumulator` (remuestreo); lo que corre junto al monitor, en `LocationSignalWatchdog`, `AssistancePromptEffect` y `GlanceRefresher`, agrupados por `TripBackgroundWork`. |
 | **O** — Abierto/cerrado | Una señal nueva = una clase que implemente `DeviationSignal` + registrarla en `LostEngineAssembly.signals()`. `CompositeAnomalyScorer` no cambia (prueba `una senal nueva se suma sin modificar el puntaje combinado`). |
 | **L** — Sustitución de Liskov | `RoutineDetectionMode` / `NewPlaceDetectionMode` (contrato `DetectionMode`); `DtwSequenceComparator` / `FrechetSequenceComparator` (contrato `SequenceComparator`, misma prueba para ambos). |
-| **I** — Segregación de interfaces | Puertos pequeños en `domain/port/`: `LocationSource`, `HapticNotifier`, `ContactNotifier`, `RoutineReader`, `RoutineWriter`, `TripRecorder`, `TripReader`, `MetricsTracker`, `MetricsReader`, `SettingsReader`, `SettingsWriter`, `ContactReader`, `ContactWriter`, `DestinationReader`, `DestinationWriter`, `DeviceStatusReader`, y para el mapa `MapTileSource`, `DestinationSearchService`, `WalkingRouteService`, `CompassHeadingSource`. |
+| **I** — Segregación de interfaces | Puertos pequeños en `domain/port/`: `LocationSource`, `HapticNotifier`, `ContactNotifier`, `RoutineReader`, `RoutineWriter`, `TripRecorder`, `TripReader`, `MetricsTracker`, `MetricsReader`, `SettingsReader`, `SettingsWriter`, `ContactReader`, `ContactWriter`, `DestinationReader`, `DestinationWriter`, `DeviceStatusReader`, y para el mapa `MapTileSource`, `DestinationSearchService`, `WalkingRouteService`, `CompassHeadingSource`; para los lugares de 03.2 `AlertPlaceRecorder` (escribe) y `AlertPlaceReader` (lee) por separado. En `app`, `PromptNotifications` y `GlanceSurfaces` son interfaces de un método para probar los efectos sin Android. |
 | **D** — Inversión de dependencias | El dominio define los puertos; `data` y `ai` los implementan (`FusedLocationSource`, `AndroidHapticNotifier`, `RoomRoutineRepository`, `LostDetectionEngine`…). Hilt los conecta en `DataBindingsModule` y `AiModule`. |
 
 ## Patrones de diseño
@@ -30,20 +30,23 @@ Mapa para la sustentación: cada concepto del plan apunta a la clase real que lo
 | Composite | `CompositeAnomalyScorer` |
 | State | `AssistanceState` + `AssistanceStateMachine` |
 | Chain of Responsibility | `AssistanceResponsePolicy`: `VibrateAndAskLink` → `AlternativeRouteLink` → `ShareLocationLink` |
-| Observer | `TripSession.snapshot` (`StateFlow`) y `TripSession.transitions` (`SharedFlow`) → ViewModels y `AssistanceEffects` |
-| Repository | `RoomRoutineRepository`, `RoomTripRepository`, `RoomDestinationRepository`, `DataStoreSettingsRepository`, `AuthorizedContactRepository` |
+| Observer | `TripSession.snapshot` (`StateFlow`) y `TripSession.transitions` (`SharedFlow`) → ViewModels, `AssistanceEffects`, `LocationSignalWatchdog` (ubicación perdida), `AssistancePromptEffect` (notificación 05.3) y `GlanceRefresher` (complicación y vista rápida en vivo) |
+| Repository | `RoomRoutineRepository`, `RoomTripRepository`, `RoomDestinationRepository`, `RoomAlertPlaceRepository`, `DataStoreSettingsRepository`, `AuthorizedContactRepository` |
 | Adapter | `FusedLocationSource` (Google Play Services → `LocationSource`), `AndroidHapticNotifier`, `NetworkTileSource` / `NominatimDestinationSearch` / `OsrmWalkingRouteService` (OpenStreetMap → puertos del mapa), `AndroidCompassHeadingSource` |
 | Decorator / caché en cadena | `CachedMapTileSource` envuelve a `NetworkTileSource`: memoria (LRU) → disco → red, con el mismo contrato `MapTileSource` |
 | Factory | `DetectionModeFactory` |
 | Facade | `LostDetectionEngine.evaluate(request)` |
-| Mapper | `TripEntityMapper`, `RoutineEntityMapper`, `MetricEventEntityMapper`, `DestinationEntityMapper`, `LostErrorToUiMessageMapper`, `*UiStateMapper` |
-| Use Case | `domain/usecase/*UseCase.kt` (verbo + objeto) |
+| Mapper | `TripEntityMapper`, `RoutineEntityMapper`, `MetricEventEntityMapper`, `DestinationEntityMapper`, `AlertPlaceEntityMapper`, `LostErrorToUiMessageMapper`, `*UiStateMapper`, `GlanceSummaryMapper` (reutiliza el estado de Inicio para que complicación, vista rápida e Inicio digan lo mismo) |
+| Use Case | `domain/usecase/*UseCase.kt` (verbo + objeto), p. ej. `GetWeekActivityUseCase`, `GetDisorientationPlacesUseCase` |
+| Policy (decisión pura) | `AssistancePromptPolicy` (cuándo preguntar por notificación), `StatusPresentation.of(snapshot)` (estado visible, sin alarmar en la pausa) |
 
 ## Estructuras de datos
 
 | Estructura | Uso | Clase |
 |---|---|---|
 | `ArrayDeque` como buffer circular | Ventana de giros recientes, O(1) al agregar y quitar | `ErraticHeadingSignal` |
+| `ArrayDeque` como ventana de tiempo | Puntos GPS de los últimos 15–45 s (según la precisión), promedio ponderado por 1/precisión² | `GpsWindowAverage` |
+| Agrupamiento voraz por distancia | Alertas a menos de una cuadra = un lugar; O(n·k) con pocas alertas | `AlertPlaceGrouper` |
 | `HashMap<GridCell, MutableList<Int>>` | Grilla de 20 m: "¿ya pasé por aquí?" en O(1) | `SpatialGrid`, `LoopSignal` |
 | Matriz DTW de dos filas (`DoubleArray`) | O(n·m) tiempo, O(m) memoria, banda de Sakoe-Chiba | `DtwSequenceComparator` |
 | `PriorityQueue<RoutineMatch>` | Rutina más parecida (top-k) | `RoutineMatcher` |
