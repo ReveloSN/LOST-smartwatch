@@ -13,5 +13,8 @@ enum class MonitoringHeadline(@param:StringRes val text: Int) {
     NEW_PLACE(R.string.monitoring_new_place),
 
     /** Sin una ubicación confiable no hay nada que comparar: se dice en vez de mostrar el último estado. */
-    NO_LOCATION(R.string.error_gps_what)
+    NO_LOCATION(R.string.error_gps_what),
+
+    /** Tras "Estoy bien": LOST no pregunta un rato; el titular no contradice esa respuesta. */
+    PAUSED(R.string.monitoring_paused)
 }

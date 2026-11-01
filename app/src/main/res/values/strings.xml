@@ -80,6 +80,7 @@
     <string name="monitoring_other_street">Hoy tomaste otra calle</string>
     <string name="monitoring_drifting">Te estás apartando</string>
     <string name="monitoring_not_similar">Ya no es tu ruta</string>
+    <string name="monitoring_paused">En pausa, sigo atento.</string>
     <string name="monitoring_new_place">Lugar nuevo, sin ruta habitual</string>
     <string name="monitoring_idle">No hay un recorrido en curso.</string>
     <string name="cd_route_comparison">Ruta de siempre en gris y la de hoy en color</string>

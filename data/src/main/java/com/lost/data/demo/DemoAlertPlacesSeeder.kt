@@ -26,6 +26,8 @@ class DemoAlertPlacesSeeder @Inject constructor(
         val routine = routines.routines().firstOrNull()?.name
         val closedStreet = gpx.points(DemoScenario.DISORIENTATION)
         val clinic = gpx.points(DemoScenario.NEW_PLACE)
+        // Un GPX vacío o dañado no debe impedir que la app arranque: simplemente no se siembra.
+        if (closedStreet.isEmpty() || clinic.isEmpty()) return
         listOf(
             AlertPlace(
                 at(closedStreet, LOOPS_SHARE),

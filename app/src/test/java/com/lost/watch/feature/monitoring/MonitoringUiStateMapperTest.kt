@@ -46,7 +46,9 @@ class MonitoringUiStateMapperTest {
     @Test
     fun `en la pausa tras estoy bien no muestra ayuda`() {
         val snapshot = AppFixtures.monitoring(AppFixtures.detection(AssistanceLevel.HIGH), AssistanceState.Paused)
-        assertEquals(StatusPresentation.ON_ROUTE, MonitoringUiStateMapper().map(snapshot).status)
+        val state = MonitoringUiStateMapper().map(snapshot)
+        assertEquals(StatusPresentation.ON_ROUTE, state.status)
+        assertEquals(MonitoringHeadline.PAUSED, state.headline)
     }
 
     @Test

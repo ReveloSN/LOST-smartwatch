@@ -67,6 +67,7 @@
     <string name="monitoring_other_street">Another street today</string>
     <string name="monitoring_drifting">You’re drifting away</string>
     <string name="monitoring_not_similar">Not your usual route</string>
+    <string name="monitoring_paused">Paused, still watching.</string>
     <string name="monitoring_new_place">New place, no usual route</string>
     <string name="monitoring_idle">No route in progress.</string>
     <string name="cd_route_comparison">Usual route in gray and today’s in color</string>

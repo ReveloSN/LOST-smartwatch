@@ -1,5 +1,6 @@
 package com.lost.watch.feature.monitoring
 
+import com.lost.domain.assistance.AssistanceState
 import com.lost.domain.detection.AssistanceLevel
 import com.lost.domain.detection.DetectionModeKind
 import com.lost.domain.detection.DeviationReason
@@ -27,6 +28,8 @@ class MonitoringUiStateMapper @Inject constructor() {
         val detection = snapshot.detection
         return when {
             snapshot.hasWeakLocation -> MonitoringHeadline.NO_LOCATION
+
+            snapshot.assistance == AssistanceState.Paused -> MonitoringHeadline.PAUSED
 
             detection.mode == DetectionModeKind.NEW_PLACE -> MonitoringHeadline.NEW_PLACE
 

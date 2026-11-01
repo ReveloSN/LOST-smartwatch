@@ -70,6 +70,7 @@
     <string name="monitoring_other_street">Outra rua hoje</string>
     <string name="monitoring_drifting">Você está se afastando</string>
     <string name="monitoring_not_similar">Não é sua rota de sempre</string>
+    <string name="monitoring_paused">Em pausa, continuo atento.</string>
     <string name="monitoring_new_place">Lugar novo, sem rota habitual</string>
     <string name="monitoring_idle">Não há percurso em andamento.</string>
     <string name="cd_route_comparison">Rota de sempre em cinza e a de hoje em cor</string>
