@@ -15,6 +15,11 @@ App nativa para **Wear OS** que aprende tus recorridos habituales y nota cuándo
 - **Mapa real** de OpenStreetMap (sin llave de API): tu ruta de siempre y la de hoy sobre calles reales; sin internet, mini-mapa simple.
 - **Destinos reales por voz**: si no está guardado, lo busca en OpenStreetMap y lo guarda con sus coordenadas.
 - **Flecha con brújula**: en la guía, la flecha gira según hacia dónde miras.
+- **Robusta al GPS del reloj**: usa la precisión de cada punto (ignora los malos, pesa menos los dudosos) y no confunde una esquina con temblor con dar vueltas; probado con 10 ruidos distintos por variante.
+- **Pregunta aunque no mires la app**: con la pantalla apagada llega "¿Todo bien en tu ruta?" como notificación con Guíame y Estoy bien.
+- **Avisa si pierde tu ubicación**: tras un minuto sin GPS confiable dice "No encontramos tu ubicación · Camina hacia una salida o ventana".
+- **Complicación y vista rápida en vivo**: anillo con el avance, a dónde vas y la hora de llegada.
+- **Dónde más te desorientas**: los lugares donde LOST preguntó en el último mes, nombrados sin enviar tu ubicación a nadie.
 - Español, inglés y portugués; texto grande; TalkBack; contraste WCAG AA verificado por prueba.
 
 ## Requisitos
@@ -67,14 +72,14 @@ Las rutas de demo se regeneran con `python tools/generate_osm_routes.py` cambian
 | Módulo | Pruebas |
 |---|---|
 | `core/designsystem` | 11 (contraste WCAG, líneas por rol de texto) |
-| `domain` | 92 (máquina de estados, cadena de respuesta, temporizadores, monitor, casos de uso, métricas, mapa, batería) |
-| `ai` | 43 (las 5 de escenario de la sección 8.5 + geometría, remuestreo con ruido de GPS, DTW, señales, aprendizaje, rendimiento) |
+| `domain` | 112 (máquina de estados, cadena de respuesta, temporizadores, monitor, aviso de ubicación perdida, lugares de desorientación, casos de uso, métricas, mapa, batería) |
+| `ai` | 51 (las 5 de escenario de la sección 8.5 + geometría, remuestreo con ruido y precisión del GPS, DTW, señales, aprendizaje, rendimiento) |
 | `data` | 29 (mappers, repositorios, DataStore, GPX, demo, háptica, caché de teselas, Nominatim, OSRM) |
-| `app` | 69 (mappers de UI, ViewModel, demo GPX de punta a punta, ruido de GPS, traducciones, textos que caben con Manrope, accesibilidad) |
-| **Total JVM** | **244** |
+| `app` | 272 (mappers de UI, ViewModel, demo GPX de punta a punta, ruido de GPS con 10 semillas por variante, complicación y vista rápida, notificación, traducciones, accesibilidad) |
+| **Total JVM** | **475** |
 
-En el emulador de Wear OS (17 pruebas instrumentadas: Room contra SQLite real, alertas en la pantalla redonda,
-TalkBack, Texto grande y pantallas sin internet):
+En el emulador de Wear OS (21 pruebas instrumentadas: Room contra SQLite real y su migración, alertas en la pantalla
+redonda, pantallas de error con letra normal y grande, TalkBack, Texto grande y pantallas sin internet):
 
 ```bash
 ./gradlew :data:connectedDebugAndroidTest :app:connectedDebugAndroidTest
@@ -112,7 +117,7 @@ LOST/
 
 | Tema | Archivo |
 |---|---|
-| Avances por fase, decisiones y pendientes | `docs/AVANCES.md` (último: "Pulido del 27 de octubre") |
+| Avances por fase, decisiones y pendientes | `docs/AVANCES.md` (último: "Jornada del 1 de noviembre") |
 | Arquitectura, SOLID, patrones y estructuras de datos | `docs/arquitectura.md` |
 | Arquitectura de información | `docs/ia/arquitectura-informacion.md` |
 | Motor de IA | `docs/ia/motor-ia.md` |
@@ -120,7 +125,7 @@ LOST/
 | Voz, tono, glosario y errores | `docs/contenido/glosario-voz.md` |
 | Personalidad de la marca | `docs/marca/personalidad.md` |
 | Métricas y cuestionario SUS | `docs/metricas/` |
-| Decisiones (ADR) | `docs/adr/` (001 arquitectura · 002 DTW · 003 máquina de estados · 004 mapa OpenStreetMap) |
+| Decisiones (ADR) | `docs/adr/` (001 arquitectura · 002 DTW · 003 máquina de estados · 004 mapa OpenStreetMap · 005 lugares sin geocodificación) |
 | Simplificación de la interfaz (antes/después) | `docs/diseno/simplificacion.md` |
 | Tipografía Manrope (licencia y peso) | `docs/diseno/tipografia-manrope.md` |
 | Fidelidad con los mockups | `docs/diseno/fidelidad-mockups.md` |

@@ -45,3 +45,9 @@ stateDiagram-v2
 - ✅ Los estados imposibles no se pueden representar.
 - ✅ Agregar un estado obliga al compilador a revisar todos los `when`.
 - ⚠️ Decisiones explícitas que antes quedaban implícitas: cancelar la cuenta vuelve a Calm; nivel alto sin contacto pregunta en vez de compartir; mientras guía, nuevas lecturas no interrumpen; tras "Estoy bien" o "Ya sé dónde estoy" hay 2 minutos sin preguntas (`Paused`, 31 de octubre), porque quien sigue buscando la salida volvía a recibir la alerta a los pocos segundos.
+- ✅ **"Voy a otro lado" se recuerda hasta el final del recorrido** (1 de noviembre): `TripSession` marca
+  `isGoingElsewhere` y el resto del recorrido se evalúa como un lugar nuevo, sin compararlo con la ruta de siempre.
+  Antes el desvío seguía midiéndose contra la rutina y el temblor del GPS podía terminar en "¿Necesitas ayuda?".
+- ✅ **La máquina sigue siendo pura aunque la pregunta llegue por notificación** (1 de noviembre): con la app
+  oculta, `AssistancePromptEffect` muestra `SoftAsk` y `AskForHelp` como notificación (mockup 05.3) y sus botones
+  despachan los mismos eventos (`UserIsFine`, `UserIsGoingElsewhere`, `UserRequestedGuidance`). No hay estados nuevos.

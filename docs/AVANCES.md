@@ -10,7 +10,8 @@ las decisiones tomadas y lo que queda pendiente.
 - **Demo con GPX** verificada de punta a punta por prueba: rutina normal (silencio), desvío voluntario (pregunta suave), calle cerrada (pregunta → guía → ruta recuperada) y hospital (pregunta → llegada).
 - **Diseño** fiel a los mockups: tokens en 3 niveles, Atomic Design, previews redondo/cuadrado, voz y tono, 3 idiomas, accesibilidad verificada por prueba.
 - **Mejoras del 25 de octubre** (rama `mejoras-ui-mapa`): interfaz simplificada y verificada en un emulador de Wear OS, **mapa real de OpenStreetMap**, destinos reales por voz, demo sobre calles reales, flecha con brújula y optimización (APK de 57 MB a 3,6 MB, GPS adaptativo).
-- **Lo que falta** (ver "Pendientes generales" al final): prueba con usuarios (SUS), calibrar la IA con recorridos reales y probar voz y brújula en un reloj físico.
+- **Jornada del 1 de noviembre**: IA robusta con varias semillas y con la precisión del GPS, aviso de ubicación perdida, notificación 05.3, complicación y vista rápida en vivo (05), "Donde más te desorientas" (03.2), icono propio y pantallas de error probadas en el reloj. **475 pruebas JVM + 21 instrumentadas.**
+- **Lo que falta** (ver "Pendientes generales" al final): prueba con usuarios (SUS), calibrar la IA con recorridos reales y probar voz, brújula y la complicación en un reloj físico.
 
 ## Resumen de fases
 
@@ -603,6 +604,32 @@ Cierra el pendiente del cañón urbano. Detalle, tablas y costos en
 - Las falsas alarmas se prueban con 10 semillas por variante. Detalle en
   [`docs/ia/robustez-ruido-gps.md`](ia/robustez-ruido-gps.md#varias-semillas-el-desvío-voluntario-con-σ-10-m--1-de-noviembre).
 
+## Jornada del 1 de noviembre (funcionalidades)
+
+Además del diagnóstico del desvío voluntario (sección anterior), quedaron cerrados todos los pendientes de código
+de la tabla (c) de `docs/diseno/fidelidad-mockups.md`. Todo se probó en el emulador de Wear OS.
+
+| Qué | Commits | Pruebas |
+|---|---|---|
+| **Aviso de ubicación perdida.** Tras un minuto sin un punto confiable (≤ 50 m de precisión) Inicio dice "No encontramos tu ubicación · Camina hacia una salida o ventana", con región viva para TalkBack y una vibración suave; se quita con el primer punto bueno y no aparece tras llegar. Captura `19`. | `9d0b41c` | `LocationSignalWatchdogTest` (5), `HomeUiStateMapperTest` |
+| **Complicación y vista rápida como el mockup 05.** Complicación `RANGED_VALUE` (anillo con el avance + hora de llegada) y `SHORT_TEXT`; vista rápida "LOST · ahora / Vas a Casa → U / Todo en orden · llegada 7:15" en el color del estado; ambas abren Inicio y se actualizan en vivo solo cuando cambia algo visible. | `5936628`, `a24c5f5` | `GlanceSummaryMapperTest` (5), `GlanceRefresherTest` |
+| **Notificación 05.3.** Con la app oculta, "LOST · ¿Todo bien en tu ruta?" con Guíame / Estoy bien (o "¿Vas a otro lado hoy?"). Estoy bien y Voy a otro lado responden sin abrir la app; Guíame la abre. Captura `20`. | `a502d80` | `AssistancePromptTest` (4) |
+| **Icono propio.** El lanzador, la notificación y el splash usaban el robot de la plantilla; ahora es el anillo aqua del mockup 05.2 sobre negro, con capa monocroma. | `b2efd4d` | Visto en el lanzador del emulador |
+| **Donde más te desorientas (03.2).** Se guarda dónde y por qué preguntó LOST (Room v2, migración automática); hasta 3 lugares agrupados por cuadra, nombrados con destinos o rutinas sin internet ([ADR 005](adr/005-lugares-sin-geocodificacion.md)). "Borrar lo aprendido" también los borra. Captura `21`. | `140d538` | `DisorientationPlacesTest` (4), `LostDatabaseTest` (+1), `LostDatabaseMigrationTest` |
+| **Errores (10) y Texto grande.** Los 9 errores se dibujan en el reloj con letra normal y con Texto grande; se revisaron con Texto grande las 11 pantallas que faltaban (hoja `a11y-texto-grande-resto.png`): sin cortes, las largas se desplazan. | `a0d2c7a` | `ErrorScreensTest` (2, instrumentada) |
+
+**Verificación:** `./gradlew ktlintCheck detekt test assembleDebug` en verde (475 pruebas JVM) y 21 pruebas
+instrumentadas en el emulador `Wear_OS_Large_Round` (data 8 · app 13).
+
+### Decisiones
+
+- **Sin geocodificación inversa** para los lugares (ADR 005): la ubicación de los momentos difíciles no sale del reloj.
+- **La notificación no vibra**: la escalada ya vibra con su patrón; vibrar dos veces confundiría.
+- **"Guíame" abre la app**: la guía es una flecha que hay que ver, y Android no permite abrir una pantalla desde un
+  receptor lanzado por una notificación.
+- **El refresco de la complicación y la vista rápida** se pide solo cuando cambia el estado, el destino, la llegada o
+  un décimo del avance: pedirlo con cada punto GPS gastaría batería sin cambiar nada en pantalla.
+
 ---
 
 ## Pendientes generales
@@ -615,4 +642,5 @@ Cierra el pendiente del cañón urbano. Detalle, tablas y costos en
 | ~~Fuente Manrope~~ | Hecho el 27 de octubre (`docs/diseno/tipografia-manrope.md`). | — |
 | ~~Flecha con brújula~~ | Hecho el 25 de octubre (`AndroidCompassHeadingSource`). | Probarla en un reloj físico. |
 | Selector de contacto real | En el reloj no hay un selector estándar; la demo usa a Laura. | Elegirlo desde el teléfono vinculado (Data Layer). |
+| Complicación sobre una esfera real | La esfera del emulador es declarativa y no expone huecos por comando. | Ponerla en una esfera con huecos en un reloj físico. |
 | ~~Pruebas instrumentadas (Room, Compose UI)~~ | Hecho el 27 de octubre: 17 pruebas en el emulador. | — |
