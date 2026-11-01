@@ -46,8 +46,11 @@ class TripSession @Inject constructor() {
 
     /**
      * Aplica un evento a la máquina de estados y publica la transición. Si el usuario dice "Voy a otro lado",
-     * la sesión lo recuerda hasta el final del recorrido.
+     * la sesión lo recuerda hasta el final del recorrido. Es sincronizado: el monitor, los temporizadores, la UI
+     * y la notificación despachan desde hilos distintos, y leer el estado y escribir el siguiente debe ser
+     * una sola operación para que ninguna respuesta se pierda.
      */
+    @Synchronized
     fun dispatch(event: AssistanceEvent): AssistanceTransition {
         val current = state.value.assistance
         val next = stateMachine.next(current, event)

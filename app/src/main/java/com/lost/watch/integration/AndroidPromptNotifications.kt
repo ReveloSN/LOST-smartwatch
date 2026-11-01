@@ -21,8 +21,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 /**
- * 05.3 · La pregunta como notificación del reloj: "LOST" en ámbar, la pregunta y dos botones. No vibra
- * por su cuenta (la escalada ya vibra con su patrón) y no se copia al teléfono.
+ * 05.3 · La pregunta como notificación del reloj: "LOST" en ámbar, la pregunta y dos botones. No vibra ni
+ * suena por su cuenta (la escalada ya vibra con su patrón; LOST es discreto) y no se copia al teléfono.
  */
 class AndroidPromptNotifications @Inject constructor(@ApplicationContext private val context: Context) :
     PromptNotifications {
@@ -42,7 +42,11 @@ class AndroidPromptNotifications @Inject constructor(@ApplicationContext private
             .addAction(0, context.getString(prompt.primary.label), intentFor(prompt.primary))
             .addAction(0, context.getString(prompt.secondary.label), intentFor(prompt.secondary))
             .build()
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
+        try {
+            NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
+        } catch (_: SecurityException) {
+            // El permiso se revocó entre la comprobación y el aviso: la alerta en pantalla sigue funcionando.
+        }
     }
 
     override fun cancel() = NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
@@ -70,12 +74,15 @@ class AndroidPromptNotifications @Inject constructor(@ApplicationContext private
             CHANNEL_ID,
             context.getString(R.string.notification_channel_questions),
             NotificationManager.IMPORTANCE_HIGH
-        ).apply { enableVibration(false) }
+        ).apply {
+            enableVibration(false)
+            setSound(null, null)
+        }
         context.getSystemService(NotificationManager::class.java)?.createNotificationChannel(channel)
     }
 
     private companion object {
-        const val CHANNEL_ID = "lost_questions"
+        const val CHANNEL_ID = "lost_prompts"
         const val NOTIFICATION_ID = 2
     }
 }

@@ -40,9 +40,13 @@ class MainActivity : ComponentActivity() {
         super.onStop()
     }
 
-    /** "Guíame" tocado en la notificación abre la app con la respuesta: la guía se ve aquí. */
+    /**
+     * "Guíame" tocado en la notificación abre la app con la respuesta: la guía se ve aquí. Al volver desde
+     * recientes Android repite el intent original, y esa respuesta vieja se ignora.
+     */
     private fun answerFromNotification(intent: Intent?) {
-        PromptAction.from(intent)?.let { session.dispatch(it.event) }
+        val isFromHistory = (intent?.flags ?: 0) and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0
+        if (!isFromHistory) PromptAction.from(intent)?.let { session.dispatch(it.event) }
         intent?.removeExtra(PromptAction.EXTRA)
     }
 }
