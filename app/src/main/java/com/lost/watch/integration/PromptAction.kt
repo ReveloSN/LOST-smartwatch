@@ -12,7 +12,8 @@ import com.lost.watch.R
 enum class PromptAction(@param:StringRes val label: Int, val event: AssistanceEvent, val opensApp: Boolean) {
     GUIDE(R.string.assist_guide_me, AssistanceEvent.UserRequestedGuidance, opensApp = true),
     IM_FINE(R.string.assist_im_fine, AssistanceEvent.UserIsFine, opensApp = false),
-    GOING_ELSEWHERE(R.string.assist_going_elsewhere, AssistanceEvent.UserIsGoingElsewhere, opensApp = false);
+    GOING_ELSEWHERE(R.string.assist_going_elsewhere, AssistanceEvent.UserIsGoingElsewhere, opensApp = false),
+    CANCEL_SHARING(R.string.assist_cancel, AssistanceEvent.CountdownCancelled, opensApp = false);
 
     companion object {
         const val EXTRA = "com.lost.watch.PROMPT_ACTION"

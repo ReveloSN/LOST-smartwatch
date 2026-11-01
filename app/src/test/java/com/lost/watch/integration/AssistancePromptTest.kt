@@ -19,6 +19,13 @@ class AssistancePromptTest {
     fun `con la app oculta pregunta por notificacion`() {
         assertEquals(AssistancePrompt.ASK_FOR_HELP, policy.promptFor(AssistanceState.AskForHelp(emptyList()), false))
         assertEquals(AssistancePrompt.SOFT_ASK, policy.promptFor(AssistanceState.SoftAsk(emptyList()), false))
+        assertEquals(AssistancePrompt.SHARING_SOON, policy.promptFor(AssistanceState.SharingCountdown(5), false))
+    }
+
+    @Test
+    fun `la cuenta regresiva se puede cancelar desde la notificacion`() {
+        assertEquals(AssistanceEvent.CountdownCancelled, AssistancePrompt.SHARING_SOON.primary.event)
+        assertNull(AssistancePrompt.SHARING_SOON.secondary)
     }
 
     @Test
@@ -31,7 +38,7 @@ class AssistancePromptTest {
     @Test
     fun `las respuestas de la notificacion son las de la alerta`() {
         assertEquals(AssistanceEvent.UserRequestedGuidance, AssistancePrompt.ASK_FOR_HELP.primary.event)
-        assertEquals(AssistanceEvent.UserIsFine, AssistancePrompt.ASK_FOR_HELP.secondary.event)
+        assertEquals(AssistanceEvent.UserIsFine, AssistancePrompt.ASK_FOR_HELP.secondary?.event)
         assertEquals(AssistanceEvent.UserIsGoingElsewhere, AssistancePrompt.SOFT_ASK.primary.event)
     }
 

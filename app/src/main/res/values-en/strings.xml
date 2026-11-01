@@ -273,6 +273,7 @@
     <string name="tile_title_now">LOST · now</string>
     <string name="glance_detail_with_arrival">%1$s · arriving %2$s</string>
     <string name="notification_channel_questions">LOST questions</string>
+    <string name="notification_sharing_soon">I\'m about to tell your contact.</string>
     <string name="notification_ask_question">Is everything OK on your route?</string>
 
     <!-- Rumbos para TalkBack -->

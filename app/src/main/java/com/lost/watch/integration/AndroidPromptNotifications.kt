@@ -21,8 +21,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 /**
- * 05.3 · La pregunta como notificación del reloj: "LOST" en ámbar, la pregunta y dos botones. No vibra ni
- * suena por su cuenta (la escalada ya vibra con su patrón; LOST es discreto) y no se copia al teléfono.
+ * 05.3 · La pregunta como notificación del reloj: "LOST" en ámbar, la pregunta y sus botones. No suena (LOST es
+ * discreto) y no se copia al teléfono. Vibra un solo toque de 40 ms: Wear OS deja una notificación sin sonido ni
+ * vibración en la sección silenciosa, sin anunciarla, y con la pantalla apagada la pregunta pasaría inadvertida.
+ * El patrón propio de cada nivel lo sigue dando la escalada.
  */
 class AndroidPromptNotifications @Inject constructor(@ApplicationContext private val context: Context) :
     PromptNotifications {
@@ -40,16 +42,26 @@ class AndroidPromptNotifications @Inject constructor(@ApplicationContext private
             .setAutoCancel(true)
             .setContentIntent(openLostIntent(context))
             .addAction(0, context.getString(prompt.primary.label), intentFor(prompt.primary))
-            .addAction(0, context.getString(prompt.secondary.label), intentFor(prompt.secondary))
+            .apply { prompt.secondary?.let { addAction(0, context.getString(it.label), intentFor(it)) } }
             .build()
         try {
-            NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
+            cancel()
+            NotificationManagerCompat.from(context).notify(idOf(prompt), notification)
         } catch (_: SecurityException) {
             // El permiso se revocó entre la comprobación y el aviso: la alerta en pantalla sigue funcionando.
         }
     }
 
-    override fun cancel() = NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
+    override fun cancel() {
+        val manager = NotificationManagerCompat.from(context)
+        AssistancePrompt.entries.forEach { manager.cancel(idOf(it)) }
+    }
+
+    /**
+     * Cada pregunta tiene su propio id: una notificación que solo se actualiza no vuelve a aparecer en pantalla,
+     * y la cuenta regresiva (5 s para cancelar) tiene que verse aunque reemplace a "¿Todo bien en tu ruta?".
+     */
+    private fun idOf(prompt: AssistancePrompt) = FIRST_NOTIFICATION_ID + prompt.ordinal
 
     /** "Guíame" abre la app directamente: Android no deja abrir una pantalla desde un receptor de notificación. */
     private fun intentFor(action: PromptAction): PendingIntent {
@@ -75,14 +87,16 @@ class AndroidPromptNotifications @Inject constructor(@ApplicationContext private
             context.getString(R.string.notification_channel_questions),
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
-            enableVibration(false)
+            enableVibration(true)
+            vibrationPattern = ANNOUNCE_VIBRATION
             setSound(null, null)
         }
         context.getSystemService(NotificationManager::class.java)?.createNotificationChannel(channel)
     }
 
     private companion object {
-        const val CHANNEL_ID = "lost_prompts"
-        const val NOTIFICATION_ID = 2
+        const val CHANNEL_ID = "lost_prompts_alert"
+        const val FIRST_NOTIFICATION_ID = 2
+        val ANNOUNCE_VIBRATION = longArrayOf(0, 40)
     }
 }
