@@ -539,7 +539,7 @@ aviso enviado, guía, "Entendido" y las secciones. Hoja resumen en `00-resumen.p
 | Aplicar el SUS con 5 personas | Seguir `docs/metricas/guia-aplicacion-sus.md` y pegar el informe del script en `sus.md`. |
 | GPS en cañón urbano (σ 20 m) | Usar `Location.accuracy` para ignorar los puntos malos. |
 | Escuchar TalkBack palabra por palabra y Accessibility Scanner | En un reloj físico. |
-| Tu semana con un segmento por día; "Lugares donde más te desorientas" | Ver la sección (c) de `fidelidad-mockups.md`. |
+| ~~Tu semana con un segmento por día~~ (hecho el 1 de noviembre); "Lugares donde más te desorientas" | Ver la sección (c) de `fidelidad-mockups.md`. |
 | Recorridos reales con el reloj | Repetir la tabla de `robustez-ruido-gps.md` con datos grabados. |
 | Arranque con Baseline Profile en un reloj | Repetir `StartupBenchmark` en hardware real. |
 
@@ -553,6 +553,27 @@ aviso enviado, guía, "Entendido" y las secciones. Hoja resumen en `00-resumen.p
    dónde estoy", LOST no vuelve a preguntar durante 2 minutos (estado `Paused`, ver ADR 003). Sigue observando y
    llegar al destino termina la pausa.
 5. Si quieres hacer el merge de `mejoras-ui-mapa` a `main` (no lo hice).
+
+---
+
+## Tu semana por día (1 de noviembre)
+
+Cierra la diferencia con el mockup 03.1 que quedaba pendiente en `docs/diseno/fidelidad-mockups.md`.
+
+- **Un segmento por día hábil, en ámbar el día con desvío**, y debajo la fila **L M M J V** con el mismo color
+  (`SegmentedRingLegend`, organismo nuevo del design system). Un día cuenta como "con desvío" si LOST mostró
+  al menos una alerta ese día.
+- **El desvío no se dice solo con color:** el resumen pasa de "6 recorridos · 1 rutina" a "6 recorridos · sin desvíos"
+  o "· 1 día con desvío" (plurales en es/en/pt), y TalkBack lee "lunes, sin desvíos. martes, con desvío. …".
+  Las rutinas aprendidas se siguen viendo en Mis recorridos.
+- Las letras salen de `strings.xml` y no de `DayOfWeek.getDisplayName`: así miércoles es "M", como en el mockup,
+  y no "X".
+- `GetWeekTripDaysUseCase` pasa a **`GetWeekActivityUseCase`**, que devuelve los días con recorrido y los días con
+  alerta (`WeekActivity`).
+- Verificado en el emulador de Wear OS con datos de prueba (lunes y miércoles sin desvío, martes con alerta):
+  captura `docs/capturas/pulido/15b-tu-semana-con-desvio.png`. Luego se restauró la base de la demo.
+- **5 pruebas nuevas** (`GetWeekActivityUseCaseTest` 3, `InsightsUiStateMapperTest` +2); ktlint, detekt, todas
+  las pruebas JVM y `assembleDebug` en verde.
 
 ---
 
