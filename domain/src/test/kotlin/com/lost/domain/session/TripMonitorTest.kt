@@ -30,6 +30,7 @@ class TripMonitorTest {
     private val session = TripSession()
     private val routines = FakeRoutineRepository(listOf(DomainFixtures.routine()))
     private var nextResult: (Trip) -> DetectionResult = { DomainFixtures.result(AssistanceLevel.LOW) }
+    private val routinesSent = mutableListOf<Int>()
     private var guidanceMeters = 200.0
     private val recorded = mutableListOf<Trip>()
 
@@ -37,6 +38,7 @@ class TripMonitorTest {
         session = session,
         evaluateTrip = EvaluateCurrentTripUseCase(
             TripEvaluator {
+                routinesSent += it.routines.size
                 nextResult(it.trip)
             },
             routines,
@@ -66,6 +68,25 @@ class TripMonitorTest {
     )
 
     private val points = DomainFixtures.trip(points = 6).points
+
+    @Test
+    fun `tras voy a otro lado el resto del recorrido no se compara con la rutina`() = runTest {
+        session.start()
+        nextResult = { DomainFixtures.result(AssistanceLevel.LOW, isVoluntary = true) }
+        monitor.run(
+            flow {
+                points.forEachIndexed { index, point ->
+                    emit(point)
+                    if (index == 3) {
+                        session.dispatch(AssistanceEvent.UserIsGoingElsewhere)
+                        session.dispatch(AssistanceEvent.AcknowledgementElapsed)
+                    }
+                }
+            }
+        )
+        // El motor evalúa desde el tercer punto: dos veces con la rutina y, tras la respuesta, sin ella.
+        assertEquals(listOf(1, 1, 0, 0), routinesSent)
+    }
 
     @Test
     fun `cada punto alarga el recorrido y publica la evaluacion`() = runTest {

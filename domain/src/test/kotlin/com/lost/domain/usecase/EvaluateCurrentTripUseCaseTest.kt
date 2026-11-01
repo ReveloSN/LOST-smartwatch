@@ -40,4 +40,10 @@ class EvaluateCurrentTripUseCaseTest {
         assertEquals(1, lastRequest!!.routines.size)
         assertEquals(Sensitivity.HIGH, lastRequest!!.sensitivity)
     }
+
+    @Test
+    fun `si el usuario va a otro lado no se compara con ninguna rutina`() = runTest {
+        useCase(DomainFixtures.trip(), isGoingElsewhere = true)
+        assertEquals(emptyList<Any>(), lastRequest!!.routines)
+    }
 }

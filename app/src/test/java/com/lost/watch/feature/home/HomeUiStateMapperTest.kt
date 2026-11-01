@@ -1,6 +1,7 @@
 package com.lost.watch.feature.home
 
 import com.lost.domain.detection.AssistanceLevel
+import com.lost.domain.detection.DetectionModeKind
 import com.lost.domain.port.ContactReader
 import com.lost.domain.session.TripSessionSnapshot
 import com.lost.watch.AppFixtures
@@ -8,6 +9,7 @@ import com.lost.watch.ui.StatusPresentation
 import java.time.ZoneOffset
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class HomeUiStateMapperTest {
@@ -30,6 +32,14 @@ class HomeUiStateMapperTest {
         assertEquals("Casa → U", state.routineName)
         assertEquals(7 * 60 + 15, state.arrivalMinuteOfDay)
         assertEquals(0.3f, state.ringProgress)
+    }
+
+    @Test
+    fun `tras voy a otro lado inicio dice que camina seguro a otro lugar`() {
+        val detection = AppFixtures.detection(AssistanceLevel.LOW).copy(mode = DetectionModeKind.NEW_PLACE)
+        val state = mapper.map(AppFixtures.monitoring(detection).copy(isGoingElsewhere = true), false)
+        assertTrue(state.isVoluntaryDetour)
+        assertFalse(state.isNewPlace)
     }
 
     @Test

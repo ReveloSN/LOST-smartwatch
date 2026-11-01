@@ -1,6 +1,7 @@
 package com.lost.watch.integration
 
 import com.lost.data.demo.DemoScenario
+import com.lost.domain.assistance.AssistanceEvent
 import com.lost.domain.assistance.AssistanceState
 import com.lost.domain.model.Destination
 import com.lost.domain.model.PlaceKind
@@ -43,6 +44,23 @@ class GpsNoiseRobustnessTest {
                 DynamicTest.dynamicTest("ruta de siempre · ${noise.name} · semilla $seed") { normal(seeded) },
                 DynamicTest.dynamicTest("desvío voluntario · ${noise.name} · semilla $seed") { voluntary(seeded) }
             )
+        }
+    }
+
+    /**
+     * La historia completa del desvío voluntario: "¿Vas a otro lado hoy?" → "Voy a otro lado" → LOST ya no
+     * compara con la ruta de siempre y no vuelve a preguntar en todo el recorrido.
+     */
+    @TestFactory
+    fun `tras voy a otro lado no vuelve a preguntar`() = SEEDS.map { seed ->
+        DynamicTest.dynamicTest("ciudad con rebotes · semilla $seed") {
+            val story = harness.story(listOf(harness.casaU))
+            val noise = GpsNoise.REALISTIC[2].copy(seed = seed)
+            val points = noise.apply(harness.gpx(DemoScenario.VOLUNTARY_DETOUR))
+            runTest { with(harness) { story.play(points, softAskAnswer = AssistanceEvent.UserIsGoingElsewhere) } }
+            val afterAnswer = story.states.dropWhile { it !is AssistanceState.SoftAsk }.drop(1)
+            assertTrue(story.states.any { it is AssistanceState.SoftAsk }, "no preguntó: ${story.states}")
+            assertTrue(afterAnswer.all { it is AssistanceState.Calm }, "volvió a preguntar: ${story.states}")
         }
     }
 

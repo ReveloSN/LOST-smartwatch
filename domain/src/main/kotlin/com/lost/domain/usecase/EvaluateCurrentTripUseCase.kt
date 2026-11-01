@@ -10,18 +10,26 @@ import com.lost.domain.port.TripEvaluator
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 
-/** Evalúa el recorrido en curso contra las rutinas conocidas y los umbrales del usuario. */
+/**
+ * Evalúa el recorrido en curso contra las rutinas conocidas y los umbrales del usuario. Con
+ * [isGoingElsewhere] (el usuario dijo "Voy a otro lado") no se compara con ninguna rutina: se evalúa
+ * como un lugar nuevo, solo con las señales de confusión.
+ */
 class EvaluateCurrentTripUseCase @Inject constructor(
     private val evaluator: TripEvaluator,
     private val routineReader: RoutineReader,
     private val settingsReader: SettingsReader
 ) {
-    suspend operator fun invoke(trip: Trip, destination: GeoPoint? = null): DetectionResult {
+    suspend operator fun invoke(
+        trip: Trip,
+        destination: GeoPoint? = null,
+        isGoingElsewhere: Boolean = false
+    ): DetectionResult {
         if (!trip.hasEnoughPoints) return DetectionResult.CALM
         val settings = settingsReader.observeSettings().first()
         val request = DetectionRequest(
             trip = trip,
-            routines = routineReader.routines(),
+            routines = if (isGoingElsewhere) emptyList() else routineReader.routines(),
             destination = destination,
             thresholds = settings.thresholds,
             sensitivity = settings.sensitivity

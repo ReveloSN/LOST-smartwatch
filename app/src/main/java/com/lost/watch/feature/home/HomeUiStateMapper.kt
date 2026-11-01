@@ -25,8 +25,9 @@ class HomeUiStateMapper @Inject constructor() {
             ringProgress = snapshot.detection.routeProgress.toFloat(),
             routineName = routine?.name?.takeIf { it.isNotBlank() } ?: snapshot.destination?.name,
             arrivalMinuteOfDay = startedAt?.takeIf { routine != null }?.let { minuteOfDay(it, expected, zoneId) },
-            isNewPlace = snapshot.detection.mode == DetectionModeKind.NEW_PLACE,
-            isVoluntaryDetour = snapshot.detection.isVoluntaryDetour,
+            // Tras "Voy a otro lado" el motor evalúa como lugar nuevo, pero para el usuario sigue siendo su desvío.
+            isNewPlace = snapshot.detection.mode == DetectionModeKind.NEW_PLACE && !snapshot.isGoingElsewhere,
+            isVoluntaryDetour = snapshot.detection.isVoluntaryDetour || snapshot.isGoingElsewhere,
             isDemoAvailable = isDemoAvailable
         )
     }

@@ -1,7 +1,9 @@
 package com.lost.domain.session
 
 import com.lost.domain.assistance.AssistanceEvent
+import com.lost.domain.assistance.AssistanceState
 import com.lost.domain.assistance.AssistanceStateMachine
+import com.lost.domain.assistance.UserFeedback
 import com.lost.domain.model.Destination
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,11 +44,15 @@ class TripSession @Inject constructor() {
     /** Lo usa el monitor para publicar el recorrido actualizado y su evaluación. */
     fun publish(transform: (TripSessionSnapshot) -> TripSessionSnapshot) = state.update(transform)
 
-    /** Aplica un evento a la máquina de estados y publica la transición. */
+    /**
+     * Aplica un evento a la máquina de estados y publica la transición. Si el usuario dice "Voy a otro lado",
+     * la sesión lo recuerda hasta el final del recorrido.
+     */
     fun dispatch(event: AssistanceEvent): AssistanceTransition {
         val current = state.value.assistance
         val next = stateMachine.next(current, event)
-        state.update { it.copy(assistance = next) }
+        val isGoingElsewhere = next == AssistanceState.Acknowledged(UserFeedback.GOING_ELSEWHERE)
+        state.update { it.copy(assistance = next, isGoingElsewhere = it.isGoingElsewhere || isGoingElsewhere) }
         val transition = AssistanceTransition(current, next, event)
         transitionEvents.tryEmit(transition)
         return transition

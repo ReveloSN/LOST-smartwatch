@@ -11,6 +11,8 @@ import com.lost.domain.model.Trip
  * Foto del recorrido en curso que observan Inicio, Monitoreo y la capa de alerta.
  * @property routine rutina contra la que se compara (null en lugar nuevo o sin recorrido).
  * @property guidance a dónde volver (punto más cercano de la ruta de siempre o el destino).
+ * @property isGoingElsewhere el usuario respondió "Voy a otro lado": el resto del recorrido ya no se compara
+ * con la ruta de siempre.
  */
 data class TripSessionSnapshot(
     val isMonitoring: Boolean,
@@ -20,7 +22,8 @@ data class TripSessionSnapshot(
     val routine: Routine?,
     val destination: Destination?,
     val guidance: Guidance?,
-    val hasArrived: Boolean
+    val hasArrived: Boolean,
+    val isGoingElsewhere: Boolean
 ) {
     val currentLocation: GeoPoint? get() = trip?.lastPoint
 
@@ -33,7 +36,8 @@ data class TripSessionSnapshot(
             routine = null,
             destination = null,
             guidance = null,
-            hasArrived = false
+            hasArrived = false,
+            isGoingElsewhere = false
         )
     }
 }

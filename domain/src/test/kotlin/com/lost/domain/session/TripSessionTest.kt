@@ -36,4 +36,22 @@ class TripSessionTest {
             assertEquals(AssistanceState.Guiding, awaitItem().to)
         }
     }
+
+    @Test
+    fun `voy a otro lado se recuerda hasta el siguiente recorrido`() {
+        session.start()
+        session.dispatch(AssistanceEvent.DetectionUpdated(DomainFixtures.result(AssistanceLevel.LOW, true), true))
+        session.dispatch(AssistanceEvent.UserIsGoingElsewhere)
+        session.dispatch(AssistanceEvent.AcknowledgementElapsed)
+        assertTrue(session.snapshot.value.isGoingElsewhere)
+        session.start()
+        assertFalse(session.snapshot.value.isGoingElsewhere)
+    }
+
+    @Test
+    fun `voy a otro lado sin una pregunta abierta no cambia nada`() {
+        session.start()
+        session.dispatch(AssistanceEvent.UserIsGoingElsewhere)
+        assertFalse(session.snapshot.value.isGoingElsewhere)
+    }
 }

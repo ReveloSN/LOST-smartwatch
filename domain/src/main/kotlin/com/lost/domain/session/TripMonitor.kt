@@ -49,7 +49,8 @@ class TripMonitor @Inject constructor(
         val isDue = throttle.shouldEvaluate(point, session.snapshot.value.assistance)
         val previous = lastEvaluation
         if (!isDue && previous != null) return previous
-        return evaluateTrip(trip, destination).also { lastEvaluation = it }
+        val isGoingElsewhere = session.snapshot.value.isGoingElsewhere
+        return evaluateTrip(trip, destination, isGoingElsewhere).also { lastEvaluation = it }
     }
 
     /** Al terminar: la IA aprende del recorrido (si no fue en un lugar nuevo con destino marcado). */
