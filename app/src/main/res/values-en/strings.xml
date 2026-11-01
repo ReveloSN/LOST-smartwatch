@@ -247,6 +247,9 @@
     <string name="complication_deviation">Detour</string>
     <string name="complication_help">Help</string>
     <string name="complication_idle">Watching</string>
+    <string name="complication_no_gps">No GPS</string>
+    <string name="tile_title_now">LOST · now</string>
+    <string name="glance_detail_with_arrival">%1$s · arriving %2$s</string>
 
     <!-- Rumbos para TalkBack -->
     <string name="direction_north">north</string>

@@ -277,6 +277,9 @@
     <string name="complication_deviation">Desvío</string>
     <string name="complication_help">Ayuda</string>
     <string name="complication_idle">Atento</string>
+    <string name="complication_no_gps">Sin GPS</string>
+    <string name="tile_title_now">LOST · ahora</string>
+    <string name="glance_detail_with_arrival">%1$s · llegada %2$s</string>
 
     <!-- Rumbos para TalkBack -->
     <string name="direction_north">al norte</string>

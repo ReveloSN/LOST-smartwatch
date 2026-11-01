@@ -1,14 +1,20 @@
 package com.lost.watch.tile
 
 import android.content.Context
-import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.toArgb
+import androidx.wear.protolayout.ActionBuilders
+import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.ResourceBuilders.Resources
 import androidx.wear.protolayout.TimelineBuilders
-import androidx.wear.protolayout.material3.Typography.BODY_LARGE
+import androidx.wear.protolayout.material3.MaterialScope
+import androidx.wear.protolayout.material3.Typography.BODY_MEDIUM
+import androidx.wear.protolayout.material3.Typography.LABEL_MEDIUM
 import androidx.wear.protolayout.material3.Typography.TITLE_MEDIUM
 import androidx.wear.protolayout.material3.materialScope
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
+import androidx.wear.protolayout.modifiers.clickable
+import androidx.wear.protolayout.types.LayoutColor
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.RequestBuilders.ResourcesRequest
@@ -19,35 +25,37 @@ import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
-import com.lost.domain.detection.AssistanceLevel
+import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.domain.session.TripSession
+import com.lost.watch.MainActivity
 import com.lost.watch.R
+import com.lost.watch.glance.GlanceSummary
+import com.lost.watch.glance.GlanceSummaryMapper
+import com.lost.watch.glance.StringRef
+import com.lost.watch.ui.StatusPresentation
+import com.lost.watch.ui.formatMinuteOfDay
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 private const val RESOURCES_VERSION = "0"
+private const val OPEN_LOST_ID = "open_lost"
 
-/** 05.2 · Vista rápida: el estado de LOST en un vistazo ("LOST · Todo en orden"). */
+/**
+ * 05.2 · Vista rápida: "LOST · ahora", a dónde vas ("Vas a la U") y el estado con la llegada
+ * ("Todo en orden · llegada 7:15") en el color del estado. Tocarla abre Inicio. Se actualiza en vivo
+ * (`GlanceRefresher`).
+ */
 @AndroidEntryPoint
 class MainTileService : TileService() {
     @Inject lateinit var session: TripSession
 
+    @Inject lateinit var mapper: GlanceSummaryMapper
+
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<TileBuilders.Tile> =
-        Futures.immediateFuture(tile(requestParams, this, statusLabel()))
+        Futures.immediateFuture(tile(requestParams, this, mapper.map(session.snapshot.value)))
 
     override fun onTileResourcesRequest(requestParams: ResourcesRequest): ListenableFuture<Resources> =
         Futures.immediateFuture(resources())
-
-    @StringRes
-    private fun statusLabel(): Int {
-        val snapshot = session.snapshot.value
-        return when {
-            !snapshot.isMonitoring -> R.string.home_idle_title
-            snapshot.detection.level == AssistanceLevel.HIGH -> R.string.status_help
-            snapshot.detection.level == AssistanceLevel.MEDIUM -> R.string.status_deviation
-            else -> R.string.status_on_route
-        }
-    }
 }
 
 private fun resources(): Resources = Resources.Builder()
@@ -57,7 +65,7 @@ private fun resources(): Resources = Resources.Builder()
 private fun tile(
     requestParams: RequestBuilders.TileRequest,
     context: Context,
-    @StringRes status: Int
+    summary: GlanceSummary
 ): TileBuilders.Tile = TileBuilders.Tile.Builder()
     .setResourcesVersion(RESOURCES_VERSION)
     .setTileTimeline(
@@ -65,17 +73,55 @@ private fun tile(
             materialScope(context, requestParams.deviceConfiguration) {
                 primaryLayout(
                     titleSlot = {
-                        text(context.getString(R.string.tile_label).layoutString, typography = TITLE_MEDIUM)
+                        text(context.getString(R.string.tile_title_now).layoutString, typography = LABEL_MEDIUM)
                     },
-                    mainSlot = { text(context.getString(status).layoutString, typography = BODY_LARGE) }
+                    mainSlot = { summaryColumn(context, summary) },
+                    onClick = clickable(openLost(context), OPEN_LOST_ID)
                 )
             }
         )
     )
     .build()
 
+private fun MaterialScope.summaryColumn(context: Context, summary: GlanceSummary): LayoutElementBuilders.Column {
+    val statusColor = LayoutColor(SemanticTokens.Status.of(summary.status.tone).toArgb())
+    val title = summary.title.resolve(context).layoutString
+    return LayoutElementBuilders.Column.Builder()
+        .addContent(text(title, typography = TITLE_MEDIUM, maxLines = 2))
+        .addContent(
+            text(detailLine(context, summary).layoutString, typography = BODY_MEDIUM, color = statusColor, maxLines = 2)
+        )
+        .build()
+}
+
+/** "Todo en orden · llegada 7:15" cuando se conoce la llegada; si no, solo el estado. */
+private fun detailLine(context: Context, summary: GlanceSummary): String {
+    val detail = summary.detail.resolve(context)
+    val arrival = summary.arrivalMinuteOfDay ?: return detail
+    val time = formatMinuteOfDay(arrival, context.resources.configuration.locales[0])
+    return context.getString(R.string.glance_detail_with_arrival, detail, time)
+}
+
+private fun openLost(context: Context): ActionBuilders.LaunchAction = ActionBuilders.LaunchAction.Builder()
+    .setAndroidActivity(
+        ActionBuilders.AndroidActivity.Builder()
+            .setPackageName(context.packageName)
+            .setClassName(MainActivity::class.java.name)
+            .build()
+    )
+    .build()
+
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
 fun tilePreview(context: Context) = TilePreviewData({ resources() }) {
-    tile(it, context, R.string.status_on_route)
+    val summary = GlanceSummary(
+        isMonitoring = true,
+        title = StringRef(R.string.home_heading_to, "la U"),
+        detail = StringRef(R.string.status_on_route),
+        status = StatusPresentation.ON_ROUTE,
+        shortLabel = R.string.complication_on_route,
+        progress = 0.5f,
+        arrivalMinuteOfDay = 435
+    )
+    tile(it, context, summary)
 }
