@@ -141,6 +141,15 @@
     <string name="contact_authorized">%1$s · trusted contact</string>
     <string name="contact_sees_location">Sees your location only when LOST is helping you.</string>
     <string name="contact_pending">Waiting for them to accept the invitation.</string>
+    <string name="contact_change">Change contact</string>
+    <string name="contact_authorized_plain">Trusted contact</string>
+    <string name="contact_picker_why">Choose who I tell if you need help.</string>
+    <string name="contact_picker_privacy">I only keep the person you choose, not your list.</string>
+    <string name="contact_picker_allow">Allow contacts</string>
+    <string name="contact_picker_empty">No contacts with a phone number on this watch.</string>
+    <string name="error_contacts_what">LOST can\'t see your contacts.</string>
+    <string name="error_contacts_why">It needs them so you can choose who to tell.</string>
+    <string name="error_contacts_todo">Tap Allow contacts.</string>
     <string name="contact_call">Call</string>
     <string name="contact_revoke">Remove access</string>
     <string name="contact_revoke_confirm">Tap again to remove access</string>

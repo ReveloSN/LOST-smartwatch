@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.lost.watch.feature.contacts.ContactPickerScreen
 import com.lost.watch.feature.demo.DemoScreen
 import com.lost.watch.feature.insights.InsightsScreen
 import com.lost.watch.feature.insights.MetricsScreen
@@ -73,6 +74,7 @@ private fun NavGraphBuilder.settingsRoutes(navigator: LostNavigator) {
     }
     composable(LostDestination.Metrics.route) { MetricsScreen() }
     composable(LostDestination.DisorientationPlaces.route) { PlacesScreen() }
+    composable(LostDestination.ContactPicker.route) { ContactPickerScreen(onChosen = navigator::back) }
     composable(LostDestination.Sensitivity.route) { SensitivityScreen() }
     composable(LostDestination.Privacy.route) { PrivacyScreen() }
     composable(LostDestination.About.route) { AboutScreen() }

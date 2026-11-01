@@ -37,6 +37,7 @@ class ErrorScreensTest {
         LostError.BatteryLow(BATTERY_PERCENT),
         LostError.NoAuthorizedContact,
         LostError.LocationPermissionDenied,
+        LostError.ContactsPermissionDenied,
         LostError.NoRoutinesYet,
         LostError.StorageFailure("SQLiteDiskIOException"),
         LostError.MapUnavailable,

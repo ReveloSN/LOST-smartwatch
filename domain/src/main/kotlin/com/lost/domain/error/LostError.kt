@@ -15,6 +15,9 @@ sealed interface LostError {
 
     data object LocationPermissionDenied : LostError
 
+    /** Para elegir al contacto autorizado hay que poder ver los contactos del reloj. */
+    data object ContactsPermissionDenied : LostError
+
     data object NoRoutinesYet : LostError
 
     data class StorageFailure(val detail: String) : LostError

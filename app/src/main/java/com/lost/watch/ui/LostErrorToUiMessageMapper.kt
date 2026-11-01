@@ -19,6 +19,9 @@ class LostErrorToUiMessageMapper @Inject constructor() {
         LostError.LocationPermissionDenied ->
             UiMessage(R.string.error_permission_what, R.string.error_permission_why, R.string.error_permission_todo)
 
+        LostError.ContactsPermissionDenied ->
+            UiMessage(R.string.error_contacts_what, R.string.error_contacts_why, R.string.error_contacts_todo)
+
         LostError.NoAuthorizedContact ->
             UiMessage(R.string.error_no_contact_what, null, R.string.error_no_contact_todo)
 

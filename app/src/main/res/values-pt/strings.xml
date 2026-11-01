@@ -149,6 +149,15 @@
     <string name="contact_authorized">%1$s · contato autorizado</string>
     <string name="contact_sees_location">Vê sua localização só quando o LOST te ajuda.</string>
     <string name="contact_pending">Esperando que aceite o convite.</string>
+    <string name="contact_change">Trocar contato</string>
+    <string name="contact_authorized_plain">Contato autorizado</string>
+    <string name="contact_picker_why">Escolha quem eu aviso se você precisar de ajuda.</string>
+    <string name="contact_picker_privacy">Só guardo quem você escolher, não sua lista.</string>
+    <string name="contact_picker_allow">Permitir ver contatos</string>
+    <string name="contact_picker_empty">Não há contatos com telefone neste relógio.</string>
+    <string name="error_contacts_what">O LOST não consegue ver seus contatos.</string>
+    <string name="error_contacts_why">Ele precisa deles para você escolher quem avisar.</string>
+    <string name="error_contacts_todo">Toque em Permitir ver contatos.</string>
     <string name="contact_call">Ligar</string>
     <string name="contact_revoke">Remover permissão</string>
     <string name="contact_revoke_confirm">Toque de novo para remover a permissão</string>

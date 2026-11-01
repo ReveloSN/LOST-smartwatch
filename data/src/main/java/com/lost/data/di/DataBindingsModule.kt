@@ -1,6 +1,7 @@
 package com.lost.data.di
 
 import com.lost.data.contacts.ActiveContactNotifier
+import com.lost.data.contacts.AndroidDeviceContactsReader
 import com.lost.data.contacts.AuthorizedContactRepository
 import com.lost.data.demo.AndroidGpxAssetOpener
 import com.lost.data.demo.GpxAssetOpener
@@ -24,6 +25,7 @@ import com.lost.domain.port.ContactReader
 import com.lost.domain.port.ContactWriter
 import com.lost.domain.port.DestinationReader
 import com.lost.domain.port.DestinationWriter
+import com.lost.domain.port.DeviceContactsReader
 import com.lost.domain.port.DeviceStatusReader
 import com.lost.domain.port.HapticNotifier
 import com.lost.domain.port.IdGenerator
@@ -76,6 +78,8 @@ abstract class DataBindingsModule {
     @Binds abstract fun contactWriter(impl: AuthorizedContactRepository): ContactWriter
 
     @Binds abstract fun contactNotifier(impl: ActiveContactNotifier): ContactNotifier
+
+    @Binds abstract fun deviceContactsReader(impl: AndroidDeviceContactsReader): DeviceContactsReader
 
     @Binds abstract fun hapticNotifier(impl: AndroidHapticNotifier): HapticNotifier
 

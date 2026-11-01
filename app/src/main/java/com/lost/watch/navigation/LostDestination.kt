@@ -43,6 +43,10 @@ sealed interface LostDestination {
         override val route = "insights/places"
     }
 
+    data object ContactPicker : LostDestination {
+        override val route = "contacts/choose"
+    }
+
     data object Sensitivity : LostDestination {
         override val route = "settings/sensitivity"
     }

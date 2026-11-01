@@ -24,7 +24,7 @@ import com.lost.watch.R
 
 /** 04.3 · Contacto autorizado con permiso revocable. */
 @Composable
-fun ContactsScreen(viewModel: ContactsViewModel = hiltViewModel()) {
+fun ContactsScreen(onChooseContact: () -> Unit, viewModel: ContactsViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     ContactsContent(
@@ -32,25 +32,30 @@ fun ContactsScreen(viewModel: ContactsViewModel = hiltViewModel()) {
         onCall = { number ->
             runCatching { context.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$number"))) }
         },
+        onChooseContact = onChooseContact,
         onEvent = viewModel::onEvent
     )
 }
 
 @Composable
-private fun ContactsContent(state: ContactsUiState, onCall: (String) -> Unit, onEvent: (ContactsUiEvent) -> Unit) {
+private fun ContactsContent(
+    state: ContactsUiState,
+    onCall: (String) -> Unit,
+    onChooseContact: () -> Unit,
+    onEvent: (ContactsUiEvent) -> Unit
+) {
     WatchScreenTemplate {
         LostIcon(Icons.Rounded.Group, null, tint = SemanticTokens.Status.onRoute)
         if (!state.hasContact) {
             LostText(stringResource(R.string.contact_empty), role = LostTextRole.TITLE)
-            LostText(
-                stringResource(R.string.error_no_contact_todo),
-                role = LostTextRole.CAPTION,
-                color = SemanticTokens.Text.secondary
-            )
+            LostPrimaryButton(stringResource(R.string.contact_choose), onChooseContact)
             return@WatchScreenTemplate
         }
         LostText(state.name.orEmpty(), role = LostTextRole.QUESTION)
-        LostText(stringResource(R.string.contact_authorized, state.relationship.orEmpty()), role = LostTextRole.CAPTION)
+        val authorized = state.relationship?.takeIf { it.isNotBlank() }
+            ?.let { stringResource(R.string.contact_authorized, it) }
+            ?: stringResource(R.string.contact_authorized_plain)
+        LostText(authorized, role = LostTextRole.CAPTION)
         val note = if (state.hasAcceptedInvitation) R.string.contact_sees_location else R.string.contact_pending
         LostText(stringResource(note), role = LostTextRole.CAPTION, color = SemanticTokens.Text.secondary)
         state.phoneNumber?.takeIf { it.isNotBlank() }?.let { number ->
@@ -60,17 +65,22 @@ private fun ContactsContent(state: ContactsUiState, onCall: (String) -> Unit, on
         LostSecondaryButton(stringResource(revokeLabel), {
             onEvent(ContactsUiEvent.RevokeTapped)
         }, style = SecondaryButtonStyle.TEXT_ONLY)
+        LostSecondaryButton(
+            stringResource(R.string.contact_change),
+            onChooseContact,
+            style = SecondaryButtonStyle.TEXT_ONLY
+        )
     }
 }
 
 @LostDevicePreviews
 @Composable
 private fun ContactsPreview() {
-    LostTheme { ContactsContent(ContactsUiState("Laura", "Hermana", "+57300", true, false), {}, {}) }
+    LostTheme { ContactsContent(ContactsUiState("Laura", "Hermana", "+57300", true, false), {}, {}, {}) }
 }
 
 @LostDevicePreviews
 @Composable
 private fun ContactsEmptyPreview() {
-    LostTheme { ContactsContent(ContactsUiState.EMPTY, {}, {}) }
+    LostTheme { ContactsContent(ContactsUiState.EMPTY, {}, {}, {}) }
 }

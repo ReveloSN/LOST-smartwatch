@@ -64,7 +64,7 @@ private fun SectionPage(section: GlobalSection, navigator: LostNavigator) {
 
         GlobalSection.DESTINATIONS -> DestinationsScreen(onOpenDestination = navigator::openNewPlace)
 
-        GlobalSection.CONTACTS -> ContactsScreen()
+        GlobalSection.CONTACTS -> ContactsScreen(onChooseContact = { navigator.open(LostDestination.ContactPicker) })
 
         GlobalSection.SETTINGS -> SettingsScreen(onOpen = navigator::open)
     }
