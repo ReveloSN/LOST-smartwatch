@@ -2,6 +2,7 @@ package com.lost.watch.integration
 
 import com.lost.ai.LostEngineAssembly
 import com.lost.ai.config.DetectionConfig
+import com.lost.ai.signals.DeviationSignal
 import com.lost.data.demo.DemoScenario
 import com.lost.data.demo.GpxRouteReader
 import com.lost.domain.assistance.AssistanceEvent
@@ -32,9 +33,13 @@ import kotlinx.coroutines.flow.flowOf
 
 /**
  * Reproduce recorridos por la tubería real (motor de IA → monitor → máquina de estados) sin emulador.
- * Lo usan la demo de los GPX y las pruebas de ruido del GPS.
+ * Lo usan la demo de los GPX y las pruebas de ruido del GPS. [wrapSignals] permite espiar las señales
+ * para diagnosticar por qué el motor decidió algo.
  */
-class GpxStoryHarness(config: DetectionConfig = DetectionConfig.DEFAULT) {
+class GpxStoryHarness(
+    config: DetectionConfig = DetectionConfig.DEFAULT,
+    private val wrapSignals: (List<DeviationSignal>) -> List<DeviationSignal> = { it }
+) {
     private val reader = GpxRouteReader()
     private val assembly = LostEngineAssembly(config)
 
@@ -79,7 +84,11 @@ class GpxStoryHarness(config: DetectionConfig = DetectionConfig.DEFAULT) {
             }
         val monitor = TripMonitor(
             session = session,
-            evaluateTrip = EvaluateCurrentTripUseCase(assembly.detectionEngine(), routineReader, settings),
+            evaluateTrip = EvaluateCurrentTripUseCase(
+                assembly.detectionEngine(wrapSignals(assembly.signals())),
+                routineReader,
+                settings
+            ),
             routineReader = routineReader,
             guidanceCalculator = assembly.guidanceCalculator(),
             collaborators = TripMonitorCollaborators(
@@ -114,8 +123,15 @@ class GpxStoryHarness(config: DetectionConfig = DetectionConfig.DEFAULT) {
         ) { 0L }
     )
 
-    /** Reproduce el GPX; si LOST pregunta, el usuario toca "Sí, guíame". */
-    suspend fun Story.play(points: List<GeoPoint>, destination: Destination? = null) {
+    /**
+     * Reproduce el GPX; si LOST pregunta "¿Necesitas ayuda?", el usuario toca "Sí, guíame". A "¿Vas a otro
+     * lado hoy?" responde [softAskAnswer] (por defecto no responde).
+     */
+    suspend fun Story.play(
+        points: List<GeoPoint>,
+        destination: Destination? = null,
+        softAskAnswer: AssistanceEvent? = null
+    ) {
         session.start(destination)
         monitor.run(
             flow {
@@ -123,10 +139,22 @@ class GpxStoryHarness(config: DetectionConfig = DetectionConfig.DEFAULT) {
                     emit(point)
                     val state = session.snapshot.value.assistance
                     if (states.lastOrNull() != state) states += state
-                    if (state is AssistanceState.AskForHelp) session.dispatch(AssistanceEvent.UserRequestedGuidance)
+                    answer(state, softAskAnswer)
                 }
             }
         )
         states += session.snapshot.value.assistance
+    }
+
+    private fun Story.answer(state: AssistanceState, softAskAnswer: AssistanceEvent?) {
+        when {
+            state is AssistanceState.AskForHelp -> session.dispatch(AssistanceEvent.UserRequestedGuidance)
+
+            state is AssistanceState.SoftAsk && softAskAnswer != null -> {
+                session.dispatch(softAskAnswer)
+                // El "Entendido" se cierra solo a los 3 s (en la app lo hace AssistanceTimers).
+                session.dispatch(AssistanceEvent.AcknowledgementElapsed)
+            }
+        }
     }
 }

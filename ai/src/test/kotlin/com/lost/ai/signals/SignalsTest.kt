@@ -69,6 +69,14 @@ class SignalsTest {
     }
 
     @Test
+    fun `doblar dos esquinas seguidas de la ciudad no es erratico`() {
+        // Una cuadra corta (40 m) entre dos esquinas: cada esquina mide dos giros bruscos seguidos (la cuerda
+        // abarca 2 puntos), pero son dos esquinas, no cuatro cambios de dirección.
+        val trip = SyntheticWalk().to(200.0, 0.0).to(200.0, 40.0).to(400.0, 40.0).trip()
+        assertEquals(0.0, ErraticHeadingSignal(thresholds).measure(context(trip)).score)
+    }
+
+    @Test
     fun `dar vueltas cerradas es erratico`() {
         val trip = SyntheticWalk().square(40.0, times = 3).trip()
         assertTrue(ErraticHeadingSignal(thresholds).measure(context(trip)).score > 0.5)

@@ -29,6 +29,23 @@ class GpsNoiseRobustnessTest {
             )
         }
 
+    /**
+     * Una sola semilla puede tener suerte: las falsas alarmas (ruta de siempre y desvío voluntario) se prueban
+     * con 10 ruidos distintos por variante. En el desvío voluntario nadie responde "¿Vas a otro lado hoy?",
+     * el caso más exigente. La desorientación y el hospital nunca fallaron con varias semillas (ver
+     * docs/ia/robustez-ruido-gps.md) y se dejan con una para no alargar las pruebas.
+     */
+    @TestFactory
+    fun `sin falsas alarmas con 10 semillas por variante`() = realisticWithAndWithoutAccuracy().flatMap { noise ->
+        SEEDS.flatMap { seed ->
+            val seeded = noise.copy(seed = seed)
+            listOf(
+                DynamicTest.dynamicTest("ruta de siempre · ${noise.name} · semilla $seed") { normal(seeded) },
+                DynamicTest.dynamicTest("desvío voluntario · ${noise.name} · semilla $seed") { voluntary(seeded) }
+            )
+        }
+    }
+
     @Test
     fun `en un cañón urbano la precisión del gps evita la falsa alarma en la ruta de siempre`() {
         normal(GpsNoise.URBAN_CANYON.reporting(AccuracyReport.HONEST))
@@ -84,5 +101,9 @@ class GpsNoiseRobustnessTest {
             states.any { it is AssistanceState.AskForHelp || it is AssistanceState.Guiding },
             "no notó las vueltas: $states"
         )
+    }
+
+    private companion object {
+        val SEEDS = 1..10
     }
 }
