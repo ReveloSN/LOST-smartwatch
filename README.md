@@ -46,6 +46,20 @@ La compilación *debug* corre en **modo demo**: GPS simulado con los GPX de `sam
    - **Lugar nuevo (hospital)** → "Pasaste 3 veces por la misma cuadra. ¿Necesitas ayuda?" → guía hasta el Consultorio 304.
 4. Desliza entre secciones para ver **Mis recorridos**, **Destinos**, **Contactos**, **Ajustes** y **Tu semana** (métricas).
 
+Lo agregado el 1 de noviembre:
+
+- **Pregunta por notificación (05.3):** elige **Calle cerrada** y sal a la esfera con el botón del reloj. Al minuto
+  llega "LOST · ¿Todo bien en tu ruta?" con **Guíame** / **Estoy bien**; si no respondes, "Voy a avisar a tu
+  contacto." con **Cancelar**.
+- **Pausa:** responde **Estoy bien** y vuelve a Inicio: "Pausa de 2 minutos".
+- **Ubicación perdida:** toca **Empezar recorrido** sin elegir un recorrido de demostración (no llega ningún punto
+  GPS). Al minuto Inicio dice "No encontramos tu ubicación · Camina hacia una salida o ventana".
+- **Donde más te desorientas (03.2):** **Mis recorridos → Tu semana → Dónde te desorientas** (la demo trae tres
+  lugares de ejemplo; las alertas que provoques se suman).
+- **Vista rápida y complicación (05):** agrega la Tile "LOST" en el carrusel de Tiles (o
+  `adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE --es operation add-tile --ecn component com.lost.watch/com.lost.watch.tile.MainTileService`)
+  y la complicación "Estado de LOST" en una esfera que admita anillos.
+
 La reproducción va 10× más rápido que caminar, pero conserva los tiempos reales para el motor.
 
 ## Mapa real y privacidad
@@ -74,9 +88,9 @@ Las rutas de demo se regeneran con `python tools/generate_osm_routes.py` cambian
 | `core/designsystem` | 11 (contraste WCAG, líneas por rol de texto) |
 | `domain` | 112 (máquina de estados, cadena de respuesta, temporizadores, monitor, aviso de ubicación perdida, lugares de desorientación, casos de uso, métricas, mapa, batería) |
 | `ai` | 51 (las 5 de escenario de la sección 8.5 + geometría, remuestreo con ruido y precisión del GPS, DTW, señales, aprendizaje, rendimiento) |
-| `data` | 29 (mappers, repositorios, DataStore, GPX, demo, háptica, caché de teselas, Nominatim, OSRM) |
-| `app` | 272 (mappers de UI, ViewModel, demo GPX de punta a punta, ruido de GPS con 10 semillas por variante, complicación y vista rápida, notificación, traducciones, accesibilidad) |
-| **Total JVM** | **475** |
+| `data` | 31 (mappers, repositorios, DataStore, GPX, demo y sus lugares de ejemplo, háptica, caché de teselas, Nominatim, OSRM) |
+| `app` | 276 (mappers de UI, ViewModel, demo GPX de punta a punta, ruido de GPS con 10 semillas por variante, complicación y vista rápida, notificación, traducciones, accesibilidad) |
+| **Total JVM** | **481** |
 
 En el emulador de Wear OS (21 pruebas instrumentadas: Room contra SQLite real y su migración, alertas en la pantalla
 redonda, pantallas de error con letra normal y grande, TalkBack, Texto grande y pantallas sin internet):
