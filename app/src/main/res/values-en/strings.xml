@@ -180,13 +180,13 @@
         <item quantity="one">%d trip</item>
         <item quantity="other">%d trips</item>
     </plurals>
-    <string name="insights_no_deviations">no detours</string>
+    <string name="insights_no_deviations">no detours</string>
     <plurals name="insights_deviation_days">
-        <item quantity="one">%d day with a detour</item>
-        <item quantity="other">%d days with a detour</item>
+        <item quantity="one">%d day with a detour</item>
+        <item quantity="other">%d days with a detour</item>
     </plurals>
     <string name="insights_day_no_trip">%1$s, no trip</string>
-    <string name="insights_day_on_route">%1$s, no detours</string>
+    <string name="insights_day_on_route">%1$s, no detours</string>
     <string name="insights_day_deviated">%1$s, with a detour</string>
     <string name="weekday_initial_monday">M</string>
     <string name="weekday_initial_tuesday">T</string>
@@ -272,7 +272,8 @@
     <string name="complication_idle">Watching</string>
     <string name="complication_no_gps">No GPS</string>
     <string name="tile_title_now">LOST · now</string>
-    <string name="glance_detail_with_arrival">%1$s · arriving %2$s</string>
+    <string name="glance_on_routine">On your route %1$s</string>
+    <string name="glance_arrival">Arriving %1$s</string>
     <string name="notification_channel_questions">LOST questions</string>
     <string name="notification_sharing_soon">I\'m about to tell your contact.</string>
     <string name="notification_ask_question">Is everything OK on your route?</string>

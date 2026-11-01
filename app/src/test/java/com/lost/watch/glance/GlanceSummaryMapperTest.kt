@@ -27,7 +27,7 @@ class GlanceSummaryMapperTest {
     @Test
     fun `en rutina dice a donde vas con el avance y la llegada como inicio`() {
         val summary = mapper.map(AppFixtures.monitoring(AppFixtures.detection(AssistanceLevel.LOW)), ZoneOffset.UTC)
-        assertEquals(StringRef(R.string.home_heading_to, "Casa → U"), summary.title)
+        assertEquals(StringRef(R.string.glance_on_routine, "Casa → U"), summary.title)
         assertEquals(StringRef(R.string.status_on_route), summary.detail)
         assertEquals(0.3f, summary.progress)
         assertEquals(7 * 60 + 15, summary.arrivalMinuteOfDay)

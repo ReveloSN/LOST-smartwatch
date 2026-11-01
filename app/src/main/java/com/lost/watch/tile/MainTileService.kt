@@ -9,7 +9,7 @@ import androidx.wear.protolayout.TimelineBuilders
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.Typography.BODY_MEDIUM
 import androidx.wear.protolayout.material3.Typography.LABEL_MEDIUM
-import androidx.wear.protolayout.material3.Typography.TITLE_MEDIUM
+import androidx.wear.protolayout.material3.Typography.TITLE_LARGE
 import androidx.wear.protolayout.material3.materialScope
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
@@ -41,8 +41,8 @@ private const val RESOURCES_VERSION = "0"
 private const val OPEN_LOST_ID = "open_lost"
 
 /**
- * 05.2 · Vista rápida: "LOST · ahora", a dónde vas ("Vas a la U") y el estado con la llegada
- * ("Todo en orden · llegada 7:15") en el color del estado. Tocarla abre Inicio. Se actualiza en vivo
+ * 05.2 · Vista rápida: "LOST · ahora", la rutina ("En tu ruta Casa → U"), el estado en su color ("Todo en
+ * orden") y la llegada en su propia línea ("Llegada 7:15"). Tocarla abre Inicio. Se actualiza en vivo
  * (`GlanceRefresher`).
  */
 @AndroidEntryPoint
@@ -91,22 +91,19 @@ private fun MaterialScope.summaryColumn(context: Context, summary: GlanceSummary
     val statusColor = LayoutColor(SemanticTokens.Status.of(summary.status.tone).toArgb())
     val titleColor = LayoutColor(SemanticTokens.Text.primary.toArgb())
     val title = summary.title.resolve(context).layoutString
-    return LayoutElementBuilders.Column.Builder()
-        .addContent(
-            text(title, typography = TITLE_MEDIUM, color = titleColor, maxLines = 2)
-        )
-        .addContent(
-            text(detailLine(context, summary).layoutString, typography = BODY_MEDIUM, color = statusColor, maxLines = 2)
-        )
-        .build()
+    val detail = summary.detail.resolve(context).layoutString
+    val column = LayoutElementBuilders.Column.Builder()
+        .addContent(text(title, typography = TITLE_LARGE, color = titleColor, maxLines = 2))
+        .addContent(text(detail, typography = BODY_MEDIUM, color = statusColor, maxLines = 2))
+    arrivalLine(context, summary)?.let {
+        column.addContent(text(it.layoutString, typography = BODY_MEDIUM, color = titleColor))
+    }
+    return column.build()
 }
 
-/** "Todo en orden · llegada 7:15" cuando se conoce la llegada; si no, solo el estado. */
-private fun detailLine(context: Context, summary: GlanceSummary): String {
-    val detail = summary.detail.resolve(context)
-    val arrival = summary.arrivalMinuteOfDay ?: return detail
-    val time = formatMinuteOfDay(arrival, context.resources.configuration.locales[0])
-    return context.getString(R.string.glance_detail_with_arrival, detail, time)
+/** "Llegada 7:15" en su propia línea: es el dato que se busca de un vistazo. */
+private fun arrivalLine(context: Context, summary: GlanceSummary): String? = summary.arrivalMinuteOfDay?.let {
+    context.getString(R.string.glance_arrival, formatMinuteOfDay(it, context.resources.configuration.locales[0]))
 }
 
 private fun openLost(context: Context): ActionBuilders.LaunchAction = ActionBuilders.LaunchAction.Builder()
@@ -123,7 +120,7 @@ private fun openLost(context: Context): ActionBuilders.LaunchAction = ActionBuil
 fun tilePreview(context: Context) = TilePreviewData({ resources() }) {
     val summary = GlanceSummary(
         isMonitoring = true,
-        title = StringRef(R.string.home_heading_to, "la U"),
+        title = StringRef(R.string.glance_on_routine, "Casa → U"),
         detail = StringRef(R.string.status_on_route),
         status = StatusPresentation.ON_ROUTE,
         shortLabel = R.string.complication_on_route,

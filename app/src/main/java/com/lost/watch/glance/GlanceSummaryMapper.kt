@@ -17,7 +17,7 @@ class GlanceSummaryMapper @Inject constructor(private val homeMapper: HomeUiStat
         val home = homeMapper.map(snapshot, isDemoAvailable = false, zoneId = zoneId)
         return GlanceSummary(
             isMonitoring = home.isMonitoring,
-            title = titleOf(home),
+            title = titleOf(home, snapshot),
             detail = detailOf(home),
             status = home.status,
             shortLabel = shortLabelOf(home),
@@ -26,10 +26,12 @@ class GlanceSummaryMapper @Inject constructor(private val homeMapper: HomeUiStat
         )
     }
 
-    private fun titleOf(home: HomeUiState): StringRef = when {
+    /** Con rutina, "En tu ruta Casa → U" (el nombre ya dice de dónde a dónde); en un lugar nuevo, "Vas a {destino}". */
+    private fun titleOf(home: HomeUiState, snapshot: TripSessionSnapshot): StringRef = when {
         !home.isMonitoring -> StringRef(R.string.home_idle_title)
         home.hasWeakLocation -> StringRef(R.string.error_gps_what)
         home.isVoluntaryDetour -> StringRef(R.string.home_walking_safely)
+        snapshot.routine != null && home.routineName != null -> StringRef(R.string.glance_on_routine, home.routineName)
         home.routineName != null -> StringRef(R.string.home_heading_to, home.routineName)
         home.isNewPlace -> StringRef(R.string.home_new_place)
         else -> StringRef(R.string.home_only_observing)

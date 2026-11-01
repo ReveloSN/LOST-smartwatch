@@ -189,14 +189,14 @@
         <item quantity="many">%d percursos</item>
         <item quantity="other">%d percursos</item>
     </plurals>
-    <string name="insights_no_deviations">sem desvios</string>
+    <string name="insights_no_deviations">sem desvios</string>
     <plurals name="insights_deviation_days">
-        <item quantity="one">%d dia com desvio</item>
-        <item quantity="many">%d dias com desvio</item>
-        <item quantity="other">%d dias com desvio</item>
+        <item quantity="one">%d dia com desvio</item>
+        <item quantity="many">%d dias com desvio</item>
+        <item quantity="other">%d dias com desvio</item>
     </plurals>
     <string name="insights_day_no_trip">%1$s, sem percurso</string>
-    <string name="insights_day_on_route">%1$s, sem desvios</string>
+    <string name="insights_day_on_route">%1$s, sem desvios</string>
     <string name="insights_day_deviated">%1$s, com desvio</string>
     <string name="weekday_initial_monday">S</string>
     <string name="weekday_initial_tuesday">T</string>
@@ -283,7 +283,8 @@
     <string name="complication_idle">Atento</string>
     <string name="complication_no_gps">Sem GPS</string>
     <string name="tile_title_now">LOST · agora</string>
-    <string name="glance_detail_with_arrival">%1$s · chegada %2$s</string>
+    <string name="glance_on_routine">Na sua rota %1$s</string>
+    <string name="glance_arrival">Chegada %1$s</string>
     <string name="notification_channel_questions">Perguntas do LOST</string>
     <string name="notification_sharing_soon">Vou avisar seu contato.</string>
     <string name="notification_ask_question">Tudo bem na sua rota?</string>
