@@ -10,7 +10,7 @@ las decisiones tomadas y lo que queda pendiente.
 - **Demo con GPX** verificada de punta a punta por prueba: rutina normal (silencio), desvío voluntario (pregunta suave), calle cerrada (pregunta → guía → ruta recuperada) y hospital (pregunta → llegada).
 - **Diseño** fiel a los mockups: tokens en 3 niveles, Atomic Design, previews redondo/cuadrado, voz y tono, 3 idiomas, accesibilidad verificada por prueba.
 - **Mejoras del 25 de octubre** (rama `mejoras-ui-mapa`): interfaz simplificada y verificada en un emulador de Wear OS, **mapa real de OpenStreetMap**, destinos reales por voz, demo sobre calles reales, flecha con brújula y optimización (APK de 57 MB a 3,6 MB, GPS adaptativo).
-- **Jornada del 1 de noviembre**: IA robusta con varias semillas y con la precisión del GPS, aviso de ubicación perdida, notificación 05.3, complicación y vista rápida en vivo (05), "Donde más te desorientas" (03.2), icono propio y pantallas de error probadas en el reloj. **475 pruebas JVM + 21 instrumentadas.**
+- **Jornada del 1 de noviembre**: IA robusta con varias semillas y con la precisión del GPS, aviso de ubicación perdida, notificación 05.3, complicación y vista rápida en vivo (05), "Donde más te desorientas" (03.2), icono propio y pantallas de error probadas en el reloj. **481 pruebas JVM + 21 instrumentadas.**
 - **Lo que falta** (ver "Pendientes generales" al final): prueba con usuarios (SUS), calibrar la IA con recorridos reales y probar voz, brújula y la complicación en un reloj físico.
 
 ## Resumen de fases
@@ -618,7 +618,7 @@ de la tabla (c) de `docs/diseno/fidelidad-mockups.md`. Todo se probó en el emul
 | **Donde más te desorientas (03.2).** Se guarda dónde y por qué preguntó LOST (Room v2, migración automática); hasta 3 lugares agrupados por cuadra, nombrados con destinos o rutinas sin internet ([ADR 005](adr/005-lugares-sin-geocodificacion.md)). "Borrar lo aprendido" también los borra. Captura `21`. | `140d538` | `DisorientationPlacesTest` (4), `LostDatabaseTest` (+1), `LostDatabaseMigrationTest` |
 | **Errores (10) y Texto grande.** Los 9 errores se dibujan en el reloj con letra normal y con Texto grande; se revisaron con Texto grande las 11 pantallas que faltaban (hoja `a11y-texto-grande-resto.png`): sin cortes, las largas se desplazan. | `a0d2c7a` | `ErrorScreensTest` (2, instrumentada) |
 
-**Verificación:** `./gradlew ktlintCheck detekt test assembleDebug` en verde (475 pruebas JVM) y 21 pruebas
+**Verificación:** `./gradlew ktlintCheck detekt test assembleDebug` en verde (481 pruebas JVM al cierre del día) y 21 pruebas
 instrumentadas en el emulador `Wear_OS_Large_Round` (data 8 · app 13).
 
 ### Revisión de código, Lint y pulido de la tarde
