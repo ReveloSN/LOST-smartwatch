@@ -73,7 +73,11 @@ private fun tile(
             materialScope(context, requestParams.deviceConfiguration) {
                 primaryLayout(
                     titleSlot = {
-                        text(context.getString(R.string.tile_title_now).layoutString, typography = LABEL_MEDIUM)
+                        text(
+                            context.getString(R.string.tile_title_now).layoutString,
+                            typography = LABEL_MEDIUM,
+                            color = LayoutColor(SemanticTokens.Text.secondary.toArgb())
+                        )
                     },
                     mainSlot = { summaryColumn(context, summary) },
                     onClick = clickable(openLost(context), OPEN_LOST_ID)
@@ -85,9 +89,12 @@ private fun tile(
 
 private fun MaterialScope.summaryColumn(context: Context, summary: GlanceSummary): LayoutElementBuilders.Column {
     val statusColor = LayoutColor(SemanticTokens.Status.of(summary.status.tone).toArgb())
+    val titleColor = LayoutColor(SemanticTokens.Text.primary.toArgb())
     val title = summary.title.resolve(context).layoutString
     return LayoutElementBuilders.Column.Builder()
-        .addContent(text(title, typography = TITLE_MEDIUM, maxLines = 2))
+        .addContent(
+            text(title, typography = TITLE_MEDIUM, color = titleColor, maxLines = 2)
+        )
         .addContent(
             text(detailLine(context, summary).layoutString, typography = BODY_MEDIUM, color = statusColor, maxLines = 2)
         )
