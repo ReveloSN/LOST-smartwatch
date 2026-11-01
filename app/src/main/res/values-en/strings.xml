@@ -34,6 +34,10 @@
     <string name="home_stop_trip">End route</string>
     <string name="home_walking_safely">Walking steadily somewhere else</string>
     <string name="home_only_observing">Just watching</string>
+    <plurals name="home_paused">
+        <item quantity="one">Paused for %d min</item>
+        <item quantity="other">Paused for %d min</item>
+    </plurals>
     <string name="home_new_place">Exploring a new place</string>
 
     <string name="learning_progress">%1$d of %2$d</string>

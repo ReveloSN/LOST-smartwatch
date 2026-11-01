@@ -5,6 +5,7 @@ import androidx.compose.material.icons.rounded.LocationOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -113,9 +114,15 @@ private fun WeakLocationStatus() {
 
 @Composable
 private fun supportLine(state: HomeUiState, hasArrival: Boolean): String = when {
+    state.pauseMinutes != null ->
+        pluralStringResource(R.plurals.home_paused, state.pauseMinutes, state.pauseMinutes)
+
     state.isVoluntaryDetour -> stringResource(R.string.home_walking_safely)
+
     state.isNewPlace -> state.routineName ?: stringResource(R.string.home_new_place)
+
     hasArrival && state.routineName != null -> stringResource(R.string.home_arriving_at, state.routineName)
+
     else -> stringResource(R.string.home_only_observing)
 }
 

@@ -1,5 +1,6 @@
 package com.lost.watch.feature.home
 
+import com.lost.domain.assistance.AssistanceState
 import com.lost.domain.detection.AssistanceLevel
 import com.lost.domain.detection.DetectionModeKind
 import com.lost.domain.port.ContactReader
@@ -46,6 +47,14 @@ class HomeUiStateMapperTest {
     fun `sin ubicacion confiable inicio lo dice`() {
         val snapshot = AppFixtures.monitoring(AppFixtures.detection(AssistanceLevel.LOW)).copy(hasWeakLocation = true)
         assertTrue(mapper.map(snapshot, false).hasWeakLocation)
+    }
+
+    @Test
+    fun `tras estoy bien no alarma y dice cuanto dura la pausa`() {
+        val snapshot = AppFixtures.monitoring(AppFixtures.detection(AssistanceLevel.HIGH), AssistanceState.Paused)
+        val state = mapper.map(snapshot, false)
+        assertEquals(StatusPresentation.DEVIATION, state.status)
+        assertEquals(2, state.pauseMinutes)
     }
 
     @Test

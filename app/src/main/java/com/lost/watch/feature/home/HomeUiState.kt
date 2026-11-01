@@ -5,6 +5,7 @@ import com.lost.watch.ui.StatusPresentation
 /**
  * Inicio: estado tranquilo o recorrido en curso.
  * @property arrivalMinuteOfDay hora estimada de llegada (minuto del día) si hay rutina.
+ * @property pauseMinutes minutos sin preguntar tras "Estoy bien" (null si no hay pausa).
  */
 data class HomeUiState(
     val isMonitoring: Boolean,
@@ -15,7 +16,8 @@ data class HomeUiState(
     val isNewPlace: Boolean,
     val isVoluntaryDetour: Boolean,
     val isDemoAvailable: Boolean,
-    val hasWeakLocation: Boolean = false
+    val hasWeakLocation: Boolean = false,
+    val pauseMinutes: Int? = null
 ) {
     companion object {
         fun idle(isDemoAvailable: Boolean) = HomeUiState(

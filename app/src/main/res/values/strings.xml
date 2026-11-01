@@ -42,6 +42,11 @@
     <string name="home_stop_trip">Terminar recorrido</string>
     <string name="home_walking_safely">Caminas seguro a otro lugar</string>
     <string name="home_only_observing">Solo observo</string>
+    <plurals name="home_paused">
+        <item quantity="one">Pausa de %d minuto</item>
+        <item quantity="many">Pausa de %d minutos</item>
+        <item quantity="other">Pausa de %d minutos</item>
+    </plurals>
     <string name="home_new_place">Explorando un lugar nuevo</string>
 
     <!-- Aprendiendo tu rutina -->
