@@ -20,6 +20,7 @@ import com.lost.designsystem.tokens.StatusTone
 /**
  * Anillo partido en segmentos: "Aprendiendo tu rutina 4 de 5" o "Tu semana L M M J V".
  * Un segmento marcado (FLAGGED) usa el color de desviación, por ejemplo un día con desvío.
+ * Para nombrar cada segmento con su letra se usa [SegmentedRingLegend].
  */
 @Composable
 fun SegmentedProgressRing(

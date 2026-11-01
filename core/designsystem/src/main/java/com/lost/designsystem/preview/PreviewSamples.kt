@@ -25,4 +25,5 @@ internal object PreviewSamples {
     const val LEARNING_PROGRESS = "4 / 5"
     const val MAP_DESCRIPTION = "Ruta de siempre y ruta de hoy"
     const val MAP_ATTRIBUTION = "© OpenStreetMap contributors"
+    val WEEK_LETTERS = listOf("L", "M", "M", "J", "V")
 }

@@ -1,20 +1,29 @@
 package com.lost.watch.feature.insights
 
 import com.lost.domain.metrics.InsightsSummary
+import com.lost.domain.metrics.WeekActivity
 import com.lost.watch.R
 import java.time.DayOfWeek
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-/** Convierte el resumen de métricas en las líneas que ve el usuario (eficacia, eficiencia, falsos positivos). */
+/**
+ * Convierte el resumen de métricas y la actividad de la semana en lo que ve el usuario: el estado de cada
+ * día hábil y las líneas de eficacia, eficiencia y falsos positivos.
+ */
 class InsightsUiStateMapper @Inject constructor() {
-    fun map(summary: InsightsSummary, daysWithTrips: Set<DayOfWeek>) = InsightsUiState(
-        weekDays = WORK_WEEK,
-        daysWithTrips = daysWithTrips,
+    fun map(summary: InsightsSummary, activity: WeekActivity) = InsightsUiState(
+        days = WeekDayLabels.workWeek.map { InsightsDay(it, statusOf(it, activity)) },
         tripsCompleted = summary.tripsCompleted,
-        routinesLearned = summary.routinesLearned,
         metrics = metricsOf(summary)
     )
+
+    /** Un día con alerta cuenta como desvío aunque el recorrido no se haya terminado de guardar. */
+    private fun statusOf(day: DayOfWeek, activity: WeekActivity): WeekDayStatus = when (day) {
+        in activity.daysWithDeviation -> WeekDayStatus.DEVIATED
+        in activity.daysWithTrips -> WeekDayStatus.ON_ROUTE
+        else -> WeekDayStatus.NO_TRIP
+    }
 
     private fun metricsOf(summary: InsightsSummary): List<MetricLine> = listOf(
         MetricLine(
@@ -50,7 +59,5 @@ class InsightsUiStateMapper @Inject constructor() {
 
     private companion object {
         const val PERCENT = 100
-        val WORK_WEEK =
-            listOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)
     }
 }

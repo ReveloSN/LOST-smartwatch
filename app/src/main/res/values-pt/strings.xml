@@ -181,11 +181,25 @@
         <item quantity="many">%d percursos</item>
         <item quantity="other">%d percursos</item>
     </plurals>
-    <plurals name="insights_routines">
-        <item quantity="one">%d rotina</item>
-        <item quantity="many">%d rotinas</item>
-        <item quantity="other">%d rotinas</item>
+    <string name="insights_no_deviations">sem desvios</string>
+    <plurals name="insights_deviation_days">
+        <item quantity="one">%d dia com desvio</item>
+        <item quantity="many">%d dias com desvio</item>
+        <item quantity="other">%d dias com desvio</item>
     </plurals>
+    <string name="insights_day_no_trip">%1$s, sem percurso</string>
+    <string name="insights_day_on_route">%1$s, sem desvios</string>
+    <string name="insights_day_deviated">%1$s, com desvio</string>
+    <string name="weekday_initial_monday">S</string>
+    <string name="weekday_initial_tuesday">T</string>
+    <string name="weekday_initial_wednesday">Q</string>
+    <string name="weekday_initial_thursday">Q</string>
+    <string name="weekday_initial_friday">S</string>
+    <string name="weekday_monday">segunda-feira</string>
+    <string name="weekday_tuesday">terça-feira</string>
+    <string name="weekday_wednesday">quarta-feira</string>
+    <string name="weekday_thursday">quinta-feira</string>
+    <string name="weekday_friday">sexta-feira</string>
     <string name="insights_see_metrics">Ver métricas</string>
     <string name="insights_metrics_title">Métricas</string>
     <string name="insights_success">Voltou à sua rota</string>
