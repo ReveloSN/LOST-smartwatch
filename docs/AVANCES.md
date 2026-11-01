@@ -10,7 +10,7 @@ las decisiones tomadas y lo que queda pendiente.
 - **Demo con GPX** verificada de punta a punta por prueba: rutina normal (silencio), desvío voluntario (pregunta suave), calle cerrada (pregunta → guía → ruta recuperada) y hospital (pregunta → llegada).
 - **Diseño** fiel a los mockups: tokens en 3 niveles, Atomic Design, previews redondo/cuadrado, voz y tono, 3 idiomas, accesibilidad verificada por prueba.
 - **Mejoras del 25 de octubre** (rama `mejoras-ui-mapa`): interfaz simplificada y verificada en un emulador de Wear OS, **mapa real de OpenStreetMap**, destinos reales por voz, demo sobre calles reales, flecha con brújula y optimización (APK de 57 MB a 3,6 MB, GPS adaptativo).
-- **Jornada del 1 de noviembre**: IA robusta con varias semillas y con la precisión del GPS, aviso de ubicación perdida, notificación 05.3, complicación y vista rápida en vivo (05), "Donde más te desorientas" (03.2), icono propio y pantallas de error probadas en el reloj. **481 pruebas JVM + 21 instrumentadas.**
+- **Jornada del 1 de noviembre**: IA robusta con varias semillas y con la precisión del GPS, aviso de ubicación perdida, notificación 05.3, complicación y vista rápida en vivo (05), "Donde más te desorientas" (03.2), icono propio y pantallas de error probadas en el reloj. **482 pruebas JVM + 23 instrumentadas.**
 - **Lo que falta** (ver "Pendientes generales" al final): prueba con usuarios (SUS), calibrar la IA con recorridos reales y probar voz, brújula y la complicación en un reloj físico.
 
 ## Resumen de fases
