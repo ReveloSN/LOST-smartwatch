@@ -65,6 +65,25 @@ Sin cambios de color en esta revisión: `ContrastRatioTest` sigue verificando WC
 texto o estado sobre el fondo OLED. El nuevo `StatusIconBadge` relleno usa `Text.onAccent` sobre `Status.onRoute`,
 la misma pareja ya verificada en los botones primarios.
 
+## 7. Revisión del 1 de noviembre (lo nuevo y lo que faltaba)
+
+**Texto grande en las 11 pantallas que faltaban** (Ajustes, Contactos, Destinos, Mis recorridos, detalle de rutina,
+Tu semana, Lugares, Métricas, Sensibilidad, Acerca de, Demostración, Privacidad): sin "…"; las largas se desplazan
+con el indicador curvo. Hoja: [a11y-texto-grande-resto](../capturas/pulido/a11y-texto-grande-resto.png).
+
+**Errores (10)**: `ErrorScreensTest` (instrumentada) dibuja los 9 `LostError` con letra normal y con Texto grande y
+comprueba que "qué pasó" se ve al abrir y que "qué hacer" está en la pantalla.
+
+**Portugués y en-XA en lo nuevo** (aviso de ubicación perdida, Tu semana, Lugares), con
+`adb shell cmd locale set-app-locales com.lost.watch --locales en-XA|pt-BR`:
+
+| Hallazgo | Arreglo |
+|---|---|
+| pt: todo cabe | — |
+| en-XA: "0 de 5 días" (rol número, 1 línea) se cortaba con "…" | `CountOfTotal`: el número grande y "de 5 días" más pequeño y gris en línea, como el mockup 03.1, con hasta 2 líneas. TalkBack lee la frase completa. |
+| en-XA: la fila L M M J V se salía del círculo (la pseudolocalización alarga las letras) | `SegmentedRingLegend` usa `FlowRow`: si no caben, las letras pasan a otra línea. |
+| en-XA: en el aviso de ubicación perdida "Terminar recorrido" queda bajo los puntos del paginador | Se alcanza desplazando; aceptable para la pseudolocalización (en es, en y pt cabe). |
+
 ## Pendientes
 
 | Pendiente | Cómo cerrarlo |
