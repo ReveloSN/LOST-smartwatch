@@ -4,13 +4,13 @@ import com.lost.domain.session.TripSession
 import javax.inject.Inject
 import kotlin.math.roundToInt
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
 
 /**
  * Mantiene al día la complicación y la vista rápida (patrón Observer): cuando cambia algo que se ve en ellas
  * (estado, destino, llegada o un décimo del avance del anillo), les pide redibujarse. Pedirlo en cada
- * punto GPS gastaría batería sin cambiar nada en pantalla.
+ * punto GPS gastaría batería sin cambiar nada en pantalla. Al arrancar el proceso también pide redibujar,
+ * por si quedó mostrando un recorrido que ya no existe.
  */
 class GlanceRefresher @Inject constructor(
     private val session: TripSession,
@@ -21,7 +21,6 @@ class GlanceRefresher @Inject constructor(
         session.snapshot
             .map { visibleKey(mapper.map(it)) }
             .distinctUntilChanged()
-            .drop(1)
             .collect { surfaces.requestUpdate() }
     }
 
