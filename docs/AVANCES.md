@@ -658,6 +658,10 @@ Un agente revisó las capturas nuevas frente a los mockups y las reglas del curs
 | "Vas a Casa → U" en la vista rápida se leía como si el destino fuera Casa; la llegada quedaba partida | "En tu ruta Casa → U" más grande y "Llegada 7:15" en su línea | `8267ce0` |
 | La notificación repetía "LOST" (app y título) | El título es la pregunta | `23e6fb2` |
 
+Una segunda revisión de código, sobre todo lo posterior a la primera, no encontró errores críticos; se corrigió que
+Monitoreo mostrara "Ya no es tu ruta" durante la pausa (ahora "En pausa, sigo atento.") y que el sembrador de la
+demo fallara con un GPX vacío.
+
 No se aplicó centrar en vertical la lista de Lugares: todas las listas de la app se alinean arriba
 (`ListTemplate`). Las capturas 15, 20, 22 y 23 se repitieron en el emulador después de los cambios.
 
