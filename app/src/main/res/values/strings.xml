@@ -280,6 +280,8 @@
     <string name="complication_no_gps">Sin GPS</string>
     <string name="tile_title_now">LOST · ahora</string>
     <string name="glance_detail_with_arrival">%1$s · llegada %2$s</string>
+    <string name="notification_channel_questions">Preguntas de LOST</string>
+    <string name="notification_ask_question">¿Todo bien en tu ruta?</string>
 
     <!-- Rumbos para TalkBack -->
     <string name="direction_north">al norte</string>

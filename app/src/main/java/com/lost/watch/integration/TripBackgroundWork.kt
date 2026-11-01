@@ -8,16 +8,19 @@ import kotlinx.coroutines.launch
 
 /**
  * Lo que corre junto al monitor mientras dura un recorrido: los efectos de cada transición (háptica,
- * métricas, aviso), los temporizadores de la escalada y el aviso de ubicación perdida.
+ * métricas, aviso), los temporizadores de la escalada, el aviso de ubicación perdida y la pregunta por
+ * notificación cuando la app no está a la vista.
  */
 class TripBackgroundWork @Inject constructor(
     private val effects: AssistanceEffects,
     private val timers: AssistanceTimers,
-    private val locationWatchdog: LocationSignalWatchdog
+    private val locationWatchdog: LocationSignalWatchdog,
+    private val promptEffect: AssistancePromptEffect
 ) {
     suspend fun run(): Unit = coroutineScope {
         launch { effects.run() }
         launch { timers.run() }
         launch { locationWatchdog.run() }
+        launch { promptEffect.run() }
     }
 }

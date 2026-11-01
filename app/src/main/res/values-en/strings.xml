@@ -250,6 +250,8 @@
     <string name="complication_no_gps">No GPS</string>
     <string name="tile_title_now">LOST · now</string>
     <string name="glance_detail_with_arrival">%1$s · arriving %2$s</string>
+    <string name="notification_channel_questions">LOST questions</string>
+    <string name="notification_ask_question">Is everything OK on your route?</string>
 
     <!-- Rumbos para TalkBack -->
     <string name="direction_north">north</string>

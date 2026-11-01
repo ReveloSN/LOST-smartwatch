@@ -15,4 +15,7 @@ abstract class IntegrationModule {
 
     @Binds
     abstract fun glanceSurfaces(impl: WearGlanceSurfaces): GlanceSurfaces
+
+    @Binds
+    abstract fun promptNotifications(impl: AndroidPromptNotifications): PromptNotifications
 }
