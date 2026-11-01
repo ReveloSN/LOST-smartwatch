@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="nav_home">Início</string>
     <string name="nav_routines">Meus percursos</string>
     <string name="nav_destinations">Destinos</string>
@@ -37,7 +37,8 @@
     <string name="home_new_place">Explorando um lugar novo</string>
 
     <string name="learning_progress">%1$d de %2$d</string>
-    <plurals name="learning_remaining">
+    <!-- Con 0 la rutina ya quedó guardada y este texto no se muestra. -->
+    <plurals name="learning_remaining" tools:ignore="ImpliedQuantity">
         <item quantity="one">Mais uma e salvamos como sua rota de sempre.</item>
         <item quantity="many">Mais %d e salvamos como sua rota de sempre.</item>
         <item quantity="other">Mais %d e salvamos como sua rota de sempre.</item>
@@ -102,7 +103,8 @@
         <item quantity="other">≈ %d min caminhando</item>
     </plurals>
     <string name="assist_sharing_in">Aviso a %1$s em</string>
-    <plurals name="assist_seconds">
+    <!-- Solo la etiqueta bajo el número de la cuenta regresiva, que nunca muestra 0. -->
+    <plurals name="assist_seconds" tools:ignore="ImpliedQuantity">
         <item quantity="one">segundo</item>
         <item quantity="many">segundos</item>
         <item quantity="other">segundos</item>
