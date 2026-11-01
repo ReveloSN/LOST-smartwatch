@@ -7,24 +7,35 @@ import com.lost.domain.model.PlaceKind
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 /**
  * Los 4 escenarios de la demo con el ruido de un GPS real: el motor debe contar la misma historia
- * (sin falsas alarmas en la ruta de siempre y sin perder la desorientación).
+ * (sin falsas alarmas en la ruta de siempre y sin perder la desorientación), con o sin la precisión
+ * que informa el reloj en cada punto.
  */
 class GpsNoiseRobustnessTest {
     private val harness = GpxStoryHarness()
 
     @TestFactory
-    fun `la historia de cada escenario resiste el ruido realista`() = GpsNoise.REALISTIC.flatMap { noise ->
-        listOf(
-            DynamicTest.dynamicTest("ruta de siempre · ${noise.name}") { normal(noise) },
-            DynamicTest.dynamicTest("desvío voluntario · ${noise.name}") { voluntary(noise) },
-            DynamicTest.dynamicTest("calle cerrada · ${noise.name}") { disorientation(noise) },
-            DynamicTest.dynamicTest("hospital · ${noise.name}") { newPlace(noise) }
-        )
+    fun `la historia de cada escenario resiste el ruido realista`() =
+        realisticWithAndWithoutAccuracy().flatMap { noise ->
+            listOf(
+                DynamicTest.dynamicTest("ruta de siempre · ${noise.name}") { normal(noise) },
+                DynamicTest.dynamicTest("desvío voluntario · ${noise.name}") { voluntary(noise) },
+                DynamicTest.dynamicTest("calle cerrada · ${noise.name}") { disorientation(noise) },
+                DynamicTest.dynamicTest("hospital · ${noise.name}") { newPlace(noise) }
+            )
+        }
+
+    @Test
+    fun `en un cañón urbano la precisión del gps evita la falsa alarma en la ruta de siempre`() {
+        normal(GpsNoise.URBAN_CANYON.reporting(AccuracyReport.HONEST))
     }
+
+    private fun realisticWithAndWithoutAccuracy() =
+        GpsNoise.REALISTIC + GpsNoise.REALISTIC.map { it.reporting(AccuracyReport.HONEST) }
 
     private fun play(scenario: DemoScenario, noise: GpsNoise): GpxStoryHarness.Story {
         val points = noise.apply(harness.gpx(scenario))

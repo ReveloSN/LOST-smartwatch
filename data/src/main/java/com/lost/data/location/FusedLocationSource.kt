@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Looper
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -40,7 +41,7 @@ class FusedLocationSource @Inject constructor(@ApplicationContext private val co
     private fun updates(intervalMillis: Long): Flow<GeoPoint> = callbackFlow {
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
-                result.locations.forEach { trySend(GeoPoint(it.latitude, it.longitude, it.time)) }
+                result.locations.forEach { trySend(it.toGeoPoint()) }
             }
         }
         val request = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, intervalMillis)
@@ -49,6 +50,10 @@ class FusedLocationSource @Inject constructor(@ApplicationContext private val co
         client.requestLocationUpdates(request, callback, Looper.getMainLooper())
         awaitClose { client.removeLocationUpdates(callback) }
     }
+
+    /** La precisión viaja con el punto: el motor ignora o pesa menos los puntos imprecisos. */
+    private fun Location.toGeoPoint() =
+        GeoPoint(latitude, longitude, time, accuracy.toDouble().takeIf { hasAccuracy() })
 
     private fun hasPermission(): Boolean =
         context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED

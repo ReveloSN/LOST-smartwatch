@@ -7,8 +7,9 @@ import kotlin.math.sqrt
  * El paso a paso del remuestreo: se le dan los puntos en orden y va dejando un punto cada vez que la
  * persona está a `spacingMeters` **en línea recta** del último punto dejado. Medir en línea recta (y no
  * a lo largo del rastro) hace que el temblor del GPS no sume metros ni invente giros; antes, cada punto
- * se promedia con los de los últimos segundos ([GpsSmoothing]). Un punto aislado que implicaría ir más
- * rápido que `jumpSpeedMps` se toma como un salto de la señal y se descarta.
+ * se promedia con los de los últimos segundos ([GpsWindowAverage]). Un punto aislado que implicaría ir más
+ * rápido que `jumpSpeedMps` se toma como un salto de la señal y se descarta, y uno cuya precisión
+ * reportada es peor que `maxAccuracyMeters` se ignora siempre ([GpsSmoothing.isPrecise]).
  * Guarda su estado, así se pueden seguir agregando puntos después (remuestreo incremental).
  */
 internal class ResampleAccumulator(
@@ -18,12 +19,22 @@ internal class ResampleAccumulator(
     first: GeoPoint
 ) {
     private val committed = mutableListOf(first)
-    private val recent = ArrayDeque<GeoPoint>().apply { addLast(first) }
+    private val average = GpsWindowAverage(gps.smoothingSeconds, gps.accuracyFloorMeters).apply {
+        if (gps.isPrecise(first)) add(first)
+    }
     private var lastAccepted = first
     private var lastSmoothed = first
     private var isPreviousRejected = false
 
+    // Si el recorrido empezó con un punto impreciso, el primer punto preciso ocupa su lugar.
+    private var isSeedImprecise = !gps.isPrecise(first)
+
     fun add(point: GeoPoint) {
+        if (!gps.isPrecise(point)) return
+        if (isSeedImprecise) {
+            reseed(point)
+            return
+        }
         // Nunca se descartan dos seguidos: si la persona de verdad va rápido, el rastro no se queda atascado.
         if (!isPreviousRejected && isJump(point)) {
             isPreviousRejected = true
@@ -31,7 +42,7 @@ internal class ResampleAccumulator(
         }
         isPreviousRejected = false
         lastAccepted = point
-        val smoothed = smooth(point)
+        val smoothed = average.add(point)
         var start = lastSmoothed
         lastSmoothed = smoothed
         while (distance(committed.last(), smoothed) >= spacingMeters) {
@@ -58,19 +69,13 @@ internal class ResampleAccumulator(
         return seconds > 0 && distance(lastAccepted, point) / seconds > gps.jumpSpeedMps
     }
 
-    /** Promedio de los puntos de los últimos segundos. Sin hora creciente (datos sintéticos) no promedia. */
-    private fun smooth(point: GeoPoint): GeoPoint {
-        if (point.timestampMillis <= recent.last().timestampMillis) recent.clear()
-        recent.addLast(point)
-        val windowMillis = (gps.smoothingSeconds * MILLIS_PER_SECOND).toLong()
-        while (point.timestampMillis - recent.first().timestampMillis > windowMillis) recent.removeFirst()
-        return GeoPoint(
-            recent.sumOf {
-                it.latitude
-            } / recent.size,
-            recent.sumOf { it.longitude } / recent.size,
-            point.timestampMillis
-        )
+    private fun reseed(point: GeoPoint) {
+        isSeedImprecise = false
+        committed.clear()
+        committed += point
+        average.add(point)
+        lastAccepted = point
+        lastSmoothed = point
     }
 
     /** El punto del tramo `from → to` que queda justo a `spacingMeters` de `anchor` (from está más cerca). */

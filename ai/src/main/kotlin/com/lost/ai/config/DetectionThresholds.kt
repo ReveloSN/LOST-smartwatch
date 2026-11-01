@@ -10,6 +10,10 @@ data class DetectionThresholds(
     val gpsJumpSpeedMps: Double,
     /** Cada punto GPS se promedia con los de estos últimos segundos (el temblor del reloj baja a la mitad). */
     val gpsSmoothingSeconds: Double,
+    /** Un punto cuya precisión reportada es peor que esto (metros) se ignora: el GPS mismo dice que no sabe. */
+    val gpsMaxAccuracyMeters: Double,
+    /** En el promedio, un punto pesa 1 / precisión²; por debajo de esto (metros) todos pesan igual. */
+    val gpsAccuracyFloorMeters: Double,
     val dtwBandRatio: Double,
     val dtwMinBandPoints: Int,
     val routineStartRadiusMeters: Double,
@@ -43,6 +47,8 @@ data class DetectionThresholds(
             resampleSpacingMeters = 20.0,
             gpsJumpSpeedMps = 5.0,
             gpsSmoothingSeconds = 15.0,
+            gpsMaxAccuracyMeters = 50.0,
+            gpsAccuracyFloorMeters = 5.0,
             dtwBandRatio = 0.25,
             dtwMinBandPoints = 5,
             routineStartRadiusMeters = 150.0,
