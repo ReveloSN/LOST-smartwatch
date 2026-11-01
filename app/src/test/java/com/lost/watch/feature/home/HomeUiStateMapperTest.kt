@@ -50,10 +50,10 @@ class HomeUiStateMapperTest {
     }
 
     @Test
-    fun `tras estoy bien no alarma y dice cuanto dura la pausa`() {
+    fun `tras estoy bien se ve en calma y dice cuanto dura la pausa`() {
         val snapshot = AppFixtures.monitoring(AppFixtures.detection(AssistanceLevel.HIGH), AssistanceState.Paused)
         val state = mapper.map(snapshot, false)
-        assertEquals(StatusPresentation.DEVIATION, state.status)
+        assertEquals(StatusPresentation.ON_ROUTE, state.status)
         assertEquals(2, state.pauseMinutes)
     }
 

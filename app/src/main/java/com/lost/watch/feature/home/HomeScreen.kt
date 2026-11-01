@@ -81,12 +81,11 @@ private fun IdleStatus() {
 
 @Composable
 private fun MonitoringStatus(state: HomeUiState, onOpenMonitoring: () -> Unit) {
-    LostChip(
-        stringResource(state.status.label),
-        icon = state.status.icon,
-        tone = state.status.tone,
-        onClick = onOpenMonitoring
-    )
+    // En la pausa tras "Estoy bien" el chip dice cuánto dura, en calma; la llegada sigue debajo.
+    val chipLabel = state.pauseMinutes
+        ?.let { pluralStringResource(R.plurals.home_paused, it, it) }
+        ?: stringResource(state.status.label)
+    LostChip(chipLabel, icon = state.status.icon, tone = state.status.tone, onClick = onOpenMonitoring)
     val arrival = state.arrivalMinuteOfDay.takeUnless { state.isVoluntaryDetour || state.isNewPlace }
     arrival?.let { LostText(formatMinuteOfDay(it), role = LostTextRole.DISPLAY) }
     LostText(supportLine(state, hasArrival = arrival != null), role = LostTextRole.CAPTION)
@@ -114,15 +113,9 @@ private fun WeakLocationStatus() {
 
 @Composable
 private fun supportLine(state: HomeUiState, hasArrival: Boolean): String = when {
-    state.pauseMinutes != null ->
-        pluralStringResource(R.plurals.home_paused, state.pauseMinutes, state.pauseMinutes)
-
     state.isVoluntaryDetour -> stringResource(R.string.home_walking_safely)
-
     state.isNewPlace -> state.routineName ?: stringResource(R.string.home_new_place)
-
     hasArrival && state.routineName != null -> stringResource(R.string.home_arriving_at, state.routineName)
-
     else -> stringResource(R.string.home_only_observing)
 }
 

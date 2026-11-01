@@ -26,14 +26,11 @@ enum class StatusPresentation(val tone: StatusTone, val icon: ImageVector, @para
         }
 
         /**
-         * El estado de un recorrido en curso. Tras "Estoy bien" LOST no pregunta en 2 minutos; mostrar "Creo que
-         * necesitas ayuda" en ese rato contradiría la respuesta, así que se queda como mucho en "Posible
-         * desorientación": honesto, sin alarmar. Inicio, Monitoreo, la complicación y la vista rápida lo usan igual.
+         * El estado de un recorrido en curso. Tras "Estoy bien" LOST no pregunta en 2 minutos y para la pantalla
+         * es como estar en calma: mostrar desorientación en ese rato contradiría lo que la persona acaba de decir.
+         * Inicio, Monitoreo, la complicación y la vista rápida lo usan igual.
          */
-        fun of(snapshot: TripSessionSnapshot): StatusPresentation {
-            val status = of(snapshot.detection.level)
-            val isPaused = snapshot.assistance == AssistanceState.Paused
-            return if (isPaused && status == HELP) DEVIATION else status
-        }
+        fun of(snapshot: TripSessionSnapshot): StatusPresentation =
+            if (snapshot.assistance == AssistanceState.Paused) ON_ROUTE else of(snapshot.detection.level)
     }
 }
