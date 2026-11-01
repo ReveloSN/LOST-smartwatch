@@ -592,6 +592,17 @@ Cierra el pendiente del cañón urbano. Detalle, tablas y costos en
   y `assembleDebug` en verde. Commits separados: el filtro y el peso (`0d3e2a3`) y la ventana adaptativa (`7cf327b`),
   por si se prefiere no pagar el retraso del hospital.
 
+## Desvío voluntario estable con varias semillas (1 de noviembre)
+
+- **Diagnóstico:** con σ 10 m el desvío voluntario pedía ayuda en 3 de 20 semillas. La señal de giros bruscos
+  contaba una esquina dos veces (la cuerda de 40 m la reparte en dos puntos) y 3 giros en 160 m ya bastaban.
+- **Corrección** (`726596e`): una esquina repartida cuenta una vez y la confusión empieza con más de 3 giros por
+  ventana. Con 20 semillas todo lo realista pasa 20/20 y la desorientación y el hospital se siguen detectando 20/20.
+- **"Voy a otro lado"** (`b39482c`): el resto del recorrido ya no se compara con la ruta de siempre; Inicio dice
+  "Caminas seguro a otro lugar".
+- Las falsas alarmas se prueban con 10 semillas por variante. Detalle en
+  [`docs/ia/robustez-ruido-gps.md`](ia/robustez-ruido-gps.md#varias-semillas-el-desvío-voluntario-con-σ-10-m--1-de-noviembre).
+
 ---
 
 ## Pendientes generales
@@ -600,7 +611,6 @@ Cierra el pendiente del cañón urbano. Detalle, tablas y costos en
 |---|---|---|
 | ~~Ver las pantallas en un emulador de Wear OS~~ | Hecho el 25 de octubre; TalkBack revisado en el emulador el 27. | Escucharlo palabra por palabra en un reloj. |
 | Pruebas con usuarios y SUS | Requiere personas reales. La guía, la plantilla y el script ya están (27 de octubre). | Seguir `docs/metricas/guia-aplicacion-sus.md`. |
-| Desvío voluntario con σ 10 m estable entre semillas | Pasa con la semilla 27, falla en 2–3 de 10 (`robustez-ruido-gps.md`, Límites). | Diagnosticar qué señal sube en las semillas que fallan y agregar la prueba con varias semillas. |
 | Calibrar los pesos de la IA con recorridos reales | Los pesos se ajustaron con recorridos sintéticos y los GPX de la demo. | Grabar recorridos reales y ajustar `DetectionConfig` / `ScoringWeights`. |
 | ~~Fuente Manrope~~ | Hecho el 27 de octubre (`docs/diseno/tipografia-manrope.md`). | — |
 | ~~Flecha con brújula~~ | Hecho el 25 de octubre (`AndroidCompassHeadingSource`). | Probarla en un reloj físico. |

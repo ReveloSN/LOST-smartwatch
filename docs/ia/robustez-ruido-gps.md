@@ -144,11 +144,66 @@ señal de un cañón urbano, las vueltas se notan **unos 90 s más tarde**. Se e
 | `GpsAccuracyTest` (ai, 7) | Dos saltos seguidos marcados como imprecisos no apartan el rastro (y sin precisión sí, más de 10 m); sin precisión el remuestreo es el de siempre; un inicio impreciso se reemplaza; el promedio pesa más el punto preciso; la ventana crece hasta el tope; el remuestreo incremental da lo mismo que el completo. |
 | `GpsNoiseRobustnessTest` (app, 16 → 35) | Las 4 variantes realistas también con precisión honesta, y en el cañón urbano: ruta de siempre sin alerta, desvío voluntario sin "¿Necesitas ayuda?", desorientación y vueltas detectadas. |
 
+## Varias semillas: el desvío voluntario con σ 10 m — 1 de noviembre
+
+La tabla de 16 combinaciones de arriba era de **una sola semilla** (27). Con 20 semillas, el desvío voluntario con
+σ 10 m pedía ayuda en 3 de 20 (semillas 4, 5 y 9).
+
+### Diagnóstico
+
+Se espiaron las señales en el momento en que LOST pasaba a "¿Necesitas ayuda?" (`GpxStoryHarness(wrapSignals = …)`).
+En los tres casos `ErraticHeading` valía 0,5–1,0, y con más de 0,2 el desvío deja de contar como voluntario
+(`voluntaryMaxUnsteadiness`). Los giros, con signo, alrededor de una esquina real de la ruta del desvío:
+
+| Recorrido | Giros bruscos (≥ 60°) cerca de la esquina | En la ventana de 8 puntos |
+|---|---|---|
+| Sin ruido | −90 | 1 |
+| Semilla 9 | +70, −62, −101 | 3 → 0,375 → señal 0,5 |
+| Semilla 4 | −72, +62, −89, −93 | 4 → 0,5 → señal 1,0 |
+| Desorientación (sin ruido) | −179, −154, −67, −74, −70, −115, 179, −114 | 8 |
+
+Dos cosas inflaban la cuenta:
+
+1. **La cuerda de 40 m reparte una esquina en dos giros seguidos del mismo sentido** (−89, −93): es una esquina,
+   no dos cambios de dirección.
+2. **Un zigzag del temblor más una esquina dan 3 giros en 160 m**, y 3 ya superaba el umbral de 0,25 (2 de 8).
+
+### Corrección
+
+| Pieza | Cambio |
+|---|---|
+| `ErraticHeadingSignal` | Una racha de giros bruscos **del mismo sentido no más larga que la cuerda** (2 puntos) cuenta como un giro. Una racha más larga es dar vueltas en círculo y cuenta completa (lo fija "dar vueltas cerradas es errático"). |
+| `DetectionThresholds` | `erraticBaselineRatio` 0,25 → **0,375** y `erraticSaturationRatio` 0,5 → **0,625**: hasta 3 giros por ventana es caminar por la ciudad; 4 empieza a contar y 5 satura. |
+| `Degrees.signedDifferenceTo` | Diferencia de rumbo con signo, para saber hacia qué lado se gira. |
+
+### Resultado con 20 semillas (sin responder la pregunta suave)
+
+| Variante · precisión | Ruta de siempre | Desvío voluntario | Calle cerrada | Hospital |
+|---|---|---|---|---|
+| Sin ruido | 20/20 | 20/20 | 20/20 | 20/20 |
+| σ 5 m · ninguna / honesta | 20/20 | 20/20 | 20/20 | 20/20 |
+| σ 10 m · ninguna | 20/20 | 17/20 → **20/20** | 20/20 | 20/20 |
+| σ 10 m · honesta | 20/20 | **20/20** | 20/20 | 20/20 |
+| Rebotes · ninguna / honesta | 20/20 | **20/20** | 20/20 | 20/20 |
+| Puntos perdidos · ninguna / honesta | 20/20 | 20/20 | 20/20 | 20/20 |
+| Cañón urbano · honesta | 20/20 | **20/20** | 20/20 | 20/20 |
+| Cañón urbano · ninguna (fuera de lo realista) | 20/20 | 3/20 | 20/20 | 20/20 |
+
+La desorientación y el hospital se siguen detectando en todas. `GpsNoiseRobustnessTest` prueba ahora las falsas
+alarmas (ruta de siempre y desvío voluntario) con **10 semillas por variante** (195 → 205 casos, ~50 s).
+
+### "Voy a otro lado" deja de comparar con la rutina
+
+En los casos que fallaban tarde, LOST ya había preguntado "¿Vas a otro lado hoy?", pero el arnés no respondía y el
+motor seguía comparando con la ruta de siempre (fuera de ruta 1,0, alejarse del destino 1,0, retraso 0,8). Si la
+persona responde "Voy a otro lado", ahora la sesión lo recuerda (`TripSessionSnapshot.isGoingElsewhere`) y el resto
+del recorrido se evalúa como un lugar nuevo, solo con las señales de confusión. Lo prueban `TripMonitorTest`,
+`TripSessionTest` y la historia completa en `GpsNoiseRobustnessTest` (10 semillas).
+
 ## Límites
 
-- **El desvío voluntario no es estable entre semillas con σ 10 m:** con la semilla 27 pasa, pero en 2–3 de 10
-  semillas pide ayuda (también antes de usar la precisión, que no lo cambia porque con σ 10 m todos los puntos
-  informan casi la misma). La tabla de 16 combinaciones de arriba es de una sola semilla. Queda pendiente.
+- **Cañón urbano sin precisión:** el desvío voluntario pide ayuda en 17 de 20 semillas, y casi siempre sin pasar
+  antes por la pregunta suave. Con la precisión que informa el reloj pasa 20/20.
 - Que el reloj informe una precisión **honesta** es un supuesto: si oculta los saltos, en estas variantes la
   ventana larga los absorbe igual, pero hay que confirmarlo con recorridos reales.
 - Si el GPS informa más de 50 m durante mucho rato (bajo techo), LOST deja de recibir puntos: no da alertas falsas,
