@@ -630,6 +630,7 @@ sustento:
 |---|---|---|
 | `TripSession.dispatch` leía el estado y escribía el siguiente en dos pasos; con el receptor de la notificación ya son 4 hilos despachando y una respuesta podía perderse | `@Synchronized` | `054d5c8` |
 | El canal de la notificación sonaba (solo se apagó la vibración) | `setSound(null, null)`, canal nuevo `lost_prompts` | `054d5c8` |
+| La cuenta regresiva no se podía cancelar con la app oculta, y la notificación silenciosa no se anunciaba | Notificación "Voy a avisar a tu contacto." con Cancelar, un id por pregunta y un toque de 40 ms (canal `lost_prompts_alert`) | `5130a90` |
 | Al volver a LOST desde recientes se repetía un "Guíame" viejo | Se ignora el intent con `FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY` | `054d5c8` |
 | La complicación no se redibujaba al reiniciar el proceso | `GlanceRefresher` pide redibujar al arrancar | `ffedefe` |
 | Un caso de uso con 5 parámetros y umbrales sueltos | `DisorientationPlaceSummarizer` e `InsightsThresholds` | `38e4235` |
@@ -647,7 +648,9 @@ sustento:
 ### Decisiones
 
 - **Sin geocodificación inversa** para los lugares (ADR 005): la ubicación de los momentos difíciles no sale del reloj.
-- **La notificación no vibra**: la escalada ya vibra con su patrón; vibrar dos veces confundiría.
+- ~~La notificación no vibra~~ **Corregido**: sin sonido ni vibración, Wear OS deja la notificación en la sección
+  silenciosa y no la anuncia (verificado en el emulador). Ahora vibra un solo toque de 40 ms y el patrón de cada
+  nivel lo sigue dando la escalada (captura `24`).
 - **"Guíame" abre la app**: la guía es una flecha que hay que ver, y Android no permite abrir una pantalla desde un
   receptor lanzado por una notificación.
 - **El refresco de la complicación y la vista rápida** se pide solo cuando cambia el estado, el destino, la llegada o
