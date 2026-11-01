@@ -73,11 +73,12 @@ El tono lo decide `ToneResolver` (`app/.../ui/ToneResolver.kt`) a partir del `As
 | Geocoding / routing request | "Solo se envía lo que dictaste." · "Envío inicio y destino a OpenStreetMap." (en Lugar nuevo) |
 | GPS accuracy > 50 m durante 1 min | No encontramos tu ubicación. · Camina hacia una salida o ventana. |
 | Alert snoozed after false positive | Pausa de 2 minutos |
-| Push notification: deviation prompt | LOST · ¿Todo bien en tu ruta? (Guíame · Estoy bien) |
+| Push notification: deviation prompt | ¿Todo bien en tu ruta? (Guíame · Estoy bien) · Voy a avisar a tu contacto. (Cancelar) |
 | Alert heatmap / incident clusters | Donde más te desorientas |
 | Reverse-geocoded address | (no se usa) "Cerca de Biblioteca Central" · "En tu ruta Casa → U" |
 | Data stays on device | Solo lo ves tú. |
 | Complication: ETA + progress ring | 7:15 · En tu ruta |
+| Glance: routine + ETA | En tu ruta Casa → U · Todo en orden · Llegada 7:15 |
 
 ## Mensajes de error: qué pasó · por qué · qué hacer
 

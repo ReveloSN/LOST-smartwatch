@@ -638,12 +638,28 @@ sustento:
 - **Android Lint** (`./gradlew :app:lintDebug`) pasa sin errores: se manejó el permiso de notificaciones como pide
   Lint y se justificaron dos plurales en portugués que ya existían (`f08ec5f`).
 - **Build de release con R8** (`./gradlew :app:assembleRelease`): compila, 3,8 MB.
-- **Pausa visible** (`13fe944`): tras "Estoy bien", Inicio seguía en coral "Creo que necesitas ayuda" aunque LOST no
-  iba a preguntar en 2 minutos. Ahora dice "Pausa de 2 minutos" y el estado se queda como mucho en "Posible
-  desorientación" (captura `23`). El primer texto ("No te pregunto por 2 minutos. Sigo atento.") ocupaba dos
+- **Pausa visible** (`13fe944`, ajustada en `5ddfbb7`): tras "Estoy bien", Inicio seguía en coral "Creo que
+  necesitas ayuda" aunque LOST no iba a preguntar en 2 minutos. Ahora se ve en calma y el chip dice "Pausa de 2
+  minutos", con "Llegas a Casa → U" bajo la hora (captura `23`). El primer texto ("No te pregunto por 2 minutos. Sigo atento.") ocupaba dos
   líneas y empujaba "Terminar recorrido" bajo los puntos del paginador; se acortó y se verificó en el emulador.
 - **Vista previa de la Tile** (`a6621be`): la imagen del selector de Tiles era la del diseño viejo (captura `22`).
 - **Glosario de voz** (`a96f131`): los textos nuevos, en la tabla sistema → usuario.
+
+### Crítica de diseño independiente
+
+Un agente revisó las capturas nuevas frente a los mockups y las reglas del curso. Se aplicó lo que tenía sustento:
+
+| Hallazgo | Arreglo | Commit |
+|---|---|---|
+| En la pausa, el ámbar contradecía "Estoy bien" y la hora quedaba sin etiqueta | Calma y chip "Pausa de 2 minutos"; "Llegas a Casa → U" vuelve bajo la hora | `5ddfbb7` |
+| La hora del sistema tapaba parte del primer y último segmento de Tu semana | Hueco de 40° arriba en el anillo por segmentos | `d6f1a82` |
+| En en-XA el botón "Dónde te desorientas" terminaba en "…" | Botones de solo texto con hasta 3 líneas | `d6f1a82` |
+| "desvío" quedaba sola en otra línea | Espacios que no se cortan en "1 día con desvío" | `8267ce0` |
+| "Vas a Casa → U" en la vista rápida se leía como si el destino fuera Casa; la llegada quedaba partida | "En tu ruta Casa → U" más grande y "Llegada 7:15" en su línea | `8267ce0` |
+| La notificación repetía "LOST" (app y título) | El título es la pregunta | `23e6fb2` |
+
+No se aplicó centrar en vertical la lista de Lugares: todas las listas de la app se alinean arriba
+(`ListTemplate`). Las capturas 15, 20, 22 y 23 se repitieron en el emulador después de los cambios.
 
 ### Decisiones
 
@@ -667,7 +683,8 @@ sustento:
 3. **Lugares sin dirección** (ADR 005): "Cerca de Biblioteca Central" en vez de "Avenida 19 con calle 45", para no
    enviar a nadie dónde se desorientó la persona.
 4. **La notificación vibra un toque de 40 ms** además del patrón de la escalada: sin eso Wear OS no la anuncia.
-5. **"Pausa de 2 minutos"** en Inicio tras "Estoy bien", con el estado como mucho en ámbar.
+5. **"Pausa de 2 minutos"** en el chip de Inicio tras "Estoy bien", en calma (aqua). Una primera versión la dejaba
+   en ámbar; la crítica de diseño mostró que contradecía la respuesta de la persona.
 6. **Sin subir nada**: la rama `mejoras-ui-mapa` tiene todos los commits del día (y los anteriores) sin merge a
    `main` ni push.
 
