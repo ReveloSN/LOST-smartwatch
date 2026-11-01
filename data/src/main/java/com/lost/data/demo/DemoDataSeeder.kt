@@ -21,8 +21,7 @@ import kotlinx.coroutines.flow.first
 class DemoDataSeeder @Inject constructor(
     @ApplicationContext private val context: Context,
     private val repositories: DemoRepositories,
-    private val opener: GpxAssetOpener,
-    private val reader: GpxRouteReader
+    private val gpx: DemoGpxLoader
 ) {
     suspend fun seedIfNeeded() {
         if (!BuildConfig.DEMO_MODE) return
@@ -32,7 +31,7 @@ class DemoDataSeeder @Inject constructor(
     }
 
     private fun habitualRoutine(): Routine {
-        val path = opener.open(DemoScenario.NORMAL_ROUTINE.assetName).use(reader::read)
+        val path = gpx.points(DemoScenario.NORMAL_ROUTINE)
         return Routine(
             id = HABITUAL_ROUTINE_ID,
             name = context.getString(R.string.demo_routine_name),
@@ -63,7 +62,7 @@ class DemoDataSeeder @Inject constructor(
         clinic = arrivalOf(DemoScenario.NEW_PLACE)
     )
 
-    private fun arrivalOf(scenario: DemoScenario): GeoPoint = opener.open(scenario.assetName).use(reader::read).last()
+    private fun arrivalOf(scenario: DemoScenario): GeoPoint = gpx.points(scenario).last()
 
     private companion object {
         const val HABITUAL_ROUTINE_ID = "demo-casa-u"

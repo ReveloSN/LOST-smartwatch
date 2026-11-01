@@ -1,6 +1,7 @@
 package com.lost.watch
 
 import android.app.Application
+import com.lost.data.demo.DemoAlertPlacesSeeder
 import com.lost.data.demo.DemoDataSeeder
 import com.lost.data.di.ApplicationScope
 import com.lost.watch.glance.GlanceRefresher
@@ -13,6 +14,8 @@ import kotlinx.coroutines.launch
 class LostApplication : Application() {
     @Inject lateinit var demoDataSeeder: DemoDataSeeder
 
+    @Inject lateinit var demoAlertPlacesSeeder: DemoAlertPlacesSeeder
+
     @Inject lateinit var glanceRefresher: GlanceRefresher
 
     @Inject @ApplicationScope
@@ -20,7 +23,10 @@ class LostApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        applicationScope.launch { demoDataSeeder.seedIfNeeded() }
+        applicationScope.launch {
+            demoDataSeeder.seedIfNeeded()
+            demoAlertPlacesSeeder.seedIfNeeded()
+        }
         applicationScope.launch { glanceRefresher.run() }
     }
 }
