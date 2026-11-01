@@ -33,9 +33,12 @@ fun LostSecondaryButton(
             containerColor = container,
             contentColor = ComponentTokens.SecondaryButton.content
         ),
-        label = { ButtonLabel(label) }
+        // Sin píldora el texto puede crecer: en otros idiomas pasa a una tercera línea en vez de cortarse.
+        label = { ButtonLabel(label, if (style == SecondaryButtonStyle.TEXT_ONLY) TEXT_ONLY_MAX_LINES else 2) }
     )
 }
+
+private const val TEXT_ONLY_MAX_LINES = 3
 
 @LostDevicePreviews
 @Composable

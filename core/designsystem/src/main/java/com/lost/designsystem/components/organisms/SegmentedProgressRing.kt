@@ -31,13 +31,15 @@ fun SegmentedProgressRing(
     val painter = with(LocalDensity.current) {
         RingArcPainter(StatusRing.strokeWidth.toPx(), StatusRing.inset.toPx())
     }
-    val segmentSweep = StatusRing.FULL_SWEEP / segments.size.coerceAtLeast(1)
+    // Los segmentos se reparten en el arco visible: arriba queda la hora del sistema.
+    val segmentSweep = (StatusRing.FULL_SWEEP - StatusRing.CLOCK_GAP_DEGREES) / segments.size.coerceAtLeast(1)
+    val firstAngle = StatusRing.START_ANGLE + StatusRing.CLOCK_GAP_DEGREES / 2
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             segments.forEachIndexed { index, state ->
                 val arc = RingArc(
                     color = colorFor(state),
-                    startAngle = StatusRing.START_ANGLE + index * segmentSweep + StatusRing.SEGMENT_GAP_DEGREES / 2,
+                    startAngle = firstAngle + index * segmentSweep + StatusRing.SEGMENT_GAP_DEGREES / 2,
                     sweepAngle = segmentSweep - StatusRing.SEGMENT_GAP_DEGREES
                 )
                 with(painter) { drawArc(arc) }

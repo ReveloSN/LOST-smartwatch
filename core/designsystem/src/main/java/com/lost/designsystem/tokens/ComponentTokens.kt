@@ -17,6 +17,9 @@ object ComponentTokens {
         const val START_ANGLE: Float = -90f
         const val FULL_SWEEP: Float = 360f
         const val SEGMENT_GAP_DEGREES: Float = 6f
+
+        /** El anillo por segmentos deja libre arriba el arco de la hora del sistema, que lo taparía. */
+        const val CLOCK_GAP_DEGREES: Float = 40f
     }
 
     object RouteLine {

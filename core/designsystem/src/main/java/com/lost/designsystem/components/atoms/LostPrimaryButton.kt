@@ -42,13 +42,13 @@ fun LostPrimaryButton(label: String, onClick: () -> Unit, modifier: Modifier = M
 }
 
 @Composable
-internal fun ButtonLabel(label: String) {
+internal fun ButtonLabel(label: String, maxLines: Int = 2) {
     Text(
         text = label,
         modifier = Modifier.fillMaxWidth(),
         style = LostTypography.button,
         textAlign = TextAlign.Center,
-        maxLines = 2,
+        maxLines = maxLines,
         overflow = TextOverflow.Ellipsis
     )
 }
