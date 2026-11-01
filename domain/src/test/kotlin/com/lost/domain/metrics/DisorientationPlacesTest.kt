@@ -82,8 +82,7 @@ class DisorientationPlacesTest {
             destinations = object : DestinationReader {
                 override fun observeDestinations() = flowOf(emptyList<Destination>())
             },
-            grouper = AlertPlaceGrouper(distances),
-            labeler = PlaceLabeler(distances),
+            summarizer = DisorientationPlaceSummarizer(AlertPlaceGrouper(distances), PlaceLabeler(distances)),
             timeSource = { 10L }
         )()
         assertEquals(listOf(3, 1), places.map { it.times })

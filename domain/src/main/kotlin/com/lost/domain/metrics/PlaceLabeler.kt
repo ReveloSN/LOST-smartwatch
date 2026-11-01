@@ -20,7 +20,7 @@ class PlaceLabeler @Inject constructor(private val distances: GuidanceCalculator
                 }
             }
             .minByOrNull { (_, guidance) -> guidance.distance.value }
-            ?.takeIf { (_, guidance) -> guidance.distance.value <= NEAR_DESTINATION_METERS }
+            ?.takeIf { (_, guidance) -> guidance.distance.value <= InsightsThresholds.NEAR_DESTINATION_METERS }
             ?.first
         val routine = group.mapNotNull { it.routineName }.groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
         return when {
@@ -28,9 +28,5 @@ class PlaceLabeler @Inject constructor(private val distances: GuidanceCalculator
             routine != null -> PlaceLabel.OnRoutine(routine)
             else -> PlaceLabel.Unknown
         }
-    }
-
-    private companion object {
-        const val NEAR_DESTINATION_METERS = 250.0
     }
 }

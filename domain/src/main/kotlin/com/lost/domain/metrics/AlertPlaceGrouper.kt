@@ -5,7 +5,7 @@ import com.lost.domain.port.GuidanceCalculator
 import javax.inject.Inject
 
 /**
- * Junta las alertas que ocurrieron cerca (a menos de una cuadra, [RADIUS_METERS]) en un mismo lugar. Con
+ * Junta las alertas que ocurrieron cerca (a menos de una cuadra) en un mismo lugar. Con
  * pocas alertas por semana basta un agrupamiento voraz: cada alerta se suma al primer grupo cercano.
  */
 class AlertPlaceGrouper @Inject constructor(private val distances: GuidanceCalculator) {
@@ -19,10 +19,9 @@ class AlertPlaceGrouper @Inject constructor(private val distances: GuidanceCalcu
     }
 
     private fun isNear(anchor: AlertPlace, place: AlertPlace): Boolean =
-        distances.guide(place.location, emptyList(), anchor.location)?.let { it.distance.value <= RADIUS_METERS } ==
+        distances.guide(place.location, emptyList(), anchor.location)?.let {
+            it.distance.value <=
+                InsightsThresholds.ALERT_PLACE_RADIUS_METERS
+        } ==
             true
-
-    private companion object {
-        const val RADIUS_METERS = 100.0
-    }
 }
