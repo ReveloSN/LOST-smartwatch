@@ -21,7 +21,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 /**
- * 05.3 · La pregunta como notificación del reloj: "LOST" en ámbar, la pregunta y sus botones. No suena (LOST es
+ * 05.3 · La pregunta como notificación del reloj: la pregunta como título, en ámbar, y sus botones. No suena (LOST es
  * discreto) y no se copia al teléfono. Vibra un solo toque de 40 ms: Wear OS deja una notificación sin sonido ni
  * vibración en la sección silenciosa, sin anunciarla, y con la pantalla apagada la pregunta pasaría inadvertida.
  * El patrón propio de cada nivel lo sigue dando la escalada.
@@ -33,8 +33,8 @@ class AndroidPromptNotifications @Inject constructor(@ApplicationContext private
         createChannel()
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(DataR.drawable.ic_lost_notification)
-            .setContentTitle(context.getString(R.string.tile_label))
-            .setContentText(context.getString(prompt.question))
+            // El nombre de la app ya aparece arriba: el título es la pregunta.
+            .setContentTitle(context.getString(prompt.question))
             .setColor(SemanticTokens.Status.deviation.toArgb())
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
