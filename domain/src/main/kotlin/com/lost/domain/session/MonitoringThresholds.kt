@@ -30,4 +30,13 @@ object MonitoringThresholds {
 
     /** Cada cuánto se revisa si la ubicación se perdió. */
     const val LOCATION_CHECK_MILLIS = 5_000L
+
+    /** Guiando, caminar a esto o más del rumbo al punto de regreso = hay que girar (vibra el patrón de giro). */
+    const val TURN_CUE_DEGREES = 60.0
+
+    /** El aviso de giro no se repite antes de esto, para no vibrar sin parar. */
+    const val TURN_CUE_REPEAT_MILLIS = 30_000L
+
+    /** El rumbo de la caminata se mide sobre al menos estos metros (menos sería temblor del GPS). */
+    const val HEADING_BASELINE_METERS = 15.0
 }
