@@ -537,7 +537,7 @@ aviso enviado, guía, "Entendido" y las secciones. Hoja resumen en `00-resumen.p
 | Pendiente | Cómo cerrarlo |
 |---|---|
 | Aplicar el SUS con 5 personas | Seguir `docs/metricas/guia-aplicacion-sus.md` y pegar el informe del script en `sus.md`. |
-| GPS en cañón urbano (σ 20 m) | Usar `Location.accuracy` para ignorar los puntos malos. |
+| ~~GPS en cañón urbano (σ 20 m)~~ (hecho el 1 de noviembre con `Location.accuracy`) | — |
 | Escuchar TalkBack palabra por palabra y Accessibility Scanner | En un reloj físico. |
 | ~~Tu semana con un segmento por día~~ (hecho el 1 de noviembre); "Lugares donde más te desorientas" | Ver la sección (c) de `fidelidad-mockups.md`. |
 | Recorridos reales con el reloj | Repetir la tabla de `robustez-ruido-gps.md` con datos grabados. |
@@ -575,6 +575,23 @@ Cierra la diferencia con el mockup 03.1 que quedaba pendiente en `docs/diseno/fi
 - **5 pruebas nuevas** (`GetWeekActivityUseCaseTest` 3, `InsightsUiStateMapperTest` +2); ktlint, detekt, todas
   las pruebas JVM y `assembleDebug` en verde.
 
+## Precisión del GPS (1 de noviembre)
+
+Cierra el pendiente del cañón urbano. Detalle, tablas y costos en
+[`docs/ia/robustez-ruido-gps.md`](ia/robustez-ruido-gps.md#precisión-del-gps-locationaccuracy--1-de-noviembre).
+
+- `Location.accuracy` viaja en `GeoPoint.accuracyMeters`. El motor **ignora los puntos peores que 50 m**,
+  **pesa el promedio por 1 / precisión²** y **alarga la ventana del promedio** (hasta 3 veces) cuando la precisión
+  es peor que 10 m. Sin precisión (GPX de la demo) todo sigue igual.
+- Cañón urbano (σ 20 m, saltos de 60 m), 10 semillas: ruta de siempre 9/10 → **10/10**, desvío voluntario
+  0/10 → **9/10**, desorientación y hospital siguen en 10/10.
+- **Costo:** con esa señal las vueltas del hospital se notan unos 90 s más tarde.
+- **Hallazgo:** con σ 10 m el desvío voluntario pide ayuda en 2–3 de 10 semillas (también antes; la prueba solo
+  usaba la semilla 27). Queda en pendientes.
+- 26 pruebas nuevas (`GpsAccuracyTest` 7, `GpsNoiseRobustnessTest` 16 → 35); ktlint, detekt, todas las pruebas JVM
+  y `assembleDebug` en verde. Commits separados: el filtro y el peso (`0d3e2a3`) y la ventana adaptativa (`7cf327b`),
+  por si se prefiere no pagar el retraso del hospital.
+
 ---
 
 ## Pendientes generales
@@ -583,6 +600,7 @@ Cierra la diferencia con el mockup 03.1 que quedaba pendiente en `docs/diseno/fi
 |---|---|---|
 | ~~Ver las pantallas en un emulador de Wear OS~~ | Hecho el 25 de octubre; TalkBack revisado en el emulador el 27. | Escucharlo palabra por palabra en un reloj. |
 | Pruebas con usuarios y SUS | Requiere personas reales. La guía, la plantilla y el script ya están (27 de octubre). | Seguir `docs/metricas/guia-aplicacion-sus.md`. |
+| Desvío voluntario con σ 10 m estable entre semillas | Pasa con la semilla 27, falla en 2–3 de 10 (`robustez-ruido-gps.md`, Límites). | Diagnosticar qué señal sube en las semillas que fallan y agregar la prueba con varias semillas. |
 | Calibrar los pesos de la IA con recorridos reales | Los pesos se ajustaron con recorridos sintéticos y los GPX de la demo. | Grabar recorridos reales y ajustar `DetectionConfig` / `ScoringWeights`. |
 | ~~Fuente Manrope~~ | Hecho el 27 de octubre (`docs/diseno/tipografia-manrope.md`). | — |
 | ~~Flecha con brújula~~ | Hecho el 25 de octubre (`AndroidCompassHeadingSource`). | Probarla en un reloj físico. |

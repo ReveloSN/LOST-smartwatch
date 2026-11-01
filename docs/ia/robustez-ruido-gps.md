@@ -86,9 +86,73 @@ Siguen en verde: las 5 pruebas de escenario de la sección 8.5, los 4 escenarios
 `IncrementalResamplerTest` (el remuestreo incremental sigue dando lo mismo que el completo) y
 `EvaluationPerformanceTest` (una evaluación de 2 151 puntos sigue en 3–4 ms en esta máquina).
 
+## Precisión del GPS (`Location.accuracy`) — 1 de noviembre
+
+El reloj informa en cada punto qué tan seguro está: el radio en metros dentro del cual está la persona con un
+68 % de confianza. Ahora esa precisión viaja en `GeoPoint.accuracyMeters` (`FusedLocationSource` la llena; los GPX
+no la tienen y quedan en `null`) y el motor la usa de tres formas:
+
+| Pieza | Cambio | Por qué |
+|---|---|---|
+| `GpsSmoothing.isPrecise` + `ResampleAccumulator` | Un punto con precisión peor que **50 m** (`gpsMaxAccuracyMeters`) se ignora siempre; si el recorrido empieza con uno, empieza en el primer punto preciso | El filtro de velocidad descarta un salto aislado, pero **nunca dos seguidos**; el segundo salto de 60 m creaba giros bruscos y una "zona repetida" falsos. Era justo lo que fallaba en el cañón urbano. |
+| `GpsWindowAverage` | El promedio de la ventana pesa cada punto por **1 / precisión²** (mínimo 5 m, `gpsAccuracyFloorMeters`) | Es el promedio de mínima varianza: un punto de ±30 m pesa 9 veces menos que uno de ±10 m. |
+| `GpsSmoothing.windowSecondsFor` | Con precisión peor que **10 m** (`gpsAccuracyReferenceMeters`) la ventana crece en proporción, hasta **3 veces** (`gpsMaxSmoothingFactor`): 15 s con buena señal, 30 s a ±20 m, 45 s a ±30 m o más | Entre edificios altos, 15 s de promedio no bastan: un desvío tranquilo parecía un ir y venir. |
+
+Sin precisión conocida, todo da exactamente lo mismo que antes (lo fija una prueba).
+
+### Cómo se probó
+
+`GpsNoise` simula además la precisión que informaría el reloj (`AccuracyReport`), con otra semilla para no cambiar
+el ruido de cada variante: **ninguna** (como antes), **honesta** (≈ 1,5 σ ± 20 %; un salto llega con su error real)
+y **que oculta los saltos** (peor caso: el salto llega con la precisión de un punto bueno).
+
+Además de la semilla 27 de las pruebas, se repitió cada caso con **10 semillas**. Cuántas cuentan la historia
+correcta (ruta de siempre: ninguna alerta · desvío voluntario: nunca "¿Necesitas ayuda?" · calle cerrada y hospital:
+sí pide ayuda):
+
+| Variante · precisión | Ruta de siempre | Desvío voluntario | Calle cerrada | Hospital |
+|---|---|---|---|---|
+| σ 5 m · cualquiera | 10/10 | 10/10 | 10/10 | 10/10 |
+| σ 10 m · ninguna | 10/10 | **7/10** | 10/10 | 10/10 |
+| σ 10 m · honesta | 10/10 | **8/10** | 10/10 | 10/10 |
+| Rebotes · ninguna / honesta | 10/10 | **8/10** | 10/10 | 10/10 |
+| Puntos perdidos · ninguna | 10/10 | 9/10 | 10/10 | 10/10 |
+| Puntos perdidos · honesta | 10/10 | 10/10 | 10/10 | 10/10 |
+| Cañón urbano · ninguna | 9/10 | **0/10** | 10/10 | 10/10 |
+| Cañón urbano · honesta | **10/10** | **9/10** | 10/10 | 10/10 |
+| Cañón urbano · oculta los saltos | 10/10 | 10/10 | 10/10 | 10/10 |
+
+### El costo
+
+Una ventana más larga tarda más en ver las vueltas. Tiempo medio hasta la primera alerta (10 semillas, precisión
+honesta):
+
+| Variante | Calle cerrada antes → después | Hospital antes → después |
+|---|---|---|
+| Sin ruido / σ 5 m | 595 s → 595 s | 365–379 s → igual |
+| σ 10 m | 611 s → 606 s | 387 s → 411 s |
+| Cañón urbano | 597 s → 610 s | **402 s → 488 s** |
+
+La calle cerrada no cambia (la alerta llega cuando empieza la desorientación del GPX). En el hospital, con la
+señal de un cañón urbano, las vueltas se notan **unos 90 s más tarde**. Se eligió la referencia de 10 m porque con
+8 m casi no mejora (σ 10 m: 9/10 en el desvío voluntario) y retrasa más.
+
+### Pruebas nuevas
+
+| Prueba | Qué fija |
+|---|---|
+| `GpsAccuracyTest` (ai, 7) | Dos saltos seguidos marcados como imprecisos no apartan el rastro (y sin precisión sí, más de 10 m); sin precisión el remuestreo es el de siempre; un inicio impreciso se reemplaza; el promedio pesa más el punto preciso; la ventana crece hasta el tope; el remuestreo incremental da lo mismo que el completo. |
+| `GpsNoiseRobustnessTest` (app, 16 → 35) | Las 4 variantes realistas también con precisión honesta, y en el cañón urbano: ruta de siempre sin alerta, desvío voluntario sin "¿Necesitas ayuda?", desorientación y vueltas detectadas. |
+
 ## Límites
 
-- **Cañón urbano (σ 20 m con saltos de 60 m):** la ruta de siempre todavía pide ayuda. Con ese error el GPS no
-  distingue la acera de la calle de al lado; haría falta usar la precisión que reporta cada punto
-  (`Location.accuracy`) para ignorar los puntos malos. Queda como pendiente.
+- **El desvío voluntario no es estable entre semillas con σ 10 m:** con la semilla 27 pasa, pero en 2–3 de 10
+  semillas pide ayuda (también antes de usar la precisión, que no lo cambia porque con σ 10 m todos los puntos
+  informan casi la misma). La tabla de 16 combinaciones de arriba es de una sola semilla. Queda pendiente.
+- Que el reloj informe una precisión **honesta** es un supuesto: si oculta los saltos, en estas variantes la
+  ventana larga los absorbe igual, pero hay que confirmarlo con recorridos reales.
+- Si el GPS informa más de 50 m durante mucho rato (bajo techo), LOST deja de recibir puntos: no da alertas falsas,
+  pero tampoco ve nada. No se muestra todavía el error "No encontramos tu ubicación" en ese caso.
+- `accuracyMeters` no se guarda en Room: las rutinas aprendidas se construyen con los puntos ya filtrados por el
+  remuestreo.
 - El ruido es sintético (gaussiano + saltos). Falta grabar recorridos reales con el reloj y repetir esta tabla.
