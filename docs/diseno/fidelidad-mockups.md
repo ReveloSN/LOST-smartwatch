@@ -74,6 +74,7 @@ Cada diferencia cae en una de tres categorías:
 | 20 | Notificación "¿Todo bien en tu ruta?" | 05.3 |
 | 21 | Donde más te desorientas | 03.2 |
 | 22 | Vista rápida durante un recorrido | 05.2 |
+| 23 | Inicio en pausa tras "Estoy bien" | C |
 | 15b | Tu semana con un día con desvío (datos de prueba en el emulador) | 03.1 |
 | 16 | Destinos | 02.1 |
 | 17 | Contactos | 04.3 |

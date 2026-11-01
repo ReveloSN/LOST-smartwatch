@@ -621,6 +621,29 @@ de la tabla (c) de `docs/diseno/fidelidad-mockups.md`. Todo se probó en el emul
 **Verificación:** `./gradlew ktlintCheck detekt test assembleDebug` en verde (475 pruebas JVM) y 21 pruebas
 instrumentadas en el emulador `Wear_OS_Large_Round` (data 8 · app 13).
 
+### Revisión de código, Lint y pulido de la tarde
+
+Un revisor independiente leyó todos los cambios del día. No encontró errores críticos; se corrigió lo que tenía
+sustento:
+
+| Hallazgo | Arreglo | Commit |
+|---|---|---|
+| `TripSession.dispatch` leía el estado y escribía el siguiente en dos pasos; con el receptor de la notificación ya son 4 hilos despachando y una respuesta podía perderse | `@Synchronized` | `054d5c8` |
+| El canal de la notificación sonaba (solo se apagó la vibración) | `setSound(null, null)`, canal nuevo `lost_prompts` | `054d5c8` |
+| Al volver a LOST desde recientes se repetía un "Guíame" viejo | Se ignora el intent con `FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY` | `054d5c8` |
+| La complicación no se redibujaba al reiniciar el proceso | `GlanceRefresher` pide redibujar al arrancar | `ffedefe` |
+| Un caso de uso con 5 parámetros y umbrales sueltos | `DisorientationPlaceSummarizer` e `InsightsThresholds` | `38e4235` |
+
+- **Android Lint** (`./gradlew :app:lintDebug`) pasa sin errores: se manejó el permiso de notificaciones como pide
+  Lint y se justificaron dos plurales en portugués que ya existían (`f08ec5f`).
+- **Build de release con R8** (`./gradlew :app:assembleRelease`): compila, 3,8 MB.
+- **Pausa visible** (`13fe944`): tras "Estoy bien", Inicio seguía en coral "Creo que necesitas ayuda" aunque LOST no
+  iba a preguntar en 2 minutos. Ahora dice "Pausa de 2 minutos" y el estado se queda como mucho en "Posible
+  desorientación" (captura `23`). El primer texto ("No te pregunto por 2 minutos. Sigo atento.") ocupaba dos
+  líneas y empujaba "Terminar recorrido" bajo los puntos del paginador; se acortó y se verificó en el emulador.
+- **Vista previa de la Tile** (`a6621be`): la imagen del selector de Tiles era la del diseño viejo (captura `22`).
+- **Glosario de voz** (`a96f131`): los textos nuevos, en la tabla sistema → usuario.
+
 ### Decisiones
 
 - **Sin geocodificación inversa** para los lugares (ADR 005): la ubicación de los momentos difíciles no sale del reloj.
