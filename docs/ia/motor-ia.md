@@ -48,7 +48,7 @@ Cada señal mide **una sola cosa** y devuelve un puntaje 0..1 y, si aplica, una 
 | `SequenceDivergenceSignal` | desvío | Costo DTW open-end (25 → 150 m) | matriz DTW de 2 filas |
 | `DelaySignal` | retraso | Tiempo real vs. esperado en ese punto, según sensibilidad | estadística de Welford |
 | `LoopSignal` | confusión | Pasadas por la misma celda de 20 m | `HashMap<GridCell, MutableList<Int>>` |
-| `ErraticHeadingSignal` | confusión | Proporción de giros > 60° por ventana | `ArrayDeque` como buffer circular |
+| `ErraticHeadingSignal` | confusión | Proporción de giros > 60° por ventana de 8 puntos, medidos entre cuerdas de 40 m; una esquina repartida en dos giros seguidos del mismo sentido cuenta una vez, y cuenta como confusión desde más de 3 giros por ventana | `ArrayDeque` como buffer circular |
 | `MovingAwaySignal` | confusión | Cuánto creció la distancia al destino desde lo más cerca | — |
 | `UnusualStopSignal` | confusión | Parada > 60 s lejos del inicio y del destino | una pasada O(n) |
 
@@ -84,3 +84,14 @@ El término **desvío·confusión** separa el desvío voluntario (desvío alto, 
 ## Pruebas
 
 `DetectionScenariosTest` (las 5 de la sección 8.5), más pruebas de geometría, DTW/Fréchet, Welford, aprendizaje, cada señal y el puntaje. `GpxDemoEndToEndTest` corre los GPX reales por toda la tubería.
+
+## Limpieza del GPS antes de remuestrear
+
+Ver [robustez-ruido-gps.md](robustez-ruido-gps.md). En resumen (`GpsSmoothing`, `GpsWindowAverage`,
+`ResampleAccumulator`):
+
+- Un punto con precisión reportada peor que 50 m se ignora; si el recorrido empieza con uno, empieza en el primero preciso.
+- Cada punto se promedia con los de los últimos 15 s, pesando por 1 / precisión²; con precisión peor que 10 m la
+  ventana crece en proporción (hasta 45 s).
+- Un punto aislado más rápido que 5 m/s se descarta (nunca dos seguidos).
+- Tras "Voy a otro lado" el resto del recorrido se evalúa como un lugar nuevo (sin la rutina).
