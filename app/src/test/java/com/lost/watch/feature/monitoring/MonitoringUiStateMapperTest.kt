@@ -1,9 +1,11 @@
 package com.lost.watch.feature.monitoring
 
+import com.lost.domain.assistance.AssistanceState
 import com.lost.domain.detection.AssistanceLevel
 import com.lost.domain.port.ContactReader
 import com.lost.domain.session.TripSessionSnapshot
 import com.lost.watch.AppFixtures
+import com.lost.watch.ui.StatusPresentation
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -33,6 +35,18 @@ class MonitoringUiStateMapperTest {
     fun `desvio voluntario dice hoy tomaste otra calle`() {
         val detection = AppFixtures.detection(AssistanceLevel.LOW, AppFixtures.reasons, voluntary = true)
         assertEquals(MonitoringHeadline.OTHER_STREET, mapper.map(AppFixtures.monitoring(detection)).headline)
+    }
+
+    @Test
+    fun `sin ubicacion confiable lo dice en vez del ultimo estado`() {
+        val snapshot = AppFixtures.monitoring(AppFixtures.detection(AssistanceLevel.LOW)).copy(hasWeakLocation = true)
+        assertEquals(MonitoringHeadline.NO_LOCATION, MonitoringUiStateMapper().map(snapshot).headline)
+    }
+
+    @Test
+    fun `en la pausa tras estoy bien no muestra ayuda`() {
+        val snapshot = AppFixtures.monitoring(AppFixtures.detection(AssistanceLevel.HIGH), AssistanceState.Paused)
+        assertEquals(StatusPresentation.DEVIATION, MonitoringUiStateMapper().map(snapshot).status)
     }
 
     @Test

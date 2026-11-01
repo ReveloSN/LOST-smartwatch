@@ -17,7 +17,7 @@ class MonitoringUiStateMapper @Inject constructor() {
         val detection = snapshot.detection
         return MonitoringUiState(
             headline = headlineFor(snapshot),
-            status = StatusPresentation.of(detection.level),
+            status = StatusPresentation.of(snapshot),
             routes = projector.project(snapshot.routine?.path.orEmpty(), snapshot.trip?.points.orEmpty()),
             reasons = detection.reasons
         )
@@ -26,6 +26,8 @@ class MonitoringUiStateMapper @Inject constructor() {
     private fun headlineFor(snapshot: TripSessionSnapshot): MonitoringHeadline {
         val detection = snapshot.detection
         return when {
+            snapshot.hasWeakLocation -> MonitoringHeadline.NO_LOCATION
+
             detection.mode == DetectionModeKind.NEW_PLACE -> MonitoringHeadline.NEW_PLACE
 
             detection.level != AssistanceLevel.LOW -> MonitoringHeadline.NOT_SIMILAR

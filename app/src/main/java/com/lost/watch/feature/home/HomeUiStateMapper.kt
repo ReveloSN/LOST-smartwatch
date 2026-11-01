@@ -23,7 +23,7 @@ class HomeUiStateMapper @Inject constructor() {
         val startedAt = snapshot.trip?.startedAtMillis
         return HomeUiState(
             isMonitoring = true,
-            status = statusOf(snapshot),
+            status = StatusPresentation.of(snapshot),
             ringProgress = snapshot.detection.routeProgress.toFloat(),
             routineName = routine?.name?.takeIf { it.isNotBlank() } ?: snapshot.destination?.name,
             arrivalMinuteOfDay = startedAt?.takeIf { routine != null }?.let { minuteOfDay(it, expected, zoneId) },
@@ -34,16 +34,6 @@ class HomeUiStateMapper @Inject constructor() {
             hasWeakLocation = snapshot.hasWeakLocation,
             pauseMinutes = PAUSE_MINUTES.takeIf { snapshot.assistance == AssistanceState.Paused }
         )
-    }
-
-    /**
-     * Tras "Estoy bien" LOST no pregunta en 2 minutos; mostrar "Creo que necesitas ayuda" en ese rato
-     * contradiría la respuesta. El estado se queda como mucho en "Posible desorientación": honesto, sin alarmar.
-     */
-    private fun statusOf(snapshot: TripSessionSnapshot): StatusPresentation {
-        val status = StatusPresentation.of(snapshot.detection.level)
-        val isPaused = snapshot.assistance == AssistanceState.Paused
-        return if (isPaused && status == StatusPresentation.HELP) StatusPresentation.DEVIATION else status
     }
 
     private fun minuteOfDay(startMillis: Long, durationMinutes: Int, zoneId: ZoneId): Int {

@@ -10,5 +10,8 @@ enum class MonitoringHeadline(@param:StringRes val text: Int) {
     OTHER_STREET(R.string.monitoring_other_street),
     DRIFTING(R.string.monitoring_drifting),
     NOT_SIMILAR(R.string.monitoring_not_similar),
-    NEW_PLACE(R.string.monitoring_new_place)
+    NEW_PLACE(R.string.monitoring_new_place),
+
+    /** Sin una ubicación confiable no hay nada que comparar: se dice en vez de mostrar el último estado. */
+    NO_LOCATION(R.string.error_gps_what)
 }
