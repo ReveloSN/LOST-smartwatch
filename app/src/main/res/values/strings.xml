@@ -198,6 +198,7 @@
     <string name="privacy_deleted">Listo. LOST empezará a aprender de nuevo.</string>
 
     <!-- Tu semana y métricas -->
+    <string name="insights_days_of_total">de %1$d días</string>
     <string name="insights_days_done">%1$d de %2$d días</string>
     <string name="insights_week_summary">%1$s · %2$s</string>
     <plurals name="insights_trips">

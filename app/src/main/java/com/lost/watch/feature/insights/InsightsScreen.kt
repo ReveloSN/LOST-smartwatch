@@ -10,6 +10,7 @@ import com.lost.designsystem.components.atoms.LostSecondaryButton
 import com.lost.designsystem.components.atoms.LostText
 import com.lost.designsystem.components.atoms.LostTextRole
 import com.lost.designsystem.components.atoms.SecondaryButtonStyle
+import com.lost.designsystem.components.molecules.CountOfTotal
 import com.lost.designsystem.components.organisms.SegmentLabel
 import com.lost.designsystem.components.organisms.SegmentState
 import com.lost.designsystem.components.organisms.SegmentedProgressRing
@@ -45,9 +46,10 @@ private fun InsightsContent(state: InsightsUiState, onOpenMetrics: () -> Unit, o
             role = LostTextRole.CAPTION,
             color = SemanticTokens.Text.secondary
         )
-        LostText(
-            stringResource(R.string.insights_days_done, state.daysWithTrips, state.days.size),
-            role = LostTextRole.NUMBER
+        CountOfTotal(
+            count = state.daysWithTrips.toString(),
+            ofTotal = stringResource(R.string.insights_days_of_total, state.days.size),
+            description = stringResource(R.string.insights_days_done, state.daysWithTrips, state.days.size)
         )
         LostText(
             stringResource(

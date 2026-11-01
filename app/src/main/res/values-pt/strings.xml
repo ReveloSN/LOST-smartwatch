@@ -181,6 +181,7 @@
     <string name="privacy_delete_hint">Mantenha pressionado por 2 segundos</string>
     <string name="privacy_deleted">Pronto. O LOST vai começar a aprender de novo.</string>
 
+    <string name="insights_days_of_total">de %1$d dias</string>
     <string name="insights_days_done">%1$d de %2$d dias</string>
     <string name="insights_week_summary">%1$s · %2$s</string>
     <plurals name="insights_trips">

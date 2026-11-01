@@ -173,6 +173,7 @@
     <string name="privacy_delete_hint">Press and hold for 2 seconds</string>
     <string name="privacy_deleted">Done. LOST will start learning again.</string>
 
+    <string name="insights_days_of_total">of %1$d days</string>
     <string name="insights_days_done">%1$d of %2$d days</string>
     <string name="insights_week_summary">%1$s · %2$s</string>
     <plurals name="insights_trips">
