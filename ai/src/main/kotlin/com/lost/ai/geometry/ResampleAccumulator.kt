@@ -19,7 +19,7 @@ internal class ResampleAccumulator(
     first: GeoPoint
 ) {
     private val committed = mutableListOf(first)
-    private val average = GpsWindowAverage(gps.smoothingSeconds, gps.accuracyFloorMeters).apply {
+    private val average = GpsWindowAverage(gps).apply {
         if (gps.isPrecise(first)) add(first)
     }
     private var lastAccepted = first

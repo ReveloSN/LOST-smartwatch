@@ -34,6 +34,18 @@ class GpsNoiseRobustnessTest {
         normal(GpsNoise.URBAN_CANYON.reporting(AccuracyReport.HONEST))
     }
 
+    @Test
+    fun `en un cañón urbano un desvío voluntario no pide ayuda`() {
+        voluntary(GpsNoise.URBAN_CANYON.reporting(AccuracyReport.HONEST))
+    }
+
+    @Test
+    fun `en un cañón urbano se siguen notando la desorientación y las vueltas`() {
+        val canyon = GpsNoise.URBAN_CANYON.reporting(AccuracyReport.HONEST)
+        disorientation(canyon)
+        newPlace(canyon)
+    }
+
     private fun realisticWithAndWithoutAccuracy() =
         GpsNoise.REALISTIC + GpsNoise.REALISTIC.map { it.reporting(AccuracyReport.HONEST) }
 

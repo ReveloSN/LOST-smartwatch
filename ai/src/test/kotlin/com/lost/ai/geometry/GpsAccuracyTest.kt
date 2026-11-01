@@ -73,11 +73,20 @@ class GpsAccuracyTest {
 
     @Test
     fun `el promedio pesa mas el punto mas preciso`() {
-        val average = GpsWindowAverage(smoothingSeconds = 15.0, accuracyFloorMeters = 5.0)
+        val average = GpsWindowAverage(GpsSmoothing.DEFAULT)
         average.add(TripFixtures.at(0.0, 0.0).copy(timestampMillis = 0L, accuracyMeters = 5.0))
         val smoothed = average.add(TripFixtures.at(0.0, 30.0).copy(timestampMillis = 5_000L, accuracyMeters = 30.0))
         // Pesos 1/25 y 1/900: el promedio queda a menos de 1 m del punto preciso (sin pesos, a 15 m).
         assertTrue(distance.distance(smoothed, TripFixtures.at(0.0, 0.0)).value < 1.0)
+    }
+
+    @Test
+    fun `con gps impreciso el promedio abarca mas segundos hasta un tope`() {
+        val gps = GpsSmoothing.DEFAULT
+        assertEquals(gps.smoothingSeconds, gps.windowSecondsFor(TripFixtures.ORIGIN))
+        assertEquals(gps.smoothingSeconds, gps.windowSecondsFor(TripFixtures.ORIGIN.copy(accuracyMeters = 8.0)))
+        assertEquals(gps.smoothingSeconds * 2, gps.windowSecondsFor(TripFixtures.ORIGIN.copy(accuracyMeters = 20.0)))
+        assertEquals(gps.smoothingSeconds * 3, gps.windowSecondsFor(TripFixtures.ORIGIN.copy(accuracyMeters = 45.0)))
     }
 
     @Test

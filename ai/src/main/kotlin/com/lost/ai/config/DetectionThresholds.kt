@@ -14,6 +14,10 @@ data class DetectionThresholds(
     val gpsMaxAccuracyMeters: Double,
     /** En el promedio, un punto pesa 1 / precisión²; por debajo de esto (metros) todos pesan igual. */
     val gpsAccuracyFloorMeters: Double,
+    /** Con precisión peor que esto (metros) el promedio abarca más segundos, en proporción. */
+    val gpsAccuracyReferenceMeters: Double,
+    /** Cuánto puede alargarse, como mucho, la ventana del promedio cuando el GPS es impreciso. */
+    val gpsMaxSmoothingFactor: Double,
     val dtwBandRatio: Double,
     val dtwMinBandPoints: Int,
     val routineStartRadiusMeters: Double,
@@ -49,6 +53,8 @@ data class DetectionThresholds(
             gpsSmoothingSeconds = 15.0,
             gpsMaxAccuracyMeters = 50.0,
             gpsAccuracyFloorMeters = 5.0,
+            gpsAccuracyReferenceMeters = 10.0,
+            gpsMaxSmoothingFactor = 3.0,
             dtwBandRatio = 0.25,
             dtwMinBandPoints = 5,
             routineStartRadiusMeters = 150.0,
