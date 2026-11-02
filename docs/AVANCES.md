@@ -694,7 +694,14 @@ No se aplicó centrar en vertical la lista de Lugares: todas las listas de la ap
 4. **La notificación vibra un toque de 40 ms** además del patrón de la escalada: sin eso Wear OS no la anuncia.
 5. **"Pausa de 2 minutos"** en el chip de Inicio tras "Estoy bien", en calma (aqua). Una primera versión la dejaba
    en ámbar; la crítica de diseño mostró que contradecía la respuesta de la persona.
-6. **Sin subir nada**: la rama `mejoras-ui-mapa` tiene todos los commits del día (y los anteriores) sin merge a
+6. **Permiso de contactos nuevo** (`READ_CONTACTS`): solo se pide al tocar "Elegir contacto", con su porqué, y
+   LOST guarda únicamente al contacto elegido. Un contacto elegido así queda autorizado sin "invitación" (no existe
+   una app del contacto que la acepte); recibe la ubicación por SMS solo cuando LOST ayuda.
+7. **Guía con vibración de giro**: si caminas 60° o más fuera del rumbo de regreso, vibra (como mucho cada 30 s).
+   No se pudo sentir en el emulador; conviene probarlo en un reloj.
+8. **En el emulador de Wear OS** quedaron dos contactos de prueba ("Ana Pérez" y "Mamá") para mostrar el selector;
+   Laura sigue siendo el contacto de la demo.
+9. **Sin subir nada**: la rama `mejoras-ui-mapa` tiene todos los commits del día (y los anteriores) sin merge a
    `main` ni push.
 
 ---
