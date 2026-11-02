@@ -32,7 +32,7 @@ Mapa para la sustentación: cada concepto del plan apunta a la clase real que lo
 | Chain of Responsibility | `AssistanceResponsePolicy`: `VibrateAndAskLink` → `AlternativeRouteLink` → `ShareLocationLink` |
 | Observer | `TripSession.snapshot` (`StateFlow`) y `TripSession.transitions` (`SharedFlow`) → ViewModels, `AssistanceEffects`, `LocationSignalWatchdog` (ubicación perdida), `GuidanceTurnCue` (vibrar al tener que girar), `AssistancePromptEffect` (notificación 05.3) y `GlanceRefresher` (complicación y vista rápida en vivo) |
 | Repository | `RoomRoutineRepository`, `RoomTripRepository`, `RoomDestinationRepository`, `RoomAlertPlaceRepository`, `DataStoreSettingsRepository`, `AuthorizedContactRepository` |
-| Adapter | `FusedLocationSource` (Google Play Services → `LocationSource`), `AndroidHapticNotifier`, `NetworkTileSource` / `NominatimDestinationSearch` / `OsrmWalkingRouteService` (OpenStreetMap → puertos del mapa), `AndroidCompassHeadingSource` |
+| Adapter | `FusedLocationSource` (Google Play Services → `LocationSource`), `AndroidHapticNotifier`, `NetworkTileSource` / `NominatimDestinationSearch` / `OsrmWalkingRouteService` (OpenStreetMap → puertos del mapa), `AndroidCompassHeadingSource`, `AndroidDeviceContactsReader` (proveedor de contactos → `DeviceContactsReader`) |
 | Decorator / caché en cadena | `CachedMapTileSource` envuelve a `NetworkTileSource`: memoria (LRU) → disco → red, con el mismo contrato `MapTileSource` |
 | Factory | `DetectionModeFactory` |
 | Facade | `LostDetectionEngine.evaluate(request)` |

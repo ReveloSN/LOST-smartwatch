@@ -20,6 +20,8 @@ App nativa para **Wear OS** que aprende tus recorridos habituales y nota cuándo
 - **Avisa si pierde tu ubicación**: tras un minuto sin GPS confiable dice "No encontramos tu ubicación · Camina hacia una salida o ventana".
 - **Complicación y vista rápida en vivo**: anillo con el avance, a dónde vas y la hora de llegada.
 - **Dónde más te desorientas**: los lugares donde LOST preguntó en el último mes, nombrados sin enviar tu ubicación a nadie.
+- **Guía sin mirar**: durante la guía, una vibración de giro avisa si vas en otra dirección.
+- **Elige tu contacto** entre los contactos del reloj (sin selector del sistema en Wear OS, la lista es propia).
 - Español, inglés y portugués; texto grande; TalkBack; contraste WCAG AA verificado por prueba.
 
 ## Requisitos
