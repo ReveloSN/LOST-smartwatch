@@ -5,12 +5,12 @@ las decisiones tomadas y lo que queda pendiente.
 
 ## Resumen para la entrega
 
-- **Las 10 fases del plan están completas** y publicadas en `main`.
-- **211 pruebas automáticas en verde** (designsystem 8 · domain 91 · ai 38 · data 29 · app 45), más ktlint y detekt sin alertas. Comando: `./gradlew ktlintCheck detekt test assembleDebug`.
+- **Las 10 fases del plan están completas.** El trabajo desde el 25 de octubre está en la rama `mejoras-ui-mapa`, sin merge a `main`.
+- **489 pruebas automáticas en verde** (designsystem 11 · domain 120 · ai 51 · data 31 · app 276) y **23 instrumentadas** en el emulador de Wear OS, más ktlint, detekt y Android Lint sin errores. Comando: `./gradlew ktlintCheck detekt test assembleDebug :app:lintDebug`.
 - **Demo con GPX** verificada de punta a punta por prueba: rutina normal (silencio), desvío voluntario (pregunta suave), calle cerrada (pregunta → guía → ruta recuperada) y hospital (pregunta → llegada).
 - **Diseño** fiel a los mockups: tokens en 3 niveles, Atomic Design, previews redondo/cuadrado, voz y tono, 3 idiomas, accesibilidad verificada por prueba.
 - **Mejoras del 25 de octubre** (rama `mejoras-ui-mapa`): interfaz simplificada y verificada en un emulador de Wear OS, **mapa real de OpenStreetMap**, destinos reales por voz, demo sobre calles reales, flecha con brújula y optimización (APK de 57 MB a 3,6 MB, GPS adaptativo).
-- **Jornada del 1 de noviembre**: IA robusta con varias semillas y con la precisión del GPS, aviso de ubicación perdida, notificación 05.3, complicación y vista rápida en vivo (05), "Donde más te desorientas" (03.2), icono propio y pantallas de error probadas en el reloj. **482 pruebas JVM + 23 instrumentadas.**
+- **Jornada del 1 de noviembre**: IA robusta con varias semillas y con la precisión del GPS, aviso de ubicación perdida, notificación 05.3, complicación y vista rápida en vivo (05), "Donde más te desorientas" (03.2), guía con vibración de giro, selector de contactos del reloj, icono propio y pantallas de error probadas en el reloj.
 - **Lo que falta** (ver "Pendientes generales" al final): prueba con usuarios (SUS), calibrar la IA con recorridos reales y probar voz, brújula y la complicación en un reloj físico.
 
 ## Resumen de fases
@@ -620,7 +620,7 @@ de la tabla (c) de `docs/diseno/fidelidad-mockups.md`. Todo se probó en el emul
 | **Elegir el contacto entre los del reloj.** En Wear OS el intent de elegir contacto lo atiende un stub vacío; ahora Contactos y la bienvenida ("Elegir otra persona", mockup 01.3) abren una lista propia de los contactos del reloj con teléfono, tras explicar el permiso ("Solo guardo a quien elijas, no tu lista."). Captura `25`, `26`. | `282eba8`, `87b8b8c` | `DeviceContactsUseCasesTest` (3), probado en el emulador con contactos de prueba |
 | **Errores (10) y Texto grande.** Los 9 errores se dibujan en el reloj con letra normal y con Texto grande; se revisaron con Texto grande las 11 pantallas que faltaban (hoja `a11y-texto-grande-resto.png`): sin cortes, las largas se desplazan. | `a0d2c7a` | `ErrorScreensTest` (2, instrumentada) |
 
-**Verificación:** `./gradlew ktlintCheck detekt test assembleDebug` en verde (481 pruebas JVM al cierre del día) y 21 pruebas
+**Verificación:** `./gradlew ktlintCheck detekt test assembleDebug` en verde (489 pruebas JVM al cierre del día) y 21 pruebas
 instrumentadas en el emulador `Wear_OS_Large_Round` (data 8 · app 13).
 
 ### Revisión de código, Lint y pulido de la tarde
