@@ -617,6 +617,7 @@ de la tabla (c) de `docs/diseno/fidelidad-mockups.md`. Todo se probó en el emul
 | **Icono propio.** El lanzador, la notificación y el splash usaban el robot de la plantilla; ahora es el anillo aqua del mockup 05.2 sobre negro, con capa monocroma. | `b2efd4d` | Visto en el lanzador del emulador |
 | **Donde más te desorientas (03.2).** Se guarda dónde y por qué preguntó LOST (Room v2, migración automática); hasta 3 lugares agrupados por cuadra, nombrados con destinos o rutinas sin internet ([ADR 005](adr/005-lugares-sin-geocodificacion.md)). "Borrar lo aprendido" también los borra. Captura `21`. | `140d538` | `DisorientationPlacesTest` (4), `LostDatabaseTest` (+1), `LostDatabaseMigrationTest` |
 | **Giros sin mirar la pantalla.** Durante la guía, si la persona camina 60° o más fuera del rumbo al punto de regreso, vibra el patrón de giro (como mucho cada 30 s). Antes ese patrón solo sonaba al entrar a la guía. | `5d827a1` | `GuidanceTurnCueTest` (4) |
+| **Elegir el contacto entre los del reloj.** En Wear OS el intent de elegir contacto lo atiende un stub vacío; ahora Contactos y la bienvenida ("Elegir otra persona", mockup 01.3) abren una lista propia de los contactos del reloj con teléfono, tras explicar el permiso ("Solo guardo a quien elijas, no tu lista."). Captura `25`, `26`. | `282eba8`, `87b8b8c` | `DeviceContactsUseCasesTest` (3), probado en el emulador con contactos de prueba |
 | **Errores (10) y Texto grande.** Los 9 errores se dibujan en el reloj con letra normal y con Texto grande; se revisaron con Texto grande las 11 pantallas que faltaban (hoja `a11y-texto-grande-resto.png`): sin cortes, las largas se desplazan. | `a0d2c7a` | `ErrorScreensTest` (2, instrumentada) |
 
 **Verificación:** `./gradlew ktlintCheck detekt test assembleDebug` en verde (481 pruebas JVM al cierre del día) y 21 pruebas
@@ -704,6 +705,6 @@ No se aplicó centrar en vertical la lista de Lugares: todas las listas de la ap
 | Calibrar los pesos de la IA con recorridos reales | Los pesos se ajustaron con recorridos sintéticos y los GPX de la demo. | Grabar recorridos reales y ajustar `DetectionConfig` / `ScoringWeights`. |
 | ~~Fuente Manrope~~ | Hecho el 27 de octubre (`docs/diseno/tipografia-manrope.md`). | — |
 | ~~Flecha con brújula~~ | Hecho el 25 de octubre (`AndroidCompassHeadingSource`). | Probarla en un reloj físico. |
-| Selector de contacto real | En el reloj no hay un selector estándar; la demo usa a Laura. | Elegirlo desde el teléfono vinculado (Data Layer). |
+| ~~Selector de contacto real~~ | Hecho el 1 de noviembre (`282eba8`): lista propia de los contactos del reloj. | Probarlo con contactos reales sincronizados en un reloj físico. |
 | Complicación sobre una esfera real | La esfera del emulador es declarativa y no expone huecos por comando. | Ponerla en una esfera con huecos en un reloj físico. |
 | ~~Pruebas instrumentadas (Room, Compose UI)~~ | Hecho el 27 de octubre: 17 pruebas en el emulador. | — |

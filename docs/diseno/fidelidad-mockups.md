@@ -34,7 +34,7 @@ Cada diferencia cae en una de tres categorías:
 |---|---|---|---|
 | Inicio en modo rutina (C) | Chip · icono + "Vas a la U" · hora · "llegada · 10 de 35 min" | Chip tocable · hora · "Llegas a Casa → U" · Terminar recorrido | Simplificación del 25 de octubre (8 → 4 elementos); el progreso ya lo dice el anillo. |
 | Permiso de ubicación (01.2) | Icono de ubicación en un círculo | Sin icono | Con el icono el texto se cortaba y "Ahora no" quedaba bajo el borde ([simplificacion.md](simplificacion.md)). |
-| Contacto en el onboarding (01.3) | Fila "Laura · Hermana" + botón + "Elegir otra persona" | Pregunta · Elegir a Laura · nota | La fila hacía lo mismo que el botón. |
+| Contacto en el onboarding (01.3) | Fila "Laura · Hermana" + botón + "Elegir otra persona" | Pregunta · Elegir a Laura · Elegir otra persona · nota | La fila hacía lo mismo que el botón. "Elegir otra persona" abre la lista de contactos del reloj (1 de noviembre). |
 | Contactos (04.3) | Inicial "L" en un círculo; Llamar y Quitar permiso lado a lado | Icono de personas; Quitar permiso solo con texto | Se probó la inicial (commit `49883c6`) y empujaba Quitar permiso bajo el borde; se quitó (`b047bb5`). Dos botones lado a lado no caben con etiquetas en pt. |
 | ¿Necesitas ayuda? / ¿Vas a otro lado hoy? | Segunda respuesta como píldora gris | Segunda respuesta solo con texto | En el reloj redondo la píldora chocaba con la curva (decisión del 25 de octubre). |
 | Monitoreo (D.1–D.2) | Dos líneas sobre fondo negro con arco de similitud | Mapa real con las dos líneas y el chip de estado | Mapa real encendido por defecto (ADR 004); el arco sale de Monitoreo y queda en las alertas. |
@@ -76,6 +76,9 @@ Cada diferencia cae en una de tres categorías:
 | 22 | Vista rápida durante un recorrido | 05.2 |
 | 23 | Inicio en pausa tras "Estoy bien" | C |
 | 24 | Notificación anunciada sobre la esfera (anillo de LOST abajo) | 05.3 |
+| 25 | Elegir contacto: Contactos, porqué del permiso, lista y elegido | 04.3 |
+| 26 | Bienvenida tras elegir otra persona | 01.3 |
+| 21b | Donde más te desorientas con los lugares de ejemplo de la demo | 03.2 |
 | 15b | Tu semana con un día con desvío (datos de prueba en el emulador) | 03.1 |
 | 16 | Destinos | 02.1 |
 | 17 | Contactos | 04.3 |

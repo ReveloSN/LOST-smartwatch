@@ -77,6 +77,7 @@ El tono lo decide `ToneResolver` (`app/.../ui/ToneResolver.kt`) a partir del `As
 | Alert heatmap / incident clusters | Donde más te desorientas |
 | Reverse-geocoded address | (no se usa) "Cerca de Biblioteca Central" · "En tu ruta Casa → U" |
 | Data stays on device | Solo lo ves tú. |
+| READ_CONTACTS rationale | Elige a quién aviso si necesitas ayuda. · Solo guardo a quien elijas, no tu lista. |
 | Complication: ETA + progress ring | 7:15 · En tu ruta |
 | Glance: routine + ETA | En tu ruta Casa → U · Todo en orden · Llegada 7:15 |
 
