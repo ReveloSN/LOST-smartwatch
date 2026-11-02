@@ -620,6 +620,9 @@ de la tabla (c) de `docs/diseno/fidelidad-mockups.md`. Todo se probó en el emul
 | **Elegir el contacto entre los del reloj.** En Wear OS el intent de elegir contacto lo atiende un stub vacío; ahora Contactos y la bienvenida ("Elegir otra persona", mockup 01.3) abren una lista propia de los contactos del reloj con teléfono, tras explicar el permiso ("Solo guardo a quien elijas, no tu lista."). Captura `25`, `26`. | `282eba8`, `87b8b8c` | `DeviceContactsUseCasesTest` (3), probado en el emulador con contactos de prueba |
 | **Errores (10) y Texto grande.** Los 9 errores se dibujan en el reloj con letra normal y con Texto grande; se revisaron con Texto grande las 11 pantallas que faltaban (hoja `a11y-texto-grande-resto.png`): sin cortes, las largas se desplazan. | `a0d2c7a` | `ErrorScreensTest` (2, instrumentada) |
 
+**Robustez:** `adb shell monkey -p com.lost.watch -s 2711 --throttle 150 3000` en el emulador: ningún cierre ni ANR de
+LOST en 1 927 eventos aleatorios (Monkey se detuvo por un ANR de la interfaz del sistema de Wear, no de la app).
+
 **Verificación:** `./gradlew ktlintCheck detekt test assembleDebug` en verde (489 pruebas JVM al cierre del día) y 21 pruebas
 instrumentadas en el emulador `Wear_OS_Large_Round` (data 8 · app 13).
 
