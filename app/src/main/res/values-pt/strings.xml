@@ -22,6 +22,7 @@
     <string name="onboarding_not_now">Agora não</string>
     <string name="onboarding_contact_title">Quem eu aviso se você precisar de ajuda?</string>
     <string name="onboarding_choose_contact">Escolher %1$s</string>
+    <string name="onboarding_choose_other">Escolher outra pessoa</string>
     <string name="onboarding_contact_footnote">Você pode remover quando quiser.</string>
     <string name="onboarding_no_contact">Você pode escolher seu contato depois em Contatos.</string>
     <string name="onboarding_continue">Continuar</string>
@@ -232,7 +233,7 @@
     <string name="places_cause_repeated">você deu voltas</string>
     <string name="places_cause_longer">demorou mais</string>
     <string name="places_cause_moving_away">você se afastava</string>
-    <string name="places_cause_erratic">você mudava de direção</string>
+    <string name="places_cause_erratic">você mudava de rumo</string>
     <string name="places_cause_stop">você parou</string>
     <string name="places_private">Só você vê isto.</string>
     <string name="places_empty">Ainda não precisei perguntar em nenhum lugar.</string>

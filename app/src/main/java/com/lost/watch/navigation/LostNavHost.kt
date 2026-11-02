@@ -55,7 +55,12 @@ private fun NavGraphBuilder.onboardingRoutes(navigator: LostNavigator) {
     composable(LostDestination.LocationPermission.route) {
         LocationPermissionScreen(onContinue = { navigator.open(LostDestination.ContactSetup) })
     }
-    composable(LostDestination.ContactSetup.route) { ContactSetupScreen(onFinished = navigator::finishOnboarding) }
+    composable(LostDestination.ContactSetup.route) {
+        ContactSetupScreen(
+            onFinished = navigator::finishOnboarding,
+            onChooseOther = { navigator.open(LostDestination.ContactPicker) }
+        )
+    }
 }
 
 private fun NavGraphBuilder.monitoringRoutes(navigator: LostNavigator) {

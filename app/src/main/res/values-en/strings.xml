@@ -22,6 +22,7 @@
     <string name="onboarding_not_now">Not now</string>
     <string name="onboarding_contact_title">Who should I tell if you need help?</string>
     <string name="onboarding_choose_contact">Choose %1$s</string>
+    <string name="onboarding_choose_other">Choose someone else</string>
     <string name="onboarding_contact_footnote">You can remove them anytime.</string>
     <string name="onboarding_no_contact">You can choose your contact later in Contacts.</string>
     <string name="onboarding_continue">Continue</string>
