@@ -6,6 +6,11 @@
 
 **Duración pensada: 15 minutos + preguntas.** Si hay solo 10, ver "Versión de 10 minutos" al final.
 
+**Diapositivas de apoyo** (13, con notas para quien presenta):
+<https://claude.ai/artifact/DpYkgh9vkzEjSHZpUPY7Kx>. Se descargan como PowerPoint o PDF desde el menú del
+documento. Son privadas hasta que se compartan desde ese mismo menú. Falta poner los nombres del equipo en la
+portada.
+
 La historia es la de **Sebastián**, que vive en **Catambuco** y estudia en la **Universidad de Nariño** (sede
 Torobajo). Sale a las 6:40, camina hasta la Panamericana, toma el bus y camina los últimos metros hasta el
 campus. Es la persona principal de `docs/investigacion/personas.md`.

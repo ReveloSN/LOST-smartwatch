@@ -111,10 +111,10 @@ Las rutas de demo se regeneran con `python tools/generate_osm_routes.py` cambian
 |---|---|
 | `core/designsystem` | 11 (contraste WCAG, líneas por rol de texto) |
 | `domain` | 120 (máquina de estados, cadena de respuesta, temporizadores, monitor, aviso de ubicación perdida, lugares de desorientación, casos de uso, métricas, mapa, batería) |
-| `ai` | 51 (las 5 de escenario de la sección 8.5 + geometría, remuestreo con ruido y precisión del GPS, DTW, señales, aprendizaje, rendimiento) |
-| `data` | 31 (mappers, repositorios, DataStore, GPX, demo y sus lugares de ejemplo, háptica, caché de teselas, Nominatim, OSRM) |
-| `app` | 276 (mappers de UI, ViewModel, demo GPX de punta a punta, ruido de GPS con 10 semillas por variante, complicación y vista rápida, notificación, traducciones, accesibilidad) |
-| **Total JVM** | **489** |
+| `ai` | 55 (las 5 de escenario de la sección 8.5 + geometría, remuestreo con ruido y precisión del GPS, DTW y su versión incremental, señales, aprendizaje, rendimiento con una rutina de 11 km) |
+| `data` | 38 (mappers, repositorios, DataStore, GPX, demo: semana de aprendizaje, ritmo de reproducción y candado; háptica, caché de teselas, Nominatim, OSRM) |
+| `app` | 283 (mappers de UI, ViewModel, demo GPX de punta a punta, ruido de GPS con 10 semillas por variante, salida de las pantallas de error, foco del mapa, complicación y vista rápida, notificación, traducciones, accesibilidad) |
+| **Total JVM** | **507** |
 
 En el emulador de Wear OS (23 pruebas instrumentadas: Room contra SQLite real y su migración, botones de la notificación, alertas en la pantalla
 redonda, pantallas de error con letra normal y grande, TalkBack, Texto grande y pantallas sin internet):
