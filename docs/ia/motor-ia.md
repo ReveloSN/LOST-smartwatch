@@ -45,12 +45,19 @@ Cada señal mide **una sola cosa** y devuelve un puntaje 0..1 y, si aplica, una 
 | Señal | Grupo | Qué mide | Estructura de datos |
 |---|---|---|---|
 | `OffRouteSignal` | desvío | Distancia actual a la ruta de siempre (40 → 200 m) | proyección local |
-| `SequenceDivergenceSignal` | desvío | Costo DTW open-end (25 → 150 m) | matriz DTW de 2 filas |
+| `SequenceDivergenceSignal` | desvío | Costo DTW open-end (25 → 150 m) | matriz DTW de 2 filas + caché de filas por ruta (`DtwRowCache`) |
 | `DelaySignal` | retraso | Tiempo real vs. esperado en ese punto, según sensibilidad | estadística de Welford |
 | `LoopSignal` | confusión | Pasadas por la misma celda de 20 m | `HashMap<GridCell, MutableList<Int>>` |
 | `ErraticHeadingSignal` | confusión | Proporción de giros > 60° por ventana de 8 puntos, medidos entre cuerdas de 40 m; una esquina repartida en dos giros seguidos del mismo sentido cuenta una vez, y cuenta como confusión desde más de 3 giros por ventana | `ArrayDeque` como buffer circular |
 | `MovingAwaySignal` | confusión | Cuánto creció la distancia al destino desde lo más cerca | — |
 | `UnusualStopSignal` | confusión | Parada > 60 s lejos del inicio y del destino | una pasada O(n) |
+
+**Costo en el reloj.** El recorrido en curso se compara con la rutina en cada punto GPS. Rehacer la matriz DTW
+cada vez costaba O(n·banda) por punto, y con la rutina real de la demo (Catambuco → Universidad, ~11 km,
+~550 puntos remuestreados) seguir el recorrido completo tomaba 5,2 s en un computador. Como el remuestreo nunca
+cambia los puntos ya fijados (solo el último es provisional), el DTW guarda sus filas por ruta y solo agrega las
+del punto nuevo; `RoutineMatcher` guarda además la ruta remuestreada de cada rutina. Mismo resultado
+(`DtwIncrementalTest`) y 0,5 s para todo el recorrido (`EvaluationPerformanceTest`).
 
 ## D · Cuánto preocupa (nivel de probabilidad)
 

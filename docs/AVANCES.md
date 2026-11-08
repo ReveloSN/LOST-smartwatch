@@ -706,6 +706,40 @@ No se aplicó centrar en vertical la lista de Lugares: todas las listas de la ap
 
 ---
 
+## Jornada del 8 de noviembre: demo en Pasto y preparación de la presentación
+
+Pedido: ver la app como la vería alguien que recién empieza, tener aprendida la ruta **Casa en Catambuco →
+Universidad de Nariño** de lunes a viernes en la mañana, revisar que ninguna pantalla deje atrapado al usuario y
+preparar la presentación. Guion: [`docs/presentacion/guion.md`](presentacion/guion.md). Capturas:
+`docs/capturas/presentacion/` (hojas `00-acto-1-persona-nueva.png` y `00-acto-2-rutina-aprendida.png`).
+
+| Cambio | Commit | Pruebas |
+|---|---|---|
+| **Ninguna pantalla sin salida.** Revisadas todas las rutas de navegación y cada alerta en el reloj (todas tienen botón de salida; deslizar sobre una alerta cierra la app y la pregunta pasa a una notificación). Lo único sin salida era Inicio sin permiso de ubicación o con batería baja fuera de la demo: una pantalla de error sin botones que no se revisaba al volver de los ajustes. Ahora trae **Permitir ubicación** (si Android ya no muestra el diálogo, abre los ajustes de LOST) o **Entendido**, y se revisa al volver. El selector de contactos usa la misma salida. | `467f958` | `ErrorViewModelTest` (4), probado en el emulador con la compilación *release* |
+| **Motor 10× más rápido en rutas largas.** El DTW retoma sus filas en vez de rehacer la matriz en cada punto. | `800d65a` | `DtwIncrementalTest` (3), `EvaluationPerformanceTest`: 5 206 → 539 ms |
+| **Demo en Pasto.** Rutas reales: 250 m a pie, bus por la Panamericana y caminata hasta el campus (≈ 11 km, 35 min, salida 6:40). Desvío voluntario, calle cerrada (manzana real a más de 100 m de la ruta) y Fundación Hospital San Pedro. En la demo, el bus va 40× y lo que se camina 10×. | `42eb2ba` | `GpxDemoEndToEndTest` (4), `GpsNoiseRobustnessTest` (205), `DemoPlaybackPaceTest` (3) |
+| **Persona nueva.** La demo ya no siembra la rutina: **Aprender un día de ruta** la enseña día a día con el aprendizaje real; al quinto día queda "Casa → U · L–V · 6:40 a. m. · 35 min". Se quitaron los lugares de ejemplo de hace semanas. | `aab2f63`, `3abd992` | `DemoWeekTripsTest` (3), probado en el emulador |
+| **El monitoreo se abre solo** al elegir un recorrido de la demo, con el mapa en vivo. | `27ccdb2` | probado en el emulador |
+| **Mapa enfocado en rutas largas.** En 11 km el desvío no se veía en el mapa de toda la ciudad: ahora es una ventana de 1 km centrada en la persona. | `193fdef` | `MapFocusTest` (3), probado en el emulador |
+| Gradle vuelve a correr las pruebas de punta a punta cuando cambian los GPX (antes las daba por al día). | `175dd11` | — |
+
+### Decisiones
+
+- **Universidad de Nariño, sede Torobajo**, como "la universidad" de la rutina. Se cambia con `UNIVERSITY` en
+  `tools/generate_osm_routes.py` (y `HOME` para la casa).
+- **El trayecto incluye el bus**, porque caminar de Catambuco a Torobajo tomaría más de dos horas. La rutina y las
+  señales funcionan igual; los escenarios de desorientación pasan en el tramo a pie, que es donde uno se pierde.
+- **Al confirmar la rutina, la demo la nombra "Casa → U".** En el uso real la persona la nombra (Renombrar, por voz).
+
+### Hallazgo en el emulador
+
+El mapa salía "sin calles" porque el emulador arrancó desde un *snapshot* con la hora 6 días atrasada y la
+respuesta OCSP del certificado de OpenStreetMap "todavía no era válida" (`Chain validation failed`). No es un
+error de la app: encendiendo el emulador en frío (`-no-snapshot-load`) el mapa carga. Quedó en el guion y en el
+README.
+
+---
+
 ## Pendientes generales
 
 | Pendiente | Por qué quedó pendiente | Cómo cerrarlo |

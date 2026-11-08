@@ -35,20 +35,39 @@ App nativa para **Wear OS** que aprende tus recorridos habituales y nota cuándo
 ./gradlew :app:installDebug
 ```
 
-La compilación *debug* corre en **modo demo**: GPS simulado con los GPX de `sample-routes/` (calles reales alrededor de la Universidad Nacional de Colombia, Bogotá), aviso al contacto simulado (nunca envía un SMS real) y datos de ejemplo (rutina "Casa → U", Laura como contacto, destinos del campus y la Clínica Palermo).
+La compilación *debug* corre en **modo demo**: GPS simulado con los GPX de `sample-routes/` (calles reales de
+Pasto: de una casa en **Catambuco** a la **Universidad de Nariño**, sede Torobajo), aviso al contacto simulado
+(nunca envía un SMS real), Laura como contacto sugerido y destinos de ejemplo (laboratorio, biblioteca,
+cafetería y el Consultorio 304 de la Fundación Hospital San Pedro).
 
-### Demo de la historia de Sebastián
+El guion completo para presentarla está en [`docs/presentacion/guion.md`](docs/presentacion/guion.md).
 
-1. Abre LOST y completa la bienvenida (elige a Laura).
-2. En **Inicio** toca **Demostración** (o **Ajustes → Demostración**).
-3. Elige un recorrido:
-   - **Ruta de siempre** → LOST solo observa; el anillo aqua respira.
-   - **Desvío voluntario** → "¿Vas a otro lado hoy?" una sola vez.
-   - **Calle cerrada** → vueltas a la misma cuadra → "¿Necesitas ayuda?" → "Sí, guíame" → flecha → "Ya estás en tu ruta".
-   - **Lugar nuevo (hospital)** → "Pasaste 3 veces por la misma cuadra. ¿Necesitas ayuda?" → guía hasta el Consultorio 304.
-4. Desliza entre secciones para ver **Mis recorridos**, **Destinos**, **Contactos**, **Ajustes** y **Tu semana** (métricas).
+### Acto 1 · Una persona nueva
 
-Lo agregado el 1 de noviembre:
+1. Instala desde cero (`adb shell pm clear com.lost.watch` para volver a empezar) y completa la bienvenida
+   (elige a Laura). **Mis recorridos** está vacío: LOST todavía no conoce tus recorridos.
+2. **Ajustes → Demostración → Aprender un día de ruta**: cada toque pasa un día de la semana pasada (la ruta de
+   siempre, de lunes a viernes cerca de las 6:40) por el aprendizaje real de LOST. Tras el primero, **Mis
+   recorridos** muestra "Nuevo recorrido" y su progreso "1 de 5"; al quinto, **Casa → U · L–V · 6:40 a. m. ·
+   35 min**, con el mapa real de Pasto en su detalle.
+
+### Acto 2 · Una semana después
+
+Elige un recorrido en **Ajustes → Demostración**: se abre el monitoreo con el mapa en vivo (en rutas largas, una
+ventana de 1 km centrada en la persona).
+
+- **Ruta de siempre** → LOST solo observa; el anillo aqua respira.
+- **Desvío voluntario** → se baja del bus y camina a otro lado: "¿Vas a otro lado hoy?" una sola vez (~85 s).
+- **Calle cerrada** → vueltas a una manzana cerca de la U → "¿Necesitas ayuda?" (~75 s) → "Sí, guíame" → flecha
+  → "Ya estás en tu ruta".
+- **Lugar nuevo (hospital)** → "Pasaste 3 veces por la misma cuadra. ¿Necesitas ayuda?" (~65 s) → guía hasta el
+  Consultorio 304.
+
+Si se elige un recorrido de la ruta de siempre antes de aprenderla, la demo aprende primero la semana completa.
+Luego, **Mis recorridos → Tu semana** muestra la semana y **Dónde te desorientas**, los lugares de las alertas
+que acabas de provocar.
+
+Más para mostrar:
 
 - **Pregunta por notificación (05.3):** elige **Calle cerrada** y sal a la esfera con el botón del reloj. Al minuto
   llega "LOST · ¿Todo bien en tu ruta?" con **Guíame** / **Estoy bien**; si no respondes, "Voy a avisar a tu
@@ -56,13 +75,16 @@ Lo agregado el 1 de noviembre:
 - **Pausa:** responde **Estoy bien** y vuelve a Inicio: "Pausa de 2 minutos".
 - **Ubicación perdida:** toca **Empezar recorrido** sin elegir un recorrido de demostración (no llega ningún punto
   GPS). Al minuto Inicio dice "No encontramos tu ubicación · Camina hacia una salida o ventana".
-- **Donde más te desorientas (03.2):** **Mis recorridos → Tu semana → Dónde te desorientas** (la demo trae tres
-  lugares de ejemplo; las alertas que provoques se suman).
+- **Sin permiso de ubicación** (compilación *release*): Inicio explica qué pasó y ofrece **Permitir ubicación**;
+  si Android ya no muestra el diálogo, abre los ajustes de LOST.
 - **Vista rápida y complicación (05):** agrega la Tile "LOST" en el carrusel de Tiles (o
   `adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE --es operation add-tile --ecn component com.lost.watch/com.lost.watch.tile.MainTileService`)
   y la complicación "Estado de LOST" en una esfera que admita anillos.
 
-La reproducción va 10× más rápido que caminar, pero conserva los tiempos reales para el motor.
+Lo que se camina se reproduce 10× más rápido y el tramo en bus 40×; el motor siempre ve los tiempos reales.
+**Para que el mapa cargue, el emulador debe tener la hora correcta**: enciéndelo en frío
+(`emulator -avd <nombre> -no-snapshot-load`); con la hora de un *snapshot* viejo el certificado de
+OpenStreetMap "todavía no es válido" y se ve la ruta sin calles.
 
 ## Mapa real y privacidad
 
