@@ -81,8 +81,8 @@ real (`LearnRoutineFromTripUseCase` → `RoutineLearner`). Al quinto día la rut
 
 Cada recorrido de **Ajustes → Demostración** abre el **monitoreo**: el mapa sigue a la persona (ventana de 1 km
 centrada en ella), la ruta de siempre en gris y la de hoy en aqua. Lo que se camina va 10× más rápido y el bus
-40×. Deslizar a la derecha lleva a **Inicio**: "Todo en orden · 6:40 → hora de llegada · Llegada · Casa → U";
-tocar el estado vuelve al mapa (revelación progresiva).
+40×. Deslizar a la derecha lleva a **Inicio**: "Todo en orden", la hora de llegada en grande y "Llegada · Casa →
+U"; tocar el estado vuelve al mapa (revelación progresiva).
 
 | Recorrido | Cuándo pasa algo | Qué se ve | Concepto del curso |
 |---|---|---|---|
