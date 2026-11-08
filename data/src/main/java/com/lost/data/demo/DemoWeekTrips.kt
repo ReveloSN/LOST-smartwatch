@@ -10,7 +10,8 @@ import java.time.ZoneId
 /**
  * Los cinco viajes de la semana pasada con los que la demo enseña la rutina: la ruta de siempre, un día
  * laborable distinto cada vez, saliendo cerca de las 6:40 y tardando un poco más o un poco menos, como
- * pasa en la vida real. Así el aprendizaje de LOST deduce solo los días, la hora y la duración.
+ * pasa en la vida real. Así el aprendizaje de LOST deduce solo los días, la hora y la duración (las
+ * variaciones están elegidas para que el promedio que calcula `RoutineLearner` quede en 6:40 exactas).
  */
 class DemoWeekTrips(private val zoneId: ZoneId = ZoneId.systemDefault()) {
     /** El viaje del día [dayIndex] (0 = el más antiguo de los últimos cinco días laborables antes de [today]). */
@@ -48,7 +49,7 @@ class DemoWeekTrips(private val zoneId: ZoneId = ZoneId.systemDefault()) {
             Variation(departureShiftMinutes = 2, durationFactor = 1.04),
             Variation(departureShiftMinutes = -1, durationFactor = 0.97),
             Variation(departureShiftMinutes = 3, durationFactor = 1.02),
-            Variation(departureShiftMinutes = -2, durationFactor = 0.99)
+            Variation(departureShiftMinutes = 1, durationFactor = 0.99)
         )
     }
 }
