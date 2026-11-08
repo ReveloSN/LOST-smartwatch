@@ -52,6 +52,8 @@ class RoutineMatcher(
     private fun resampledPathOf(routine: Routine): List<GeoPoint> {
         val cached = resampledRoutes[routine.id]
         if (cached != null && (cached.first === routine.path || cached.first == routine.path)) return cached.second
+        // Las rutinas borradas no se avisan: con un tope, el caché nunca crece sin límite.
+        if (resampledRoutes.size >= CACHED_ROUTES) resampledRoutes.clear()
         return resampler.resample(routine.path).also { resampledRoutes[routine.id] = routine.path to it }
     }
 
@@ -63,4 +65,8 @@ class RoutineMatcher(
 
     private fun isWithin(a: GeoPoint?, b: GeoPoint?, radius: Double): Boolean =
         a != null && b != null && distanceCalculator.distance(a, b).value <= radius
+
+    private companion object {
+        const val CACHED_ROUTES = 32
+    }
 }
