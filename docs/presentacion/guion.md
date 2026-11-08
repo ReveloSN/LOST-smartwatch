@@ -76,7 +76,8 @@ En el reloj, recién instalado:
 **Aprender la ruta a la vista** (Ajustes → Demostración → **Aprender un día de ruta**):
 
 1. Tocar una vez: "1 de 5 días". Volver a **Mis recorridos**: aparece "Nuevo recorrido · lun · 6:40 a. m. ·
-   35 min · ¿Lo confirmo?". Tocarlo: **"1 de 5 · 4 más y lo guardamos como tu ruta de siempre."**
+   35 min · ¿Lo confirmo?" (el día es el más antiguo de los últimos cinco días hábiles, así que depende de la
+   fecha de la presentación). Tocarlo: **"1 de 5 · 4 más y lo guardamos como tu ruta de siempre."**
 2. Tocar cuatro veces más: "Ruta aprendida · 5 de 5 días". En **Mis recorridos**: **"Casa → U · L–V · 6:40 a.
    m. · 35 min"**. LOST dedujo solo los días, la hora y la duración.
 3. Abrir **Casa → U**: el **mapa real de Pasto** con la ruta de Catambuco a la universidad.
