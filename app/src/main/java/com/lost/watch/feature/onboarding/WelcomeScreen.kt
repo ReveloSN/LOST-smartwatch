@@ -1,6 +1,8 @@
 package com.lost.watch.feature.onboarding
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.lost.designsystem.components.atoms.LostPrimaryButton
 import com.lost.designsystem.components.atoms.LostText
@@ -23,7 +25,12 @@ fun WelcomeScreen(onStart: () -> Unit) {
         LostText(stringResource(R.string.onboarding_welcome_title), role = LostTextRole.QUESTION)
         LostText(stringResource(R.string.onboarding_welcome_body), color = SemanticTokens.Text.secondary)
         PageIndicator(pageCount = 3, selectedPage = 0, description = stringResource(R.string.onboarding_welcome_title))
-        LostPrimaryButton(label = stringResource(R.string.onboarding_start), onClick = onStart)
+        // Más angosto que el resto: abajo el anillo de la bienvenida se cierra y la píldora lo pisaba.
+        LostPrimaryButton(
+            label = stringResource(R.string.onboarding_start),
+            onClick = onStart,
+            modifier = Modifier.padding(horizontal = SemanticTokens.Spacing.lg)
+        )
     }
 }
 

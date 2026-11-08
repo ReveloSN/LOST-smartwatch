@@ -22,7 +22,9 @@ fun LostSecondaryButton(
 ) {
     val container = when (style) {
         SecondaryButtonStyle.FILLED -> ComponentTokens.SecondaryButton.container
-        SecondaryButtonStyle.TEXT_ONLY -> SemanticTokens.Background.base
+
+        // Sin píldora y sin fondo: un botón de solo texto no tapa el anillo que pasa por detrás.
+        SecondaryButtonStyle.TEXT_ONLY -> SemanticTokens.Background.none
     }
     Button(
         onClick = onClick,

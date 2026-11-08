@@ -40,6 +40,9 @@ object SemanticTokens {
     object Background {
         val base: Color = Palette.neutral0
         val raised: Color = Palette.neutral700
+
+        /** Sin fondo: deja ver lo que hay detrás (por ejemplo, el anillo bajo un botón de solo texto). */
+        val none: Color = Color.Transparent
     }
 
     object Surface {
