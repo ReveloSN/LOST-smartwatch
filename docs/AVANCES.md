@@ -723,6 +723,12 @@ preparar la presentación. Guion: [`docs/presentacion/guion.md`](presentacion/gu
 | **El monitoreo se abre solo** al elegir un recorrido de la demo, con el mapa en vivo. | `27ccdb2` | probado en el emulador |
 | **Mapa enfocado en rutas largas.** En 11 km el desvío no se veía en el mapa de toda la ciudad: ahora es una ventana de 1 km centrada en la persona. | `193fdef` | `MapFocusTest` (3), probado en el emulador |
 | Gradle vuelve a correr las pruebas de punta a punta cuando cambian los GPX (antes las daba por al día). | `175dd11` | — |
+| **Revisión de código independiente** de todo lo anterior: elegir un recorrido podía cancelarse al cerrarse la pantalla de la demo (ahora `DemoPlayer`, en el alcance de la aplicación); dos toques seguidos aprendían el mismo día (candado en `DemoRoutineLearning`); un pedido de permiso cancelado podía abrir los ajustes. | `e128aa5`, `b8e5efc` | `DemoRoutineLearningTest` (3; la de los dos toques falla sin el candado) |
+| **"Llegada · Casa → U"** en Inicio, en vez de "Llegas a Casa → U" (se leía como llegar a la casa). | `b3fdc23` | traducciones |
+| **Volver a Inicio** al salir del monitoreo de un recorrido de la demo (antes se volvía a Ajustes). | `a2bef2d` | probado en el emulador |
+| **Empezar de nuevo** desde la demo: borra lo aprendido y vuelve a la bienvenida, sin `adb`. | `e919806` | `UpdateSettingsUseCaseTest` (2), probado en el emulador |
+| Tope al caché de rutas remuestreadas (las rutinas borradas no se soltaban). | `7056e09` | pruebas del motor |
+| **Presentación**: guion de 15 y 10 minutos, 13 diapositivas con notas, capturas y videos de respaldo grabados en el emulador. | `ef15c37`, `6f9e290`, `e8810b8` | — |
 
 ### Decisiones
 
