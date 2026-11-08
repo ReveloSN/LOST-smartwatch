@@ -49,7 +49,11 @@ android {
         compose = true
     }
     testOptions {
-        unitTests.all { it.useJUnitPlatform() }
+        unitTests.all {
+            it.useJUnitPlatform()
+            // Las pruebas de punta a punta leen los GPX de la demo: si cambian, hay que volver a correrlas.
+            it.inputs.dir(rootProject.file("sample-routes")).withPathSensitivity(PathSensitivity.RELATIVE)
+        }
         unitTests.isReturnDefaultValues = true
     }
 }
