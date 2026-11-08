@@ -24,14 +24,19 @@ import com.lost.watch.R
 
 /**
  * Primero, LOST aprende la ruta de siempre a la vista (un día por toque, como lo vería una persona nueva);
- * después, cada recorrido GPX reproduce una historia completa en el reloj o el emulador.
+ * después, cada recorrido GPX reproduce una historia completa en el reloj o el emulador. Al elegir uno se
+ * abre el monitoreo ([onStarted]): el mapa con la ruta de siempre y la de hoy, en vivo.
  */
 @Composable
-fun DemoScreen(onStarted: () -> Unit, viewModel: DemoViewModel = hiltViewModel()) {
+fun DemoScreen(onStarted: () -> Unit, onStopped: () -> Unit, viewModel: DemoViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     DemoContent(state) { event ->
         viewModel.onEvent(event)
-        if (event != DemoUiEvent.LearnNextDay) onStarted()
+        when (event) {
+            is DemoUiEvent.Play -> onStarted()
+            DemoUiEvent.Stop -> onStopped()
+            DemoUiEvent.LearnNextDay -> Unit
+        }
     }
 }
 

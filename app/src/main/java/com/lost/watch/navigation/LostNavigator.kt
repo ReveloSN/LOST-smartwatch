@@ -23,4 +23,9 @@ class LostNavigator(private val navController: NavHostController) {
     fun backToSections() {
         navController.popBackStack(LostDestination.Sections.route, inclusive = false)
     }
+
+    /** Abre [destination] justo encima de las secciones: al volver se llega a ellas, no a la pantalla anterior. */
+    fun openOverSections(destination: LostDestination) = navController.navigate(destination.route) {
+        popUpTo(LostDestination.Sections.route)
+    }
 }

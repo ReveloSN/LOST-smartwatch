@@ -38,7 +38,12 @@ fun LostNavHost(isOnboardingCompleted: Boolean) {
         composable(LostDestination.Sections.route) { SectionsPager(navigator) }
         monitoringRoutes(navigator)
         settingsRoutes(navigator)
-        composable(LostDestination.Demo.route) { DemoScreen(onStarted = navigator::backToSections) }
+        composable(LostDestination.Demo.route) {
+            DemoScreen(
+                onStarted = { navigator.openOverSections(LostDestination.Monitoring) },
+                onStopped = navigator::backToSections
+            )
+        }
         composable(LostDestination.PlaceGuide.route) { NewPlaceGuideScreen(onFinished = navigator::backToSections) }
         composable(LostDestination.RoutineDetail.route) { RoutineDetailScreen(onDeleted = navigator::back) }
         composable(LostDestination.Learning.route) { LearningScreen() }
