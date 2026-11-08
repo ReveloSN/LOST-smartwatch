@@ -156,7 +156,8 @@ LOST/
 
 | Tema | Archivo |
 |---|---|
-| Avances por fase, decisiones y pendientes | `docs/AVANCES.md` (último: "Jornada del 1 de noviembre") |
+| Avances por fase, decisiones y pendientes | `docs/AVANCES.md` (último: "Jornada del 8 de noviembre") |
+| Cómo presentar: guion, capturas y videos de respaldo | `docs/presentacion/` |
 | Arquitectura, SOLID, patrones y estructuras de datos | `docs/arquitectura.md` |
 | Arquitectura de información | `docs/ia/arquitectura-informacion.md` |
 | Motor de IA | `docs/ia/motor-ia.md` |
