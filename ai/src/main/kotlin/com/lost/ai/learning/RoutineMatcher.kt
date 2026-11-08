@@ -11,6 +11,8 @@ import java.util.PriorityQueue
 /**
  * ¿A qué rutina pertenece este recorrido? Filtra por punto de partida, compara secuencias
  * y ordena con una `PriorityQueue` (la de menor costo sale primero).
+ * La ruta remuestreada de cada rutina se guarda: se pide en cada punto GPS y no cambia mientras la rutina
+ * no cambie. Además, entregar siempre la misma lista deja que el DTW retome sus filas (`DtwRowCache`).
  */
 class RoutineMatcher(
     private val comparator: SequenceComparator,
@@ -18,6 +20,8 @@ class RoutineMatcher(
     private val thresholds: DetectionThresholds,
     private val distanceCalculator: HaversineDistanceCalculator = HaversineDistanceCalculator()
 ) {
+    private val resampledRoutes = HashMap<String, Pair<List<GeoPoint>, List<GeoPoint>>>()
+
     /** Recorrido en curso: la rutina más parecida que sale del mismo lugar, aunque hoy se haya desviado. */
     fun bestOngoingMatch(path: List<GeoPoint>, routines: List<Routine>): RoutineMatch? =
         rank(path, routines.filter { startsNear(it, path) }, isPartial = true).poll()
@@ -38,10 +42,17 @@ class RoutineMatcher(
     private fun rank(path: List<GeoPoint>, routines: List<Routine>, isPartial: Boolean): PriorityQueue<RoutineMatch> {
         val queue = PriorityQueue<RoutineMatch>()
         routines.forEach { routine ->
-            val routinePath = resampler.resample(routine.path)
+            val routinePath = resampledPathOf(routine)
             queue += RoutineMatch(routine, routinePath, comparator.compare(routinePath, path, isPartial))
         }
         return queue
+    }
+
+    @Synchronized
+    private fun resampledPathOf(routine: Routine): List<GeoPoint> {
+        val cached = resampledRoutes[routine.id]
+        if (cached != null && (cached.first === routine.path || cached.first == routine.path)) return cached.second
+        return resampler.resample(routine.path).also { resampledRoutes[routine.id] = routine.path to it }
     }
 
     private fun startsNear(routine: Routine, path: List<GeoPoint>): Boolean =
