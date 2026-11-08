@@ -28,7 +28,7 @@
     <string name="onboarding_continue">Continue</string>
 
     <string name="home_heading_to">Heading to %1$s</string>
-    <string name="home_arriving_at">Arriving at %1$s</string>
+    <string name="home_arriving_at">Arrival · %1$s</string>
     <string name="home_idle_title">LOST is watching out</string>
     <string name="home_idle_body">Walk and I’ll recognize your route.</string>
     <string name="home_start_trip">Start route</string>

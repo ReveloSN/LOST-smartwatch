@@ -32,7 +32,7 @@ Cada diferencia cae en una de tres categorías:
 
 | Pantalla (mockup) | El mockup muestra | La app muestra | Por qué |
 |---|---|---|---|
-| Inicio en modo rutina (C) | Chip · icono + "Vas a la U" · hora · "llegada · 10 de 35 min" | Chip tocable · hora · "Llegas a Casa → U" · Terminar recorrido | Simplificación del 25 de octubre (8 → 4 elementos); el progreso ya lo dice el anillo. |
+| Inicio en modo rutina (C) | Chip · icono + "Vas a la U" · hora · "llegada · 10 de 35 min" | Chip tocable · hora · "Llegada · Casa → U" · Terminar recorrido | Simplificación del 25 de octubre (8 → 4 elementos); el progreso ya lo dice el anillo. |
 | Permiso de ubicación (01.2) | Icono de ubicación en un círculo | Sin icono | Con el icono el texto se cortaba y "Ahora no" quedaba bajo el borde ([simplificacion.md](simplificacion.md)). |
 | Contacto en el onboarding (01.3) | Fila "Laura · Hermana" + botón + "Elegir otra persona" | Pregunta · Elegir a Laura · Elegir otra persona · nota | La fila hacía lo mismo que el botón. "Elegir otra persona" abre la lista de contactos del reloj (1 de noviembre). |
 | Contactos (04.3) | Inicial "L" en un círculo; Llamar y Quitar permiso lado a lado | Icono de personas; Quitar permiso solo con texto | Se probó la inicial (commit `49883c6`) y empujaba Quitar permiso bajo el borde; se quitó (`b047bb5`). Dos botones lado a lado no caben con etiquetas en pt. |

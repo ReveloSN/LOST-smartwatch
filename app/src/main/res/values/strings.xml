@@ -36,7 +36,7 @@
 
     <!-- Inicio -->
     <string name="home_heading_to">Vas a %1$s</string>
-    <string name="home_arriving_at">Llegas a %1$s</string>
+    <string name="home_arriving_at">Llegada · %1$s</string>
     <string name="home_idle_title">LOST está atento</string>
     <string name="home_idle_body">Camina y reconoceré tu recorrido.</string>
     <string name="home_start_trip">Empezar recorrido</string>

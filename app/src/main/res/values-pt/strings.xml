@@ -28,7 +28,7 @@
     <string name="onboarding_continue">Continuar</string>
 
     <string name="home_heading_to">Indo para %1$s</string>
-    <string name="home_arriving_at">Você chega a %1$s</string>
+    <string name="home_arriving_at">Chegada · %1$s</string>
     <string name="home_idle_title">O LOST está atento</string>
     <string name="home_idle_body">Caminhe e vou reconhecer seu percurso.</string>
     <string name="home_start_trip">Começar percurso</string>
