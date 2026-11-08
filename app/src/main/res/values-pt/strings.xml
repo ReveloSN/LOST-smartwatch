@@ -279,6 +279,9 @@
     <string name="error_search_todo">Escolha um destino salvo ou tente depois.</string>
 
     <string name="demo_title">Percursos de demonstração</string>
+    <string name="demo_learn_day">Aprender um dia de rota</string>
+    <string name="demo_learn_progress">%1$d de %2$d dias</string>
+    <string name="demo_learned">Rota aprendida</string>
     <string name="demo_normal">Rota de sempre</string>
     <string name="demo_voluntary">Desvio voluntário</string>
     <string name="demo_disorientation">Rua fechada</string>

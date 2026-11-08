@@ -298,6 +298,9 @@
 
     <!-- Demostración -->
     <string name="demo_title">Recorridos de demostración</string>
+    <string name="demo_learn_day">Aprender un día de ruta</string>
+    <string name="demo_learn_progress">%1$d de %2$d días</string>
+    <string name="demo_learned">Ruta aprendida</string>
     <string name="demo_normal">Ruta de siempre</string>
     <string name="demo_voluntary">Desvío voluntario</string>
     <string name="demo_disorientation">Calle cerrada</string>

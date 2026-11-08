@@ -2,7 +2,9 @@ package com.lost.watch.feature.demo
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AltRoute
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Construction
+import androidx.compose.material.icons.rounded.EventRepeat
 import androidx.compose.material.icons.rounded.LocalHospital
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Stop
@@ -20,19 +22,23 @@ import com.lost.designsystem.preview.LostDevicePreviews
 import com.lost.designsystem.theme.LostTheme
 import com.lost.watch.R
 
-/** Elige un recorrido GPX para reproducir la historia completa en el reloj o el emulador. */
+/**
+ * Primero, LOST aprende la ruta de siempre a la vista (un día por toque, como lo vería una persona nueva);
+ * después, cada recorrido GPX reproduce una historia completa en el reloj o el emulador.
+ */
 @Composable
 fun DemoScreen(onStarted: () -> Unit, viewModel: DemoViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     DemoContent(state) { event ->
         viewModel.onEvent(event)
-        onStarted()
+        if (event != DemoUiEvent.LearnNextDay) onStarted()
     }
 }
 
 @Composable
 private fun DemoContent(state: DemoUiState, onEvent: (DemoUiEvent) -> Unit) {
     ListTemplate(title = stringResource(R.string.demo_title)) {
+        item(key = "learn") { LearnRoutineItem(state, onEvent) }
         items(state.scenarios, key = { it.name }) { scenario ->
             LostListItem(ListItemContent(iconFor(scenario), stringResource(labelFor(scenario))), onClick = {
                 onEvent(DemoUiEvent.Play(scenario))
@@ -45,6 +51,18 @@ private fun DemoContent(state: DemoUiState, onEvent: (DemoUiEvent) -> Unit) {
                 })
             }
         }
+    }
+}
+
+@Composable
+private fun LearnRoutineItem(state: DemoUiState, onEvent: (DemoUiEvent) -> Unit) {
+    val progress = stringResource(R.string.demo_learn_progress, state.learnedDays, state.daysToLearn)
+    if (state.isRoutineLearned) {
+        LostListItem(ListItemContent(Icons.Rounded.CheckCircle, stringResource(R.string.demo_learned), progress), {})
+    } else {
+        LostListItem(ListItemContent(Icons.Rounded.EventRepeat, stringResource(R.string.demo_learn_day), progress), {
+            onEvent(DemoUiEvent.LearnNextDay)
+        })
     }
 }
 
@@ -65,5 +83,5 @@ private fun iconFor(scenario: DemoScenario) = when (scenario) {
 @LostDevicePreviews
 @Composable
 private fun DemoPreview() {
-    LostTheme { DemoContent(DemoUiState(DemoScenario.entries, null)) {} }
+    LostTheme { DemoContent(DemoUiState(DemoScenario.entries, null, learnedDays = 3, daysToLearn = 5)) {} }
 }
