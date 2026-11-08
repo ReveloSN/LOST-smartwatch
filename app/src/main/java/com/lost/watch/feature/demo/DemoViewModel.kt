@@ -19,7 +19,8 @@ import kotlinx.coroutines.launch
 class DemoViewModel @Inject constructor(
     selector: DemoScenarioSelector,
     private val player: DemoPlayer,
-    private val routineLearning: DemoRoutineLearning
+    private val routineLearning: DemoRoutineLearning,
+    private val reset: DemoReset
 ) : ViewModel() {
     private val learnedDays = MutableStateFlow(0)
 
@@ -40,6 +41,7 @@ class DemoViewModel @Inject constructor(
             is DemoUiEvent.Play -> player.play(event.scenario)
             DemoUiEvent.Stop -> player.stop()
             DemoUiEvent.LearnNextDay -> viewModelScope.launch { learnedDays.value = routineLearning.learnNextDay() }
+            DemoUiEvent.StartOver -> reset.startOver()
         }
     }
 

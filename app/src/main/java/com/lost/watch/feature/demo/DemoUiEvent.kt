@@ -10,4 +10,7 @@ sealed interface DemoUiEvent {
 
     /** Enseña a LOST un día más de la ruta de siempre (la demo de una persona nueva). */
     data object LearnNextDay : DemoUiEvent
+
+    /** Borra lo aprendido y vuelve a la bienvenida, para mostrar (o ensayar) la demo otra vez desde cero. */
+    data object StartOver : DemoUiEvent
 }

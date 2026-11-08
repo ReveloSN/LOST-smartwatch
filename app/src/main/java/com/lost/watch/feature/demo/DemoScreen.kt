@@ -6,6 +6,7 @@ import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Construction
 import androidx.compose.material.icons.rounded.EventRepeat
 import androidx.compose.material.icons.rounded.LocalHospital
+import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.runtime.Composable
@@ -35,7 +36,7 @@ fun DemoScreen(onStarted: () -> Unit, onStopped: () -> Unit, viewModel: DemoView
         when (event) {
             is DemoUiEvent.Play -> onStarted()
             DemoUiEvent.Stop -> onStopped()
-            DemoUiEvent.LearnNextDay -> Unit
+            DemoUiEvent.LearnNextDay, DemoUiEvent.StartOver -> Unit
         }
     }
 }
@@ -55,6 +56,14 @@ private fun DemoContent(state: DemoUiState, onEvent: (DemoUiEvent) -> Unit) {
                     onEvent(DemoUiEvent.Stop)
                 })
             }
+        }
+        item(key = "start-over") {
+            val content = ListItemContent(
+                Icons.Rounded.RestartAlt,
+                stringResource(R.string.demo_start_over),
+                stringResource(R.string.demo_start_over_detail)
+            )
+            LostListItem(content, onClick = { onEvent(DemoUiEvent.StartOver) })
         }
     }
 }

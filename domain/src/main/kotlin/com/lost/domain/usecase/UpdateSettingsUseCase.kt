@@ -1,6 +1,7 @@
 package com.lost.domain.usecase
 
 import com.lost.domain.model.Sensitivity
+import com.lost.domain.model.UserSettings
 import com.lost.domain.model.VibrationIntensity
 import com.lost.domain.port.SettingsWriter
 import javax.inject.Inject
@@ -17,4 +18,7 @@ class UpdateSettingsUseCase @Inject constructor(private val writer: SettingsWrit
     suspend fun changeRealMap(isEnabled: Boolean) = writer.update { it.copy(isRealMapEnabled = isEnabled) }
 
     suspend fun completeOnboarding() = writer.update { it.copy(isOnboardingCompleted = true) }
+
+    /** Vuelve a los ajustes de fábrica y a la bienvenida, como para alguien que recién instala LOST. */
+    suspend fun startOver() = writer.update { UserSettings.DEFAULT }
 }

@@ -282,6 +282,8 @@
     <string name="demo_learn_day">Aprender um dia de rota</string>
     <string name="demo_learn_progress">%1$d de %2$d dias</string>
     <string name="demo_learned">Rota aprendida</string>
+    <string name="demo_start_over">Começar de novo</string>
+    <string name="demo_start_over_detail">Como uma pessoa nova</string>
     <string name="demo_normal">Rota de sempre</string>
     <string name="demo_voluntary">Desvio voluntário</string>
     <string name="demo_disorientation">Rua fechada</string>
