@@ -34,8 +34,11 @@ campus. Es la persona principal de `docs/investigacion/personas.md`.
 
 3. **Comprobar internet** abriendo una vez el detalle de una ruta: si se ven calles, el mapa real funciona. Sin
    internet la app sigue funcionando y dice "Te muestro tu ruta sin calles." (también es parte del diseño).
-4. **Plan B abierto en otra pestaña**: las hojas `docs/capturas/presentacion/00-acto-1-persona-nueva.png` y
-   `00-acto-2-rutina-aprendida.png`, por si el emulador falla.
+4. **Plan B abierto en otra pestaña**, por si el emulador falla:
+   - Videos grabados en el emulador (`docs/presentacion/video/`): `1-persona-nueva.mp4` (bienvenida y la
+     ruta aprendida día a día, 2:30), `2-calle-cerrada.mp4` (de Catambuco a la alerta y la guía, 2:55) y
+     `3-hospital.mp4` (lugar nuevo, 1:50).
+   - Las hojas `docs/capturas/presentacion/00-acto-1-persona-nueva.png` y `00-acto-2-rutina-aprendida.png`.
 5. Proyectar el emulador con la ventana grande (zoom 2×) y el sonido apagado.
 
 ---
