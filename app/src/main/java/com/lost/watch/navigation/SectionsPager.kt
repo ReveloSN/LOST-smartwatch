@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,11 +24,13 @@ import com.lost.watch.feature.settings.SettingsScreen
 /**
  * Navegación global: las cinco secciones en un pager horizontal. Dentro de cada sección
  * la corona desplaza la lista; el indicador de abajo dice en qué sección está el usuario.
+ * Si otra pantalla pidió volver a una sección ([requestedSection]), se muestra esa y se avisa con [onShown].
  */
 @Composable
-fun SectionsPager(navigator: LostNavigator) {
+fun SectionsPager(navigator: LostNavigator, requestedSection: Int? = null, onShown: () -> Unit = {}) {
     val sections = GlobalSection.entries
     val pagerState = rememberPagerState { sections.size }
+    ShowRequestedSection(pagerState, requestedSection, onShown)
     Box(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
             // Solo la sección visible recibe la corona (las vecinas se componen durante el deslizamiento).
@@ -48,6 +52,16 @@ fun SectionsPager(navigator: LostNavigator) {
                 .align(Alignment.BottomCenter)
                 .padding(bottom = SemanticTokens.Spacing.sm)
         )
+    }
+}
+
+@Composable
+private fun ShowRequestedSection(pagerState: PagerState, requestedSection: Int?, onShown: () -> Unit) {
+    LaunchedEffect(requestedSection) {
+        if (requestedSection != null) {
+            pagerState.scrollToPage(requestedSection)
+            onShown()
+        }
     }
 }
 

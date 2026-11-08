@@ -1,7 +1,9 @@
 package com.lost.watch.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
@@ -35,12 +37,17 @@ fun LostNavHost(isOnboardingCompleted: Boolean) {
     val start = if (isOnboardingCompleted) LostDestination.Sections else LostDestination.Welcome
     SwipeDismissableNavHost(navController = navController, startDestination = start.route) {
         onboardingRoutes(navigator)
-        composable(LostDestination.Sections.route) { SectionsPager(navigator) }
+        composable(LostDestination.Sections.route) { entry ->
+            val requested by entry.savedStateHandle
+                .getStateFlow<Int?>(LostNavigator.REQUESTED_SECTION, null)
+                .collectAsStateWithLifecycle()
+            SectionsPager(navigator, requested) { entry.savedStateHandle[LostNavigator.REQUESTED_SECTION] = null }
+        }
         monitoringRoutes(navigator)
         settingsRoutes(navigator)
         composable(LostDestination.Demo.route) {
             DemoScreen(
-                onStarted = { navigator.openOverSections(LostDestination.Monitoring) },
+                onStarted = { navigator.openOverSections(LostDestination.Monitoring, returnTo = GlobalSection.HOME) },
                 onStopped = navigator::backToSections
             )
         }

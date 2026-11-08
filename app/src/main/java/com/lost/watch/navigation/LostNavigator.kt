@@ -24,8 +24,18 @@ class LostNavigator(private val navController: NavHostController) {
         navController.popBackStack(LostDestination.Sections.route, inclusive = false)
     }
 
-    /** Abre [destination] justo encima de las secciones: al volver se llega a ellas, no a la pantalla anterior. */
-    fun openOverSections(destination: LostDestination) = navController.navigate(destination.route) {
-        popUpTo(LostDestination.Sections.route)
+    /**
+     * Abre [destination] justo encima de las secciones: al volver se llega a ellas (en la sección [returnTo]),
+     * no a la pantalla anterior.
+     */
+    fun openOverSections(destination: LostDestination, returnTo: GlobalSection) {
+        navController.getBackStackEntry(LostDestination.Sections.route).savedStateHandle[REQUESTED_SECTION] =
+            returnTo.ordinal
+        navController.navigate(destination.route) { popUpTo(LostDestination.Sections.route) }
+    }
+
+    companion object {
+        /** Sección que deben mostrar las secciones la próxima vez que se vean. */
+        const val REQUESTED_SECTION = "requested_section"
     }
 }
