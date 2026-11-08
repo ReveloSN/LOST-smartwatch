@@ -265,6 +265,8 @@
     <string name="error_permission_what">O LOST não tem permissão para usar sua localização.</string>
     <string name="error_permission_why">Sem localização ele não pode aprender seus percursos.</string>
     <string name="error_permission_todo">Ative nas configurações do relógio.</string>
+    <string name="error_permission_action">Permitir localização</string>
+    <string name="error_acknowledge">Entendi</string>
     <string name="error_no_contact_what">Você ainda não tem um contato autorizado.</string>
     <string name="error_no_contact_todo">Escolha um em Contatos.</string>
     <string name="error_no_routines_what">Ainda não conhecemos seus percursos.</string>

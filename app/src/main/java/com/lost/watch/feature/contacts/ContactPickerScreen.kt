@@ -1,8 +1,6 @@
 package com.lost.watch.feature.contacts
 
 import android.Manifest
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Group
 import androidx.compose.material.icons.rounded.Person
@@ -11,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lost.designsystem.components.atoms.LostIcon
 import com.lost.designsystem.components.atoms.LostPrimaryButton
@@ -25,6 +24,7 @@ import com.lost.designsystem.theme.LostTheme
 import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.domain.model.DeviceContact
 import com.lost.watch.R
+import com.lost.watch.ui.rememberPermissionRequest
 
 /**
  * Elegir contacto: los contactos del reloj (sincronizados desde el teléfono), con el porqué del permiso antes de
@@ -33,13 +33,18 @@ import com.lost.watch.R
 @Composable
 fun ContactPickerScreen(onChosen: () -> Unit, viewModel: ContactPickerViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+    val requestContacts = rememberPermissionRequest(arrayOf(Manifest.permission.READ_CONTACTS)) {
         viewModel.onEvent(ContactPickerUiEvent.PermissionAnswered)
+    }
+    // Si el permiso se dio en los ajustes del reloj, al volver se carga la lista.
+    LifecycleResumeEffect(state) {
+        if (state == ContactPickerUiState.NeedsPermission) viewModel.onEvent(ContactPickerUiEvent.PermissionAnswered)
+        onPauseOrDispose {}
     }
     LaunchedEffect(state) { if (state == ContactPickerUiState.Chosen) onChosen() }
     ContactPickerContent(
         state = state,
-        onAllow = { permission.launch(Manifest.permission.READ_CONTACTS) },
+        onAllow = requestContacts,
         onChoose = { viewModel.onEvent(ContactPickerUiEvent.Choose(it)) }
     )
 }

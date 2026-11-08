@@ -254,6 +254,8 @@
     <string name="error_permission_what">LOST can’t use your location.</string>
     <string name="error_permission_why">Without location it can’t learn your routes.</string>
     <string name="error_permission_todo">Turn it on in your watch settings.</string>
+    <string name="error_permission_action">Allow location</string>
+    <string name="error_acknowledge">Got it</string>
     <string name="error_no_contact_what">You don’t have a trusted contact yet.</string>
     <string name="error_no_contact_todo">Choose one in Contacts.</string>
     <string name="error_no_routines_what">We don’t know your routes yet.</string>

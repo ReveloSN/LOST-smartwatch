@@ -11,6 +11,7 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lost.designsystem.components.atoms.LostChip
 import com.lost.designsystem.components.atoms.LostIcon
@@ -25,9 +26,9 @@ import com.lost.designsystem.preview.LostDevicePreviews
 import com.lost.designsystem.theme.LostTheme
 import com.lost.designsystem.tokens.SemanticTokens
 import com.lost.watch.R
-import com.lost.watch.feature.errors.ErrorScreen
+import com.lost.watch.feature.errors.ErrorNoticeScreen
+import com.lost.watch.feature.errors.ErrorUiEvent
 import com.lost.watch.feature.errors.ErrorViewModel
-import com.lost.watch.feature.errors.iconFor
 import com.lost.watch.ui.StatusPresentation
 import com.lost.watch.ui.formatMinuteOfDay
 
@@ -43,9 +44,14 @@ fun HomeScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val errors by errorViewModel.uiState.collectAsStateWithLifecycle()
-    val blockingError = errors.messages.firstOrNull()
-    if (!state.isMonitoring && blockingError != null && !state.isDemoAvailable) {
-        ErrorScreen(blockingError, iconFor(blockingError))
+    val blockingNotice = errors.notices.firstOrNull()
+    // Al volver de los ajustes del reloj el permiso pudo cambiar: la pantalla de error no debe quedarse pegada.
+    LifecycleResumeEffect(Unit) {
+        errorViewModel.onEvent(ErrorUiEvent.Recheck)
+        onPauseOrDispose {}
+    }
+    if (!state.isMonitoring && blockingNotice != null && !state.isDemoAvailable) {
+        ErrorNoticeScreen(blockingNotice, errorViewModel::onEvent)
     } else {
         HomeContent(state, onOpenMonitoring, viewModel::onEvent)
     }

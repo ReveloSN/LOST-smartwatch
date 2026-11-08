@@ -18,20 +18,25 @@ class ErrorViewModel @Inject constructor(
     private val state = MutableStateFlow(ErrorUiState(emptyList()))
     val uiState: StateFlow<ErrorUiState> = state.asStateFlow()
 
+    private var isBatteryAcknowledged = false
+
     init {
         onEvent(ErrorUiEvent.Recheck)
     }
 
     fun onEvent(event: ErrorUiEvent) {
-        when (event) {
-            ErrorUiEvent.Recheck -> state.value = ErrorUiState(currentErrors().map(mapper::map))
-        }
+        if (event == ErrorUiEvent.Acknowledge) isBatteryAcknowledged = true
+        state.value = ErrorUiState(currentNotices())
     }
 
-    private fun currentErrors(): List<LostError> = buildList {
-        if (!deviceStatus.hasLocationPermission()) add(LostError.LocationPermissionDenied)
+    private fun currentNotices(): List<ErrorNotice> = buildList {
+        if (!deviceStatus.hasLocationPermission()) {
+            add(ErrorNotice(mapper.map(LostError.LocationPermissionDenied), ErrorRemedy.REQUEST_LOCATION))
+        }
         val battery = deviceStatus.batteryPercent()
-        if (battery != null && battery <= LOW_BATTERY_PERCENT) add(LostError.BatteryLow(battery))
+        if (!isBatteryAcknowledged && battery != null && battery <= LOW_BATTERY_PERCENT) {
+            add(ErrorNotice(mapper.map(LostError.BatteryLow(battery)), ErrorRemedy.ACKNOWLEDGE))
+        }
     }
 
     private companion object {
