@@ -114,8 +114,8 @@ Las rutas de demo se regeneran con `python tools/generate_osm_routes.py` cambian
 | `domain` | 122 (máquina de estados, cadena de respuesta, temporizadores, monitor, aviso de ubicación perdida, lugares de desorientación, casos de uso, ajustes, métricas, mapa, batería) |
 | `ai` | 55 (las 5 de escenario de la sección 8.5 + geometría, remuestreo con ruido y precisión del GPS, DTW y su versión incremental, señales, aprendizaje, rendimiento con una rutina de 11 km) |
 | `data` | 38 (mappers, repositorios, DataStore, GPX, demo: semana de aprendizaje, ritmo de reproducción y candado; háptica, caché de teselas, Nominatim, OSRM) |
-| `app` | 283 (mappers de UI, ViewModel, demo GPX de punta a punta, ruido de GPS con 10 semillas por variante, salida de las pantallas de error, foco del mapa, complicación y vista rápida, notificación, traducciones, accesibilidad) |
-| **Total JVM** | **509** |
+| `app` | 286 (mappers de UI, ViewModel, demo GPX de punta a punta, ruido de GPS con 10 semillas por variante, salida de las pantallas de error, foco del mapa, complicación y vista rápida, notificación, traducciones, accesibilidad) |
+| **Total JVM** | **512** |
 
 En el emulador de Wear OS (23 pruebas instrumentadas: Room contra SQLite real y su migración, botones de la notificación, alertas en la pantalla
 redonda, pantallas de error con letra normal y grande, TalkBack, Texto grande y pantallas sin internet):
