@@ -36,7 +36,7 @@ class RouteMapPresenter @Inject constructor(
         val screenPx = context.resources.displayMetrics.widthPixels
         val viewportPx = (screenPx / ComponentTokens.RealMap.TILE_DISPLAY_SCALE).toInt()
         val frame = ViewportFrame(viewportPx, viewportPx, routes.marginFraction)
-        return when (val result = loadRouteMap(routes.habitual + routes.today, frame)) {
+        return when (val result = loadRouteMap(routes.framed, frame)) {
             is LostResult.Failure -> result
             is LostResult.Success -> LostResult.Success(picture(result.value, routes.habitual, routes.today))
         }

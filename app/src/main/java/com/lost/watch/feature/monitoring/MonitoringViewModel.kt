@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lost.domain.session.TripSession
 import com.lost.watch.integration.WalkingRouteGuide
+import com.lost.watch.ui.map.MapFocus
 import com.lost.watch.ui.map.MapRoutes
 import com.lost.watch.ui.map.MapUiState
 import com.lost.watch.ui.map.MapUiStateFlow
@@ -30,10 +31,15 @@ class MonitoringViewModel @Inject constructor(
         .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), MonitoringUiState.IDLE)
 
-    /** En rutina: la ruta de siempre; en lugar nuevo: la ruta a pie sugerida (si se pidió). */
+    /**
+     * En rutina: la ruta de siempre; en lugar nuevo: la ruta a pie sugerida (si se pidió). En una ruta larga
+     * el mapa se enfoca en los alrededores de donde va la persona ([MapFocus]), para que el desvío se vea.
+     */
     val map: StateFlow<MapUiState> = mapStates.of(
         combine(session.snapshot, walkingRoute.route) { snapshot, suggested ->
-            MapRoutes(snapshot.routine?.path ?: suggested, snapshot.trip?.points.orEmpty())
+            val habitual = snapshot.routine?.path ?: suggested
+            val today = snapshot.trip?.points.orEmpty()
+            MapRoutes(habitual, today, focus = MapFocus.around(habitual, today))
         }
     ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), MapUiState.Simple)
 
