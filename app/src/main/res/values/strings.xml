@@ -62,6 +62,7 @@
     <string name="routine_new">Nuevo recorrido</string>
     <string name="routine_confirm_question">¿Lo confirmo?</string>
     <string name="routine_save">Guardar</string>
+    <string name="learning_save_now">Guardarla ya</string>
     <string name="routine_rename">Renombrar</string>
     <string name="routine_delete">Borrar</string>
     <string name="routine_delete_confirm">Toca otra vez para borrar</string>

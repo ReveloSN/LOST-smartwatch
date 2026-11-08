@@ -50,6 +50,7 @@
     <string name="routine_new">New route</string>
     <string name="routine_confirm_question">Save it?</string>
     <string name="routine_save">Save</string>
+    <string name="learning_save_now">Save it now</string>
     <string name="routine_rename">Rename</string>
     <string name="routine_delete">Delete</string>
     <string name="routine_delete_confirm">Tap again to delete</string>

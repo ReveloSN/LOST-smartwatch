@@ -53,6 +53,7 @@
     <string name="routine_new">Novo percurso</string>
     <string name="routine_confirm_question">Confirmo?</string>
     <string name="routine_save">Salvar</string>
+    <string name="learning_save_now">Salvar agora</string>
     <string name="routine_rename">Renomear</string>
     <string name="routine_delete">Apagar</string>
     <string name="routine_delete_confirm">Toque de novo para apagar</string>

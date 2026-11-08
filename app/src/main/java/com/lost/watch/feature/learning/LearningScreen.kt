@@ -44,7 +44,7 @@ private fun LearningContent(state: LearningUiState, onConfirm: () -> Unit) {
                 color = SemanticTokens.Text.secondary
             )
             LostSecondaryButton(
-                stringResource(R.string.routine_save),
+                stringResource(R.string.learning_save_now),
                 onConfirm,
                 style = SecondaryButtonStyle.TEXT_ONLY
             )
