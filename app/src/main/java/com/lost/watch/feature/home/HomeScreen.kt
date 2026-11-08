@@ -30,7 +30,6 @@ import com.lost.watch.feature.errors.ErrorNoticeScreen
 import com.lost.watch.feature.errors.ErrorUiEvent
 import com.lost.watch.feature.errors.ErrorViewModel
 import com.lost.watch.ui.StatusPresentation
-import com.lost.watch.ui.formatMinuteOfDay
 
 /**
  * C · Inicio: una sola idea. En reposo, "LOST está atento"; en recorrido, el estado en un chip,
@@ -93,7 +92,7 @@ private fun MonitoringStatus(state: HomeUiState, onOpenMonitoring: () -> Unit) {
         ?: stringResource(state.status.label)
     LostChip(chipLabel, icon = state.status.icon, tone = state.status.tone, onClick = onOpenMonitoring)
     val arrival = state.arrivalMinuteOfDay.takeUnless { state.isVoluntaryDetour || state.isNewPlace }
-    arrival?.let { LostText(formatMinuteOfDay(it), role = LostTextRole.DISPLAY) }
+    arrival?.let { ArrivalTime(it) }
     LostText(supportLine(state, hasArrival = arrival != null), role = LostTextRole.CAPTION)
 }
 

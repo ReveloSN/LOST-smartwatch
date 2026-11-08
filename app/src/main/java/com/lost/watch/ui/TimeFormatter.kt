@@ -20,3 +20,17 @@ fun formatMinuteOfDay(minuteOfDay: Int, locale: Locale): String {
     val time = LocalTime.of(minutes / MINUTES_PER_HOUR, minutes % MINUTES_PER_HOUR)
     return time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale))
 }
+
+/** Una hora corta partida en la hora en sí ("5:51") y, si el idioma la usa, la parte del día ("a. m."). */
+data class ClockParts(val time: String, val dayPeriod: String?)
+
+private val TIME_THEN_DAY_PERIOD = Regex("""^(\d{1,2}[:.]\d{2})[\s\u00A0\u202F]+(\S.*)$""")
+
+/**
+ * Separa "5:51 a. m." en "5:51" y "a. m." para dibujar la hora grande y la parte del día pequeña: en una
+ * sola línea grande "a. m." no cabe en el reloj y la hora se cortaba ("5:51 a…"). Si el idioma pone la
+ * parte del día antes o no la usa, la hora queda entera.
+ */
+fun splitDayPeriod(formatted: String): ClockParts = TIME_THEN_DAY_PERIOD.matchEntire(formatted)
+    ?.let { ClockParts(it.groupValues[1], it.groupValues[2]) }
+    ?: ClockParts(formatted, null)
