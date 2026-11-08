@@ -1,32 +1,41 @@
 """Genera los GPX de la demo de LOST sobre calles reales.
 
-Todo se arma alrededor de UNA constante, CENTER (hoy: Universidad Nacional de Colombia, Bogotá).
-Para mover la demo a otro campus o barrio basta con cambiar CENTER y volver a ejecutar:
+La historia: la casa queda en Catambuco y la rutina es ir a la Universidad de Nariño (sede Torobajo,
+Pasto) de lunes a viernes en la mañana. El trayecto real se hace así: 250 m a pie hasta la Panamericana,
+bus hasta Torobajo y los últimos ~450 m a pie hasta el campus (≈ 35 min, saliendo a las 6:40).
+Para mover la demo a otro barrio o campus basta con cambiar HOME y UNIVERSITY y volver a ejecutar:
 
     python tools/generate_osm_routes.py
 
-Las rutas siguen calles reales gracias a OSRM con perfil a pie (routing.openstreetmap.de) y el
-hospital del escenario "lugar nuevo" se busca con Nominatim cerca de CENTER. Se respeta la política
-de uso de OpenStreetMap: User-Agent propio, pocas peticiones y una pausa entre ellas.
-Igual que antes, se camina a 1.4 m/s y se guarda un punto cada 5 segundos.
+Las rutas siguen calles reales gracias a OSRM (routing.openstreetmap.de: perfil en carro para el bus y a
+pie para caminar) y el escenario "lugar nuevo" pasa en la Fundación Hospital San Pedro (HOSPITAL).
+Se respeta la política de uso de OpenStreetMap: User-Agent propio, pocas peticiones y una pausa entre ellas.
+Se guarda un punto cada 5 segundos; a pie se va a 1.4 m/s y en bus a 6.5 m/s (promedio con paradas).
 """
 import json
 import math
 import os
 import time
-import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
 
-CENTER = (4.6380, -74.0840)  # Universidad Nacional de Colombia, Bogotá (lat, lon)
+HOME = (1.1663690, -77.2992956)  # Catambuco, Pasto (lat, lon)
+UNIVERSITY = (1.2325340, -77.2933885)  # Universidad de Nariño, sede Torobajo
+CENTER = UNIVERSITY  # alrededor de aquí se arman las historias que pasan a pie
+HOSPITAL = (1.2246245, -77.2920710)  # Fundación Hospital San Pedro, a ~1 km de la universidad
+HOSPITAL_NAME = 'Fundación Hospital San Pedro'
 
-SPEED_MPS = 1.4
+WALK_MPS = 1.4
+BUS_MPS = 6.5
+WALK_TO_STOP_M = 250  # de la casa al paradero de la Panamericana
+WALK_FROM_STOP_M = 600  # el bus deja de andar 600 m (por la vía) antes del campus: ahí está el paradero
 SAMPLE_SECONDS = 5
+MIN_BLOCK_AREA_M2 = 1500
 EARTH_RADIUS = 6_371_000.0
-START = datetime(2026, 10, 12, 11, 40, tzinfo=timezone.utc)  # 6:40 a. m. en Bogotá
+START = datetime(2026, 10, 12, 11, 40, tzinfo=timezone.utc)  # 6:40 a. m. en Colombia
 USER_AGENT = 'LOST-smartwatch-demo-generator/1.0 (student project; github.com/ReveloSN/LOST-smartwatch)'
-OSRM = 'https://routing.openstreetmap.de/routed-foot/route/v1/foot/'
-NOMINATIM = 'https://nominatim.openstreetmap.org/search'
+OSRM_FOOT = 'https://routing.openstreetmap.de/routed-foot/route/v1/foot/'
+OSRM_CAR = 'https://routing.openstreetmap.de/routed-car/route/v1/driving/'
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'sample-routes')
 
 
@@ -45,28 +54,13 @@ def get_json(url):
     return data
 
 
-def osrm(*waypoints):
-    """Ruta a pie por calles reales que pasa por todos los puntos, como lista de (lat, lon)."""
+def osrm(*waypoints, base=OSRM_FOOT):
+    """Ruta por calles reales que pasa por todos los puntos (a pie por defecto), como lista de (lat, lon)."""
     coords = ';'.join(f'{lon:.6f},{lat:.6f}' for lat, lon in waypoints)
-    data = get_json(f'{OSRM}{coords}?overview=full&geometries=geojson')
+    data = get_json(f'{base}{coords}?overview=full&geometries=geojson')
     if data.get('code') != 'Ok':
         raise RuntimeError(f'OSRM: {data.get("code")}')
     return [(lat, lon) for lon, lat in data['routes'][0]['geometry']['coordinates']]
-
-
-def nearest_hospital():
-    south, west = offset(-2500, -2500)
-    north, east = offset(2500, 2500)
-    query = urllib.parse.urlencode({
-        'q': 'hospital', 'format': 'jsonv2', 'limit': 10, 'bounded': 1,
-        'viewbox': f'{west},{north},{east},{south}',
-    })
-    results = get_json(f'{NOMINATIM}?{query}')
-    if not results:
-        return offset(-900, -900), 'Hospital'
-    # Nominatim no siempre devuelve el mismo orden: se elige el más cercano a CENTER (determinista).
-    best = min(results, key=lambda r: distance((float(r['lat']), float(r['lon'])), CENTER))
-    return (float(best['lat']), float(best['lon'])), best.get('name') or 'Hospital'
 
 
 def distance(a, b):
@@ -102,20 +96,31 @@ def split_at(path, fraction):
     return path, [path[-1]]
 
 
-def walk(path):
-    """Camina la ruta a 1.4 m/s y guarda un punto cada 5 s: [(lat, lon, segundos)]."""
-    spacing = SPEED_MPS * SAMPLE_SECONDS
-    points, t, carry = [(path[0][0], path[0][1], 0.0)], 0.0, 0.0
-    for a, b in zip(path, path[1:]):
-        step = distance(a, b)
-        d = spacing - carry
-        while d <= step:
-            f = d / step
-            t += SAMPLE_SECONDS
-            points.append((a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, t))
-            d += spacing
-        carry = step - (d - spacing)
+def length(path):
+    return sum(distance(a, b) for a, b in zip(path, path[1:]))
+
+
+def travel(legs):
+    """Recorre los tramos [(ruta, m/s)] seguidos y guarda un punto cada 5 s: [(lat, lon, segundos)]."""
+    marks, t = [], 0.0  # (lat, lon, segundo en que se pasa por ese vértice)
+    for path, speed in legs:
+        for point in path:
+            if marks:
+                t += distance(marks[-1][:2], point) / speed
+            marks.append((point[0], point[1], t))
+    points, next_t = [], 0.0
+    for (lat_a, lon_a, t_a), (lat_b, lon_b, t_b) in zip(marks, marks[1:]):
+        while next_t <= t_b:
+            f = (next_t - t_a) / (t_b - t_a) if t_b > t_a else 0.0
+            points.append((lat_a + (lat_b - lat_a) * f, lon_a + (lon_b - lon_a) * f, next_t))
+            next_t += SAMPLE_SECONDS
+    if points[-1][2] < marks[-1][2]:
+        points.append((marks[-1][0], marks[-1][1], next_t))  # la llegada exacta, en el siguiente muestreo
     return points
+
+
+def min_distance_to(path, others):
+    return min(distance(p, q) for p in path for q in others)
 
 
 def gpx(name, points):
@@ -137,37 +142,120 @@ def block_loops(center, side_m, times):
     return corners * times + [corners[0]]
 
 
-def build_routes():
-    home = offset(900, -650)
-    university = CENTER
-    normal = osrm(home, university)
+def perpendicular_offsets(a, b, meters):
+    """Los dos puntos a [meters] de [a], a cada lado de la dirección a → b."""
+    east = distance((a[0], a[1]), (a[0], b[1])) * (1 if b[1] > a[1] else -1)
+    north = distance((a[0], a[1]), (b[0], a[1])) * (1 if b[0] > a[0] else -1)
+    norm = math.hypot(east, north) or 1.0
+    return [offset(-north / norm * meters * side, east / norm * meters * side, a) for side in (1, -1)]
 
-    # Desvío voluntario: sale de la ruta y camina estable hacia una tienda, sin volver sobre sus pasos.
-    branch = point_at(normal, 0.35)
-    shop = offset(-500, -400, branch)
-    voluntary = osrm(home, branch, shop)
 
-    # Manzana real que nunca toca la ruta (siempre a más de 100 m): cada vuelta mide ~360 m.
-    # Los tramos "en ruta" son cortes exactos de la ruta de siempre, para que volver a ella se note.
-    before, after = split_at(normal, 0.4)
+def area(path):
+    """Área que encierra una vuelta (m²): una manzana real encierra algo; ir y volver por la misma calle, no."""
+    origin = path[0]
+    xy = [(distance(origin, (origin[0], p[1])) * (1 if p[1] > origin[1] else -1),
+           distance(origin, (p[0], origin[1])) * (1 if p[0] > origin[0] else -1)) for p in path]
+    return abs(sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(xy, xy[1:] + xy[:1]))) / 2
+
+
+def real_block(centers, accept=lambda loops: True):
+    """De varias manzanas candidatas, la de menor perímetro que de verdad es una manzana.
+
+    Las calles de Pasto no forman una cuadrícula: un cuadrado de esquinas cualquiera puede terminar en una
+    caminata larga o en ir y volver por la misma calle. Se pide un área mínima y se elige la vuelta más corta,
+    que es como da vueltas alguien que se desorienta.
+    """
+    candidates = []
+    for center in centers:
+        for half_side in (30, 40):
+            lap = osrm(*block_loops(center, half_side, 1))
+            if area(lap) >= MIN_BLOCK_AREA_M2 and accept(lap):
+                candidates.append((length(lap), center, half_side))
+    if not candidates:
+        raise RuntimeError('No encontré una manzana real cerca')
+    _, center, half_side = min(candidates)
+    return osrm(*block_loops(center, half_side, 3))
+
+
+def closed_street_walk(normal, from_stop):
+    """La caminata del paradero al campus con la calle cerrada: sale de la ruta, da 3 vueltas a una manzana
+    real que nunca toca la ruta (siempre a más de 100 m), vuelve al mismo punto y sigue. De los lugares
+    posibles para la calle cerrada se queda con el de la manzana más corta."""
+    options = []
+    for fraction in (0.1, 0.25, 0.5):
+        before, after = split_at(from_stop, fraction)
+        closed_street = after[0]
+        toward = after[min(5, len(after) - 1)]
+        centers = [p for meters in (120, 160, 200, 240, 280)
+                   for p in perpendicular_offsets(closed_street, toward, meters)] + around(closed_street, 200)
+        try:
+            loops = real_block(centers, accept=lambda lap: min_distance_to(lap, normal) > 100)
+        except RuntimeError:
+            continue
+        options.append((length(loops), before, after, loops))
+    if not options:
+        raise RuntimeError('No encontré una manzana real a más de 100 m de la ruta')
+    _, before, after, loops = min(options, key=lambda option: option[0])
     closed_street = after[0]
-    block = offset(140, 140, closed_street)
-    lost = before + osrm(closed_street, *block_loops(block, 40, 3), closed_street)[1:] + after[1:]
+    detour = osrm(closed_street, loops[0])[:-1] + loops + osrm(loops[-1], closed_street)[1:]
+    return before + detour[1:] + after[1:]
 
-    hospital, hospital_name = nearest_hospital()
-    entrance = offset(0, -250, hospital)
-    new_place = osrm(entrance, *block_loops(offset(0, -120, hospital), 35, 3), hospital)
+
+def steady_walk_away(start, normal):
+    """Una caminata de ~400 m que se aleja de la ruta sin zigzaguear ni volver a acercarse: así se ve un
+    desvío voluntario. De varias direcciones se queda con la calle más recta que siempre se aleja."""
+    options = []
+    for degrees in range(0, 360, 30):
+        for meters in (400, 500):
+            east, north = meters * math.sin(math.radians(degrees)), meters * math.cos(math.radians(degrees))
+            walk = osrm(start, offset(east, north, start))
+            away = [min_distance_to([p], normal) for p in walk]
+            steady = sum(1 for a, b in zip(away, away[1:]) if b >= a - 2) / max(1, len(away) - 1)
+            straight = distance(walk[0], walk[-1]) / max(1.0, length(walk))
+            if away[-1] >= 150:
+                options.append((straight * steady, walk))
+    return max(options, key=lambda option: option[0])[1]
+
+
+def around(point, meters):
+    return [offset(east, north, point) for east, north in
+            [(0, -meters), (0, meters), (meters, 0), (-meters, 0),
+             (meters * 0.7, -meters * 0.7), (-meters * 0.7, -meters * 0.7),
+             (meters * 0.7, meters * 0.7), (-meters * 0.7, meters * 0.7)]]
+
+
+def build_routes():
+    road = osrm(HOME, UNIVERSITY, base=OSRM_CAR)
+    first_stop = point_at(road, WALK_TO_STOP_M / length(road))
+    _, rest = split_at(road, WALK_TO_STOP_M / length(road))
+    bus, _ = split_at(rest, 1 - WALK_FROM_STOP_M / length(rest))
+    last_stop = bus[-1]
+    to_stop = osrm(HOME, first_stop)
+    from_stop = osrm(last_stop, UNIVERSITY)
+    normal = [(to_stop, WALK_MPS), (bus, BUS_MPS), (from_stop, WALK_MPS)]
+    normal_path = to_stop + bus + from_stop
+
+    # Desvío voluntario: se baja del bus y camina estable hacia una papelería, sin volver sobre sus pasos.
+    voluntary = normal[:2] + [(steady_walk_away(last_stop, normal_path), WALK_MPS)]
+
+    # Calle cerrada: al bajarse del bus no puede seguir por su calle, da 3 vueltas a una manzana y vuelve.
+    lost = normal[:2] + [(closed_street_walk(normal_path, from_stop), WALK_MPS)]
+
+    # Lugar nuevo: llega al hospital por primera vez, da 3 vueltas a una manzana vecina y llega al consultorio.
+    entrance = offset(0, -250, HOSPITAL)
+    loops = real_block(around(HOSPITAL, 140))
+    new_place = [(osrm(entrance, loops[0])[:-1] + loops + osrm(loops[-1], HOSPITAL)[1:], WALK_MPS)]
     return {
-        'demo_normal.gpx': ('Casa a la U (ruta de siempre)', normal),
-        'demo_voluntary_detour.gpx': ('Desvío voluntario a una tienda', voluntary),
-        'demo_disorientation.gpx': ('Calle cerrada, vueltas y regreso a la ruta', lost),
-        'demo_new_place.gpx': (f'{hospital_name}: vueltas y llegada al consultorio', new_place),
+        'demo_normal.gpx': ('Casa en Catambuco a la Universidad de Nariño (ruta de siempre)', normal),
+        'demo_voluntary_detour.gpx': ('Se baja del bus y camina a una papelería', voluntary),
+        'demo_disorientation.gpx': ('Calle cerrada cerca de la U: vueltas y regreso a la ruta', lost),
+        'demo_new_place.gpx': (f'{HOSPITAL_NAME}: vueltas y llegada al consultorio', new_place),
     }
 
 
 if __name__ == '__main__':
     for file_name, (title, path) in build_routes().items():
-        points = walk(path)
+        points = travel(path)
         with open(os.path.join(OUT_DIR, file_name), 'w', encoding='utf-8', newline='\n') as f:
             f.write(gpx(title, points))
         print(f'{file_name}: {len(points)} puntos, {points[-1][2] / 60:.1f} min · fin {points[-1][0]:.5f},{points[-1][1]:.5f}')

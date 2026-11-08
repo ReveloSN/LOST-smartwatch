@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 
 /**
- * Reproduce un GPX como si fuera el GPS. Acelera la reproducción (`speedFactor`) pero
- * conserva la separación real entre tiempos, así el motor ve duraciones realistas.
+ * Reproduce un GPX como si fuera el GPS. Acelera la reproducción ([DemoPlaybackPace]: más aún en el tramo
+ * en bus) pero conserva la separación real entre tiempos, así el motor ve duraciones realistas.
  */
 class SimulatedLocationSource @Inject constructor(
     private val opener: GpxAssetOpener,
@@ -21,8 +21,6 @@ class SimulatedLocationSource @Inject constructor(
     private val selector: DemoScenarioSelector,
     private val timeSource: TimeSource
 ) : LocationSource {
-    var speedFactor: Double = DEFAULT_SPEED_FACTOR
-
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun locations(): Flow<GeoPoint> = selector.current.flatMapLatest { scenario ->
         if (scenario == null) emptyFlow() else replay(scenario)
@@ -33,12 +31,8 @@ class SimulatedLocationSource @Inject constructor(
         val first = points.firstOrNull() ?: return@flow
         val sessionStart = timeSource.nowMillis()
         points.forEachIndexed { index, point ->
-            if (index > 0) delay(((point.timestampMillis - points[index - 1].timestampMillis) / speedFactor).toLong())
+            if (index > 0) delay(DemoPlaybackPace.delayMillis(points[index - 1], point))
             emit(point.copy(timestampMillis = sessionStart + point.timestampMillis - first.timestampMillis))
         }
-    }
-
-    private companion object {
-        const val DEFAULT_SPEED_FACTOR = 10.0
     }
 }

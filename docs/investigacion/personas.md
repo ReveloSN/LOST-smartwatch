@@ -4,8 +4,9 @@
 
 ## Sebastián, 20 — persona principal
 
-- Estudiante universitario, alfabetización digital alta.
-- **Rutina**: Casa → U, lunes a viernes, 6:40 a. m., 35 min · U → Casa, 5:00 p. m., 40 min.
+- Estudiante de la Universidad de Nariño, alfabetización digital alta. Vive en Catambuco (Pasto).
+- **Rutina**: Casa → U, lunes a viernes, 6:40 a. m., 35 min (250 m a pie, bus por la Panamericana hasta
+  Torobajo y los últimos metros a pie hasta el campus) · U → Casa, 5:00 p. m., 40 min.
 - **Necesita**: que LOST no lo moleste cuando cambia de camino a propósito, pero que lo ayude si de verdad se pierde (calles cerradas, desvíos, edificios nuevos del campus).
 - **LOST le da**: silencio en su rutina, una pregunta suave en desvíos voluntarios y guía inmediata cuando da vueltas.
 - **En el código**: modo rutina (`RoutineDetectionMode`), `VoluntaryDetourDetector` → `SoftAsk`, escenario GPX *Calle cerrada*.
