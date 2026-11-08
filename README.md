@@ -59,7 +59,7 @@ ventana de 1 km centrada en la persona).
 
 - **Ruta de siempre** → LOST solo observa; el anillo aqua respira.
 - **Desvío voluntario** → se baja del bus y camina a otro lado: "¿Vas a otro lado hoy?" una sola vez (~85 s).
-- **Calle cerrada** → vueltas a una manzana cerca de la U → "¿Necesitas ayuda?" (~75 s) → "Sí, guíame" → flecha
+- **Calle cerrada** → vueltas a una manzana cerca de la U → "¿Necesitas ayuda?" (~100 s) → "Sí, guíame" → flecha
   → "Ya estás en tu ruta".
 - **Lugar nuevo (hospital)** → "Pasaste 3 veces por la misma cuadra. ¿Necesitas ayuda?" (~65 s) → guía hasta el
   Consultorio 304.

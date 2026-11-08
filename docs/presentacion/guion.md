@@ -95,7 +95,7 @@ U"; tocar el estado vuelve al mapa (revelación progresiva).
 | Recorrido | Cuándo pasa algo | Qué se ve | Concepto del curso |
 |---|---|---|---|
 | **Desvío voluntario** | ~85 s | "¿Vas a otro lado hoy?" → **Sí, voy a otro lado** → "Entendido. LOST aprenderá de esto." → "Hoy tomaste otra calle" | Tono **relajado**: pregunta suave, una sola vez. Feedback que la IA usa para aprender. |
-| **Calle cerrada** | ~75 s | Vueltas a la manzana → "Te saliste de tu ruta. ¿Necesitas ayuda?" (vibra) → **Sí, guíame** → flecha "Vuelve a tu ruta · 220 m · ≈ 3 min" | Tono **atento**: el estado nunca solo con color (color + icono + texto + vibración). Escalada con máquina de estados. |
+| **Calle cerrada** | ~100 s | Vueltas a la manzana → "Te saliste de tu ruta. ¿Necesitas ayuda?" (vibra) → **Sí, guíame** → flecha "Vuelve a tu ruta · 220 m · ≈ 3 min" → a los ~1:45 de guía, "Ya estás en tu ruta" | Tono **atento**: el estado nunca solo con color (color + icono + texto + vibración). Escalada con máquina de estados. |
 | **Lugar nuevo (hospital)** | ~65 s | Mapa del barrio del Hospital San Pedro → "Pasaste 3 veces por la misma cuadra. ¿Necesitas ayuda?" → flecha al **Consultorio 304** | Modo lugar nuevo: sin rutina, busca señales generales (vueltas, alejarse). La explicación dice **por qué**. |
 
 Consejos:
