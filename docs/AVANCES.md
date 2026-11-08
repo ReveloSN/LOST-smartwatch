@@ -729,6 +729,8 @@ preparar la presentación. Guion: [`docs/presentacion/guion.md`](presentacion/gu
 | **Empezar de nuevo** desde la demo: borra lo aprendido y vuelve a la bienvenida, sin `adb`. | `e919806` | `UpdateSettingsUseCaseTest` (2), probado en el emulador |
 | Tope al caché de rutas remuestreadas (las rutinas borradas no se soltaban). | `7056e09` | pruebas del motor |
 | **Presentación**: guion de 15 y 10 minutos, 13 diapositivas con notas, capturas y videos de respaldo grabados en el emulador. | `ef15c37`, `6f9e290`, `e8810b8` | — |
+| **Calle cerrada con 2 vueltas** (la tercera solo alargaba la guía: de 2:26 a 1:45 hasta "Ya estás en tu ruta"). | `0d3e5e1` | `GpxDemoEndToEndTest`, `GpsNoiseRobustnessTest` (205) |
+| **Crítica de diseño independiente** de las pantallas de la demo: la hora de llegada se cortaba ("5:51 a…") y ahora va grande con "a. m." pequeño al lado; el botón de la rutina en aprendizaje dice "Guardarla ya"; el botón de solo texto ya no abre muescas en el anillo y "Empezar" no pisa el anillo de la bienvenida. Se dejaron como están la atribución de OpenStreetMap (texto de licencia, no traducible) y "Donde más te desorientas" (relativo, sin tilde, como en el mockup 03.2). | `59b0287`, `107e74c`, `6d5e54e` | `ClockPartsTest` (3), probado en el emulador |
 
 ### Decisiones
 
