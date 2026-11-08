@@ -19,7 +19,7 @@ Mapa para la sustentación: cada concepto del plan apunta a la clase real que lo
 | **S** — Responsabilidad única | El motor está partido en piezas de una sola tarea: `TrajectoryResampler`, `DtwSequenceComparator`, `RoutineLearner`, cada `DeviationSignal`, `CompositeAnomalyScorer`, `AssistanceLevelClassifier`, `DeviationExplanationBuilder`. Los efectos de la asistencia también: `AssistanceHapticPolicy`, `AssistanceMetricsRecorder`, `AssistanceFeedbackLearner`, `LocationSharingEffect`. |
 | **O** — Abierto/cerrado | Una señal nueva = una clase que implemente `DeviationSignal` + registrarla en `LostEngineAssembly.signals()`. `CompositeAnomalyScorer` no cambia (prueba `una senal nueva se suma sin modificar el puntaje combinado`). |
 | **L** — Sustitución de Liskov | `RoutineDetectionMode` / `NewPlaceDetectionMode` (contrato `DetectionMode`); `DtwSequenceComparator` / `FrechetSequenceComparator` (contrato `SequenceComparator`, misma prueba para ambos). |
-| **I** — Segregación de interfaces | Puertos pequeños en `domain/port/`: `LocationSource`, `HapticNotifier`, `ContactNotifier`, `RoutineReader`, `RoutineWriter`, `TripRecorder`, `TripReader`, `MetricsTracker`, `MetricsReader`, `SettingsReader`, `SettingsWriter`, `ContactReader`, `ContactWriter`, `DestinationReader`, `DestinationWriter`, `DeviceStatusReader`… |
+| **I** — Segregación de interfaces | Puertos pequeños en `domain/port/`: `LocationSource`, `HapticNotifier`, `ContactNotifier`, `RoutineReader`, `RoutineWriter`, `TripRecorder`, `TripReader`, `MetricsTracker`, `MetricsReader`, `SettingsReader`, `SettingsWriter`, `ContactReader`, `ContactWriter`, `DestinationReader`, `DestinationWriter`, `DeviceStatusReader`, y para el mapa `MapTileSource`, `DestinationSearchService`, `WalkingRouteService`, `CompassHeadingSource`. |
 | **D** — Inversión de dependencias | El dominio define los puertos; `data` y `ai` los implementan (`FusedLocationSource`, `AndroidHapticNotifier`, `RoomRoutineRepository`, `LostDetectionEngine`…). Hilt los conecta en `DataBindingsModule` y `AiModule`. |
 
 ## Patrones de diseño
@@ -32,7 +32,8 @@ Mapa para la sustentación: cada concepto del plan apunta a la clase real que lo
 | Chain of Responsibility | `AssistanceResponsePolicy`: `VibrateAndAskLink` → `AlternativeRouteLink` → `ShareLocationLink` |
 | Observer | `TripSession.snapshot` (`StateFlow`) y `TripSession.transitions` (`SharedFlow`) → ViewModels y `AssistanceEffects` |
 | Repository | `RoomRoutineRepository`, `RoomTripRepository`, `RoomDestinationRepository`, `DataStoreSettingsRepository`, `AuthorizedContactRepository` |
-| Adapter | `FusedLocationSource` (Google Play Services → `LocationSource`), `AndroidHapticNotifier` |
+| Adapter | `FusedLocationSource` (Google Play Services → `LocationSource`), `AndroidHapticNotifier`, `NetworkTileSource` / `NominatimDestinationSearch` / `OsrmWalkingRouteService` (OpenStreetMap → puertos del mapa), `AndroidCompassHeadingSource` |
+| Decorator / caché en cadena | `CachedMapTileSource` envuelve a `NetworkTileSource`: memoria (LRU) → disco → red, con el mismo contrato `MapTileSource` |
 | Factory | `DetectionModeFactory` |
 | Facade | `LostDetectionEngine.evaluate(request)` |
 | Mapper | `TripEntityMapper`, `RoutineEntityMapper`, `MetricEventEntityMapper`, `DestinationEntityMapper`, `LostErrorToUiMessageMapper`, `*UiStateMapper` |
@@ -50,6 +51,17 @@ Mapa para la sustentación: cada concepto del plan apunta a la clase real que lo
 | `EnumSet<DayOfWeek>` | Días de una rutina | `RoutineSchedule`, `DayOfWeekSetCodec` |
 | `sealed interface` / `enum class` | Estados, niveles, razones, errores, eventos | `AssistanceState`, `AssistanceLevel`, `DeviationReason`, `LostError`, `AssistanceEvent` |
 | `@JvmInline value class` | Unidades seguras | `Meters`, `Probability`, `Degrees` |
+| `LinkedHashMap` con orden de acceso (LRU) | Teselas descargadas e imágenes decodificadas: lo menos usado sale primero, O(1) | `LruCache`, `CachedMapTileSource`, `RouteMapPresenter` |
+| Proyección Web Mercator | Lat/lon → píxeles del mundo y teselas z/x/y; encuadre por búsqueda del zoom máximo que cabe | `WebMercator`, `MapViewport`, `ViewportFitter` |
+
+## Mapa real (ver `adr/004-mapa-openstreetmap.md`)
+
+```
+Monitoreo / Detalle ─► MapUiStateFlow ─► RouteMapPresenter ─► LoadRouteMapUseCase ─► MapTileSource
+                         (¿mapa real?)    (decodifica, LRU)     (encuadre + teselas)    └ CachedMapTileSource
+                                                                                           memoria → disco → red (OSM)
+        ◄─ MapUiState.Real (RealMapView) · Simple / Unavailable (RouteComparisonMap) ◄─
+```
 
 ## Reglas de código
 

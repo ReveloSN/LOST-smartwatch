@@ -1,6 +1,5 @@
 package com.lost.watch.feature.home
 
-import com.lost.domain.model.PlaceKind
 import com.lost.watch.ui.StatusPresentation
 
 /**
@@ -12,10 +11,7 @@ data class HomeUiState(
     val status: StatusPresentation,
     val ringProgress: Float,
     val routineName: String?,
-    val routineKind: PlaceKind?,
     val arrivalMinuteOfDay: Int?,
-    val elapsedMinutes: Int,
-    val expectedMinutes: Int,
     val isNewPlace: Boolean,
     val isVoluntaryDetour: Boolean,
     val isDemoAvailable: Boolean
@@ -26,10 +22,7 @@ data class HomeUiState(
             status = StatusPresentation.ON_ROUTE,
             ringProgress = 0f,
             routineName = null,
-            routineKind = null,
             arrivalMinuteOfDay = null,
-            elapsedMinutes = 0,
-            expectedMinutes = 0,
             isNewPlace = false,
             isVoluntaryDetour = false,
             isDemoAvailable = isDemoAvailable

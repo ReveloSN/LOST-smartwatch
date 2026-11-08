@@ -19,8 +19,13 @@ sealed interface AssistanceUiState {
         val isNewPlace: Boolean = false
     ) : AssistanceUiState
 
-    data class Guiding(val distanceMeters: Double?, val bearingDegrees: Float, val destinationName: String?) :
-        AssistanceUiState
+    /** [bearingDegrees] es el rumbo real (para TalkBack); [arrowDegrees], cómo se gira la flecha en pantalla. */
+    data class Guiding(
+        val distanceMeters: Double?,
+        val bearingDegrees: Float,
+        val destinationName: String?,
+        val arrowDegrees: Float = bearingDegrees
+    ) : AssistanceUiState
 
     data class SharingCountdown(val secondsLeft: Int, val totalSeconds: Int, val contactName: String?) :
         AssistanceUiState

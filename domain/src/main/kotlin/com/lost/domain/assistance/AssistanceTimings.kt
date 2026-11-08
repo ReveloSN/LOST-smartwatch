@@ -13,4 +13,10 @@ object AssistanceTimings {
 
     /** "Entendido" se queda en pantalla este tiempo antes de volver a Inicio. */
     const val ACKNOWLEDGEMENT_SECONDS = 3
+
+    /**
+     * Tras "Estoy bien" o "Ya sé dónde estoy", LOST no vuelve a preguntar durante este tiempo
+     * (cuenta desde que se cierra "Entendido"). Quien da vueltas buscando la salida ya dijo que está bien.
+     */
+    const val PAUSE_AFTER_IM_FINE_SECONDS = 120
 }

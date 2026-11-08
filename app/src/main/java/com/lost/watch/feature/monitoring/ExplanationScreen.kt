@@ -1,13 +1,10 @@
 package com.lost.watch.feature.monitoring
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.lost.designsystem.components.atoms.LostIcon
 import com.lost.designsystem.components.atoms.LostText
 import com.lost.designsystem.components.atoms.LostTextRole
 import com.lost.designsystem.components.templates.WatchScreenTemplate
@@ -18,7 +15,6 @@ import com.lost.domain.detection.DeviationReason
 import com.lost.domain.model.units.Meters
 import com.lost.watch.R
 import com.lost.watch.ui.explanationSentence
-import com.lost.watch.ui.reasonIcon
 
 /** E.4 · IA explicable: en lenguaje humano, sin porcentajes. */
 @Composable
@@ -36,9 +32,6 @@ private fun ExplanationContent(reasons: List<DeviationReason>) {
             color = SemanticTokens.Text.secondary
         )
         LostText(explanationSentence(reasons), role = LostTextRole.QUESTION)
-        Row(horizontalArrangement = Arrangement.spacedBy(SemanticTokens.Spacing.sm)) {
-            reasons.take(2).forEach { LostIcon(reasonIcon(it), null, tint = SemanticTokens.Status.deviation) }
-        }
     }
 }
 

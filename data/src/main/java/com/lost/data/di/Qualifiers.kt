@@ -16,3 +16,8 @@ annotation class ContactStore
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class ApplicationScope
+
+/** Despachador para lecturas de red y de disco. */
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class IoDispatcher

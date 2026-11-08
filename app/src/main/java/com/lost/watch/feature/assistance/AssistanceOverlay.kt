@@ -35,7 +35,7 @@ private fun AssistanceLayer(state: AssistanceUiState, onEvent: (AssistanceUiEven
         AssistanceUiState.Hidden -> Unit
         is AssistanceUiState.SoftAsk -> SoftAskAlert(onEvent)
         is AssistanceUiState.AskForHelp -> AskForHelpAlert(state, onEvent)
-        is AssistanceUiState.Guiding -> GuidingAlert(state)
+        is AssistanceUiState.Guiding -> GuidingAlert(state, onEvent)
         is AssistanceUiState.SharingCountdown -> SharingCountdownAlert(state, onEvent)
         is AssistanceUiState.LocationShared -> LocationSharedAlert(state, onEvent)
         is AssistanceUiState.Acknowledged -> AcknowledgedAlert(state)

@@ -27,4 +27,10 @@ sealed interface AssistanceState {
 
     /** "Entendido. LOST aprenderá de esto." Vuelve a Calm tras unos segundos. */
     data class Acknowledged(val feedback: UserFeedback) : AssistanceState
+
+    /**
+     * Tras "Estoy bien" o "Ya sé dónde estoy": LOST sigue mirando pero no vuelve a preguntar
+     * hasta que pasa [AssistanceTimings.PAUSE_AFTER_IM_FINE_SECONDS]. Para la pantalla es como Calm.
+     */
+    data object Paused : AssistanceState
 }

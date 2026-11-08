@@ -6,6 +6,10 @@ package com.lost.ai.config
  */
 data class DetectionThresholds(
     val resampleSpacingMeters: Double,
+    /** Un punto aislado que implicaría ir más rápido que esto (m/s) se toma como salto de la señal. */
+    val gpsJumpSpeedMps: Double,
+    /** Cada punto GPS se promedia con los de estos últimos segundos (el temblor del reloj baja a la mitad). */
+    val gpsSmoothingSeconds: Double,
     val dtwBandRatio: Double,
     val dtwMinBandPoints: Int,
     val routineStartRadiusMeters: Double,
@@ -20,6 +24,8 @@ data class DetectionThresholds(
     val loopMinPointsBetweenPasses: Int,
     val loopSaturationPasses: Int,
     val headingWindowSize: Int,
+    /** Tramos remuestreados a cada lado de un punto para medir su giro (2 = 40 m). */
+    val headingChordPoints: Int,
     val sharpTurnDegrees: Double,
     val erraticBaselineRatio: Double,
     val erraticSaturationRatio: Double,
@@ -35,6 +41,8 @@ data class DetectionThresholds(
     companion object {
         val DEFAULT = DetectionThresholds(
             resampleSpacingMeters = 20.0,
+            gpsJumpSpeedMps = 5.0,
+            gpsSmoothingSeconds = 15.0,
             dtwBandRatio = 0.25,
             dtwMinBandPoints = 5,
             routineStartRadiusMeters = 150.0,
@@ -49,8 +57,9 @@ data class DetectionThresholds(
             loopMinPointsBetweenPasses = 4,
             loopSaturationPasses = 3,
             headingWindowSize = 8,
+            headingChordPoints = 2,
             sharpTurnDegrees = 60.0,
-            erraticBaselineRatio = 0.15,
+            erraticBaselineRatio = 0.25,
             erraticSaturationRatio = 0.5,
             movingAwayMinMeters = 30.0,
             movingAwaySaturationMeters = 200.0,

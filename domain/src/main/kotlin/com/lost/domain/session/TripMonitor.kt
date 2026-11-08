@@ -2,6 +2,7 @@ package com.lost.domain.session
 
 import com.lost.domain.assistance.AssistanceEvent
 import com.lost.domain.assistance.AssistanceState
+import com.lost.domain.detection.DetectionResult
 import com.lost.domain.model.GeoPoint
 import com.lost.domain.model.Trip
 import com.lost.domain.port.ContactReader
@@ -18,6 +19,8 @@ import kotlinx.coroutines.flow.first
  * El corazón de la integración: cada punto GPS alarga el recorrido, el motor lo evalúa,
  * la sesión publica el resultado y la máquina de estados decide si hay que ayudar.
  * También detecta cuándo el usuario volvió a su ruta o llegó a su destino.
+ * Para ahorrar batería, en calma el motor no evalúa cada punto ([EvaluationThrottle]) y el
+ * recorrido en memoria tiene tope ([TripPointsCap]); la guía y la llegada sí se miran siempre.
  */
 class TripMonitor @Inject constructor(
     private val session: TripSession,
@@ -28,14 +31,25 @@ class TripMonitor @Inject constructor(
 ) {
     private var trip = Trip(id = "", points = emptyList())
     private val grace = RecoveryGrace()
+    private val throttle = EvaluationThrottle()
+    private var lastEvaluation: DetectionResult? = null
 
     suspend fun run(locations: Flow<GeoPoint>) {
         trip = Trip(collaborators.idGenerator.newId(), emptyList())
         grace.reset()
+        throttle.reset()
+        lastEvaluation = null
         locations.collect { point ->
-            trip = trip.plus(point)
+            trip = TripPointsCap.append(trip, point)
             onNewPoint(trip, point)
         }
+    }
+
+    private suspend fun evaluationFor(trip: Trip, point: GeoPoint, destination: GeoPoint?): DetectionResult {
+        val isDue = throttle.shouldEvaluate(point, session.snapshot.value.assistance)
+        val previous = lastEvaluation
+        if (!isDue && previous != null) return previous
+        return evaluateTrip(trip, destination).also { lastEvaluation = it }
     }
 
     /** Al terminar: la IA aprende del recorrido (si no fue en un lugar nuevo con destino marcado). */
@@ -47,7 +61,7 @@ class TripMonitor @Inject constructor(
 
     private suspend fun onNewPoint(trip: Trip, point: GeoPoint) {
         val destination = session.snapshot.value.destination?.location
-        val evaluated = evaluateTrip(trip, destination)
+        val evaluated = evaluationFor(trip, point, destination)
         val routine = evaluated.routineId?.let { routineReader.routine(it) }
         val guidance = guidanceCalculator.guide(point, routine?.path.orEmpty(), destination)
         val detection = grace.apply(evaluated, guidance?.distance?.value?.takeIf { routine != null })

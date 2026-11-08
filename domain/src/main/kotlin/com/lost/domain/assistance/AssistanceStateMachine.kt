@@ -5,8 +5,10 @@ import com.lost.domain.assistance.AssistanceEvent.CountdownCancelled
 import com.lost.domain.assistance.AssistanceEvent.CountdownTicked
 import com.lost.domain.assistance.AssistanceEvent.DestinationReached
 import com.lost.domain.assistance.AssistanceEvent.DetectionUpdated
+import com.lost.domain.assistance.AssistanceEvent.PauseElapsed
 import com.lost.domain.assistance.AssistanceEvent.ResponseTimedOut
 import com.lost.domain.assistance.AssistanceEvent.RouteRecovered
+import com.lost.domain.assistance.AssistanceEvent.UserEndedGuidance
 import com.lost.domain.assistance.AssistanceEvent.UserIsFine
 import com.lost.domain.assistance.AssistanceEvent.UserIsGoingElsewhere
 import com.lost.domain.assistance.AssistanceEvent.UserRequestedGuidance
@@ -15,6 +17,7 @@ import com.lost.domain.assistance.AssistanceState.AskForHelp
 import com.lost.domain.assistance.AssistanceState.Calm
 import com.lost.domain.assistance.AssistanceState.Guiding
 import com.lost.domain.assistance.AssistanceState.LocationShared
+import com.lost.domain.assistance.AssistanceState.Paused
 import com.lost.domain.assistance.AssistanceState.SharingCountdown
 import com.lost.domain.assistance.AssistanceState.SoftAsk
 import com.lost.domain.assistance.policy.AssistanceAction
@@ -38,8 +41,16 @@ class AssistanceStateMachine(private val policy: AssistanceResponsePolicy = Assi
             Guiding -> fromGuiding(event)
             is SharingCountdown -> fromCountdown(state, event)
             LocationShared -> fromLocationShared(event)
-            is Acknowledged -> if (event == AcknowledgementElapsed) Calm else state
+            is Acknowledged -> fromAcknowledged(state, event)
+            Paused -> if (event == PauseElapsed) Calm else Paused
         }
+    }
+
+    /** Si la respuesta fue "Estoy bien" (o "Ya sé dónde estoy"), primero una pausa sin preguntas. */
+    private fun fromAcknowledged(state: Acknowledged, event: AssistanceEvent): AssistanceState = when {
+        event != AcknowledgementElapsed -> state
+        state.feedback == UserFeedback.IM_FINE -> Paused
+        else -> Calm
     }
 
     private fun fromCalm(event: AssistanceEvent): AssistanceState =
@@ -61,7 +72,15 @@ class AssistanceStateMachine(private val policy: AssistanceResponsePolicy = Assi
         else -> state
     }
 
-    private fun fromGuiding(event: AssistanceEvent): AssistanceState = if (event == RouteRecovered) Calm else Guiding
+    /**
+     * La guía termina al recuperar la ruta o cuando el usuario dice "Ya sé dónde estoy". Eso cuenta
+     * como "Estoy bien" (LOST aprende y pregunta menos), así no vuelve a preguntar de inmediato.
+     */
+    private fun fromGuiding(event: AssistanceEvent): AssistanceState = when (event) {
+        RouteRecovered -> Calm
+        UserEndedGuidance -> Acknowledged(UserFeedback.IM_FINE)
+        else -> Guiding
+    }
 
     private fun fromCountdown(state: SharingCountdown, event: AssistanceEvent): AssistanceState = when (event) {
         CountdownTicked -> if (state.secondsLeft <= 1) LocationShared else SharingCountdown(state.secondsLeft - 1)
@@ -72,6 +91,7 @@ class AssistanceStateMachine(private val policy: AssistanceResponsePolicy = Assi
     private fun fromLocationShared(event: AssistanceEvent): AssistanceState = when (event) {
         UserRequestedGuidance -> Guiding
         RouteRecovered -> Calm
+        UserEndedGuidance -> Acknowledged(UserFeedback.IM_FINE)
         else -> LocationShared
     }
 

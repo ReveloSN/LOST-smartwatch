@@ -5,7 +5,6 @@ import com.lost.domain.session.TripSessionSnapshot
 import com.lost.watch.ui.StatusPresentation
 import java.time.Instant
 import java.time.ZoneId
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -25,10 +24,7 @@ class HomeUiStateMapper @Inject constructor() {
             status = StatusPresentation.of(snapshot.detection.level),
             ringProgress = snapshot.detection.routeProgress.toFloat(),
             routineName = routine?.name?.takeIf { it.isNotBlank() } ?: snapshot.destination?.name,
-            routineKind = routine?.destinationKind ?: snapshot.destination?.kind,
             arrivalMinuteOfDay = startedAt?.takeIf { routine != null }?.let { minuteOfDay(it, expected, zoneId) },
-            elapsedMinutes = TimeUnit.MILLISECONDS.toMinutes(snapshot.trip?.durationMillis ?: 0L).toInt(),
-            expectedMinutes = expected,
             isNewPlace = snapshot.detection.mode == DetectionModeKind.NEW_PLACE,
             isVoluntaryDetour = snapshot.detection.isVoluntaryDetour,
             isDemoAvailable = isDemoAvailable

@@ -1,0 +1,8 @@
+# Baseline Profile escrito a mano: precompila (AOT) el código de LOST al instalar la app,
+# así el arranque y el primer recorrido no esperan al JIT. Las librerías de Compose ya traen el suyo.
+# Pendiente: generarlo con Macrobenchmark en un reloj real para afinarlo.
+HSPLcom/lost/watch/**->**(**)**
+HSPLcom/lost/designsystem/**->**(**)**
+HSPLcom/lost/domain/**->**(**)**
+HSPLcom/lost/ai/**->**(**)**
+HSPLcom/lost/data/**->**(**)**

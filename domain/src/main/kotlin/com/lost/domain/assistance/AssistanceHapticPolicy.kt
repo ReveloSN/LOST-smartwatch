@@ -25,6 +25,8 @@ class AssistanceHapticPolicy @Inject constructor() {
             AssistanceState.LocationShared, is AssistanceState.Acknowledged -> HapticPattern.GENTLE
 
             AssistanceState.Calm -> HapticPattern.GENTLE.takeIf { from == AssistanceState.Guiding }
+
+            AssistanceState.Paused -> null
         }
     }
 }

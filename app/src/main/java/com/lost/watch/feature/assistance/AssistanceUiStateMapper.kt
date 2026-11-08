@@ -19,7 +19,7 @@ class AssistanceUiStateMapper @Inject constructor(
 ) {
     fun map(snapshot: TripSessionSnapshot, contact: AuthorizedContact?, shareError: LostError?): AssistanceUiState =
         when (val state = snapshot.assistance) {
-            AssistanceState.Calm -> AssistanceUiState.Hidden
+            AssistanceState.Calm, AssistanceState.Paused -> AssistanceUiState.Hidden
 
             is AssistanceState.SoftAsk -> AssistanceUiState.SoftAsk(state.reasons)
 

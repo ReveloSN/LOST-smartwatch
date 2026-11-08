@@ -15,7 +15,8 @@ class SettingsPreferencesMapper @Inject constructor() {
             vibrationIntensity = enumOrDefault(preferences[SettingsKeys.vibration], defaults.vibrationIntensity),
             isLargeTextEnabled = preferences[SettingsKeys.largeText] ?: defaults.isLargeTextEnabled,
             isOnboardingCompleted = preferences[SettingsKeys.onboardingCompleted] ?: defaults.isOnboardingCompleted,
-            thresholds = thresholdsOf(preferences)
+            thresholds = thresholdsOf(preferences),
+            isRealMapEnabled = preferences[SettingsKeys.realMap] ?: defaults.isRealMapEnabled
         )
     }
 
@@ -26,6 +27,7 @@ class SettingsPreferencesMapper @Inject constructor() {
         preferences[SettingsKeys.onboardingCompleted] = settings.isOnboardingCompleted
         preferences[SettingsKeys.thresholdMedium] = settings.thresholds.medium
         preferences[SettingsKeys.thresholdHigh] = settings.thresholds.high
+        preferences[SettingsKeys.realMap] = settings.isRealMapEnabled
     }
 
     private fun thresholdsOf(preferences: Preferences): PersonalThresholds {

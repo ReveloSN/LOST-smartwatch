@@ -21,7 +21,7 @@ class HomeUiStateMapperTest {
     }
 
     @Test
-    fun `en rutina calcula la llegada y el avance`() {
+    fun `en rutina calcula la llegada y el avance en el anillo`() {
         val state = mapper.map(
             AppFixtures.monitoring(AppFixtures.detection(AssistanceLevel.LOW)),
             false,
@@ -29,8 +29,6 @@ class HomeUiStateMapperTest {
         )
         assertEquals("Casa → U", state.routineName)
         assertEquals(7 * 60 + 15, state.arrivalMinuteOfDay)
-        assertEquals(10, state.elapsedMinutes)
-        assertEquals(35, state.expectedMinutes)
         assertEquals(0.3f, state.ringProgress)
     }
 

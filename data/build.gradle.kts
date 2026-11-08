@@ -12,6 +12,7 @@ android {
     }
     defaultConfig {
         minSdk = 30
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         // En debug LOST corre en modo demo: GPS simulado con los GPX y aviso al contacto simulado.
@@ -56,6 +57,14 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.mockk)
+    // org.json real en las pruebas JVM (en Android lo trae el sistema).
+    testImplementation(libs.org.json)
+
+    // Room contra el SQLite real del reloj (no el de la JVM).
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.coroutines.test)
     testImplementation(libs.turbine)
     testImplementation(libs.coroutines.test)
 }

@@ -5,8 +5,10 @@ import com.lost.domain.assistance.AssistanceEvent.CountdownCancelled
 import com.lost.domain.assistance.AssistanceEvent.CountdownTicked
 import com.lost.domain.assistance.AssistanceEvent.DestinationReached
 import com.lost.domain.assistance.AssistanceEvent.DetectionUpdated
+import com.lost.domain.assistance.AssistanceEvent.PauseElapsed
 import com.lost.domain.assistance.AssistanceEvent.ResponseTimedOut
 import com.lost.domain.assistance.AssistanceEvent.RouteRecovered
+import com.lost.domain.assistance.AssistanceEvent.UserEndedGuidance
 import com.lost.domain.assistance.AssistanceEvent.UserIsFine
 import com.lost.domain.assistance.AssistanceEvent.UserIsGoingElsewhere
 import com.lost.domain.assistance.AssistanceEvent.UserRequestedGuidance
@@ -15,6 +17,7 @@ import com.lost.domain.assistance.AssistanceState.AskForHelp
 import com.lost.domain.assistance.AssistanceState.Calm
 import com.lost.domain.assistance.AssistanceState.Guiding
 import com.lost.domain.assistance.AssistanceState.LocationShared
+import com.lost.domain.assistance.AssistanceState.Paused
 import com.lost.domain.assistance.AssistanceState.SharingCountdown
 import com.lost.domain.assistance.AssistanceState.SoftAsk
 import com.lost.domain.detection.AssistanceLevel
@@ -132,6 +135,12 @@ class AssistanceStateMachineTest {
         }
 
         @Test
+        fun `ya se donde estoy termina la guia y cuenta como estoy bien`() {
+            assertEquals(Acknowledged(UserFeedback.IM_FINE), machine.next(Guiding, UserEndedGuidance))
+            assertEquals(Acknowledged(UserFeedback.IM_FINE), machine.next(LocationShared, UserEndedGuidance))
+        }
+
+        @Test
         fun `guiando ignora otras lecturas`() {
             assertEquals(Guiding, machine.next(Guiding, detected(AssistanceLevel.HIGH)))
         }
@@ -158,12 +167,30 @@ class AssistanceStateMachineTest {
 
         @Test
         fun `el mensaje de entendido vuelve a inicio`() {
-            assertEquals(Calm, machine.next(Acknowledged(UserFeedback.IM_FINE), AcknowledgementElapsed))
+            assertEquals(Calm, machine.next(Acknowledged(UserFeedback.GOING_ELSEWHERE), AcknowledgementElapsed))
+        }
+
+        @Test
+        fun `tras estoy bien o ya se donde estoy LOST hace una pausa antes de volver a preguntar`() {
+            assertEquals(Paused, machine.next(Acknowledged(UserFeedback.IM_FINE), AcknowledgementElapsed))
+        }
+
+        @Test
+        fun `en pausa ninguna lectura vuelve a preguntar`() {
+            listOf(AssistanceLevel.MEDIUM, AssistanceLevel.HIGH).forEach {
+                assertEquals(Paused, machine.next(Paused, detected(it)))
+            }
+            assertEquals(Paused, machine.next(Paused, detected(AssistanceLevel.LOW, voluntary = true)))
+        }
+
+        @Test
+        fun `al terminar la pausa vuelve a la calma y puede preguntar otra vez`() {
+            assertEquals(Calm, machine.next(Paused, PauseElapsed))
         }
 
         @Test
         fun `llegar al destino siempre termina en calma`() {
-            listOf(Guiding, SharingCountdown(2), LocationShared, AskForHelp(reasons)).forEach {
+            listOf(Guiding, SharingCountdown(2), LocationShared, AskForHelp(reasons), Paused).forEach {
                 assertEquals(Calm, machine.next(it, DestinationReached))
             }
         }

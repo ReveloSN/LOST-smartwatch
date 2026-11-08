@@ -12,6 +12,9 @@ App nativa para **Wear OS** que aprende tus recorridos habituales y nota cuándo
 - **Ayuda escalonada**: vibrar y preguntar → guiar con una flecha → compartir la ubicación (cuenta de 5 s cancelable).
 - **Aprende de ti**: "Estoy bien" hace que pregunte menos en casos así.
 - **Lugar nuevo** (hospital, aeropuerto): sin rutina, detecta vueltas y regresos al mismo punto.
+- **Mapa real** de OpenStreetMap (sin llave de API): tu ruta de siempre y la de hoy sobre calles reales; sin internet, mini-mapa simple.
+- **Destinos reales por voz**: si no está guardado, lo busca en OpenStreetMap y lo guarda con sus coordenadas.
+- **Flecha con brújula**: en la guía, la flecha gira según hacia dónde miras.
 - Español, inglés y portugués; texto grande; TalkBack; contraste WCAG AA verificado por prueba.
 
 ## Requisitos
@@ -25,7 +28,7 @@ App nativa para **Wear OS** que aprende tus recorridos habituales y nota cuándo
 ./gradlew :app:installDebug
 ```
 
-La compilación *debug* corre en **modo demo**: GPS simulado con los GPX de `sample-routes/`, aviso al contacto simulado (nunca envía un SMS real) y datos de ejemplo (rutina "Casa → U", Laura como contacto, destinos del campus).
+La compilación *debug* corre en **modo demo**: GPS simulado con los GPX de `sample-routes/` (calles reales alrededor de la Universidad Nacional de Colombia, Bogotá), aviso al contacto simulado (nunca envía un SMS real) y datos de ejemplo (rutina "Casa → U", Laura como contacto, destinos del campus y la Clínica Palermo).
 
 ### Demo de la historia de Sebastián
 
@@ -40,6 +43,21 @@ La compilación *debug* corre en **modo demo**: GPS simulado con los GPX de `sam
 
 La reproducción va 10× más rápido que caminar, pero conserva los tiempos reales para el motor.
 
+## Mapa real y privacidad
+
+El mapa usa **OpenStreetMap** con un renderizador propio (ver `docs/adr/004-mapa-openstreetmap.md`). Se puede apagar en
+**Ajustes → Mapa real (usa internet)**; apagado, LOST no hace ninguna petición a internet.
+
+| Qué sale del reloj | Cuándo |
+|---|---|
+| La zona del mapa (tesela z/x/y) | Al ver Monitoreo o el detalle de una rutina. |
+| El texto buscado (sin "llévame a…") | Al enviar un dictado que no coincide con un destino guardado. |
+| Origen y destino de una ruta a pie | Al empezar "Lugar nuevo" (la pantalla lo avisa antes). |
+| **Nunca** | Los recorridos aprendidos, el historial ni el contacto. |
+
+Atribución: © OpenStreetMap contributors (bajo el estado en Monitoreo y en Ajustes → Acerca de).
+Las rutas de demo se regeneran con `python tools/generate_osm_routes.py` cambiando una sola constante (`CENTER`).
+
 ## Verificar
 
 ```bash
@@ -48,12 +66,31 @@ La reproducción va 10× más rápido que caminar, pero conserva los tiempos rea
 
 | Módulo | Pruebas |
 |---|---|
-| `core/designsystem` | 8 (contraste WCAG) |
-| `domain` | 64 (máquina de estados, cadena de respuesta, temporizadores, monitor, casos de uso, métricas) |
-| `ai` | 34 (las 5 de escenario de la sección 8.5 + geometría, DTW, señales, aprendizaje) |
-| `data` | 21 (mappers, repositorios, DataStore, GPX, demo, háptica) |
-| `app` | 40 (mappers de UI, ViewModel, demo GPX de punta a punta, traducciones, accesibilidad) |
-| **Total** | **167** |
+| `core/designsystem` | 11 (contraste WCAG, líneas por rol de texto) |
+| `domain` | 92 (máquina de estados, cadena de respuesta, temporizadores, monitor, casos de uso, métricas, mapa, batería) |
+| `ai` | 43 (las 5 de escenario de la sección 8.5 + geometría, remuestreo con ruido de GPS, DTW, señales, aprendizaje, rendimiento) |
+| `data` | 29 (mappers, repositorios, DataStore, GPX, demo, háptica, caché de teselas, Nominatim, OSRM) |
+| `app` | 69 (mappers de UI, ViewModel, demo GPX de punta a punta, ruido de GPS, traducciones, textos que caben con Manrope, accesibilidad) |
+| **Total JVM** | **244** |
+
+En el emulador de Wear OS (17 pruebas instrumentadas: Room contra SQLite real, alertas en la pantalla redonda,
+TalkBack, Texto grande y pantallas sin internet):
+
+```bash
+./gradlew :data:connectedDebugAndroidTest :app:connectedDebugAndroidTest
+```
+
+Baseline Profile (genera el perfil y mide el arranque; borra los datos de la app de depuración):
+
+```bash
+./gradlew :app:generateBaselineProfile
+```
+
+Herramientas en Python (cálculo del SUS):
+
+```bash
+python -m unittest discover -s tools -p "test_*.py"
+```
 
 ## Estructura
 
@@ -64,7 +101,9 @@ LOST/
 ├── domain/              Kotlin puro: modelos, puertos, casos de uso, máquina de estados
 ├── ai/                  Kotlin puro: motor de detección y aprendizaje
 ├── data/                Room, DataStore, GPS, háptica, contactos, métricas, demo
-├── sample-routes/       GPX de la demo + generate_routes.py
+├── sample-routes/       GPX de la demo (calles reales)
+├── baselineprofile/     Generador del Baseline Profile y benchmark de arranque (Macrobenchmark)
+├── tools/               generate_osm_routes.py (GPX con OSRM) · calcular_sus.py (puntaje SUS)
 ├── config/detekt.yml    Reglas de calidad
 └── docs/                Diseño, investigación, IA, contenido, marca, métricas y ADRs
 ```
@@ -73,7 +112,7 @@ LOST/
 
 | Tema | Archivo |
 |---|---|
-| Avances por fase, decisiones y pendientes | `docs/AVANCES.md` |
+| Avances por fase, decisiones y pendientes | `docs/AVANCES.md` (último: "Pulido del 27 de octubre") |
 | Arquitectura, SOLID, patrones y estructuras de datos | `docs/arquitectura.md` |
 | Arquitectura de información | `docs/ia/arquitectura-informacion.md` |
 | Motor de IA | `docs/ia/motor-ia.md` |
@@ -81,7 +120,13 @@ LOST/
 | Voz, tono, glosario y errores | `docs/contenido/glosario-voz.md` |
 | Personalidad de la marca | `docs/marca/personalidad.md` |
 | Métricas y cuestionario SUS | `docs/metricas/` |
-| Decisiones (ADR) | `docs/adr/` |
+| Decisiones (ADR) | `docs/adr/` (001 arquitectura · 002 DTW · 003 máquina de estados · 004 mapa OpenStreetMap) |
+| Simplificación de la interfaz (antes/después) | `docs/diseno/simplificacion.md` |
+| Tipografía Manrope (licencia y peso) | `docs/diseno/tipografia-manrope.md` |
+| Fidelidad con los mockups | `docs/diseno/fidelidad-mockups.md` |
+| Revisión de accesibilidad (Texto grande, en-XA, TalkBack) | `docs/diseno/accesibilidad-revision.md` |
+| Robustez de la IA ante el ruido del GPS | `docs/ia/robustez-ruido-gps.md` |
+| Guía para aplicar el SUS | `docs/metricas/guia-aplicacion-sus.md` |
 | Mockups | `docs/design/LOST v2.dc.html` |
 
 ## Stack

@@ -1,8 +1,11 @@
 package com.lost.watch.feature.assistance
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ShareLocation
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.lost.designsystem.components.atoms.LostIcon
@@ -24,13 +27,24 @@ fun SharingCountdownAlert(state: AssistanceUiState.SharingCountdown, onEvent: (A
     val fraction = state.secondsLeft.toFloat() / state.totalSeconds
     val contact = state.contactName ?: stringResource(R.string.contact_fallback_name)
     WatchScreenTemplate(ring = { ProbabilityArc(StatusTone.HELP, fraction) }) {
-        LostIcon(
-            Icons.Rounded.ShareLocation,
-            null,
-            tint = SemanticTokens.Status.help,
-            size = ComponentTokens.Icon.large
-        )
-        LostText(stringResource(R.string.assist_sharing_in, contact), role = LostTextRole.CAPTION)
+        // Icono y "Aviso a Laura en" en una sola línea, en el tono de ayuda: así "Cancelar" queda
+        // dentro del círculo sin tener que desplazar.
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(SemanticTokens.Spacing.xs),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            LostIcon(
+                Icons.Rounded.ShareLocation,
+                null,
+                tint = SemanticTokens.Status.help,
+                size = ComponentTokens.Icon.small
+            )
+            LostText(
+                stringResource(R.string.assist_sharing_in, contact),
+                role = LostTextRole.CAPTION,
+                color = SemanticTokens.Status.help
+            )
+        }
         LostText(state.secondsLeft.toString(), role = LostTextRole.DISPLAY)
         LostText(pluralStringResource(R.plurals.assist_seconds, state.secondsLeft), role = LostTextRole.CAPTION)
         LostSecondaryButton(stringResource(R.string.assist_cancel), { onEvent(AssistanceUiEvent.CancelSharing) })
