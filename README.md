@@ -44,7 +44,8 @@ El guion completo para presentarla está en [`docs/presentacion/guion.md`](docs/
 
 ### Acto 1 · Una persona nueva
 
-1. Instala desde cero (`adb shell pm clear com.lost.watch` para volver a empezar) y completa la bienvenida
+1. Instala desde cero (para volver a empezar: **Ajustes → Demostración → Empezar de nuevo**, o
+   `adb shell pm clear com.lost.watch`) y completa la bienvenida
    (elige a Laura). **Mis recorridos** está vacío: LOST todavía no conoce tus recorridos.
 2. **Ajustes → Demostración → Aprender un día de ruta**: cada toque pasa un día de la semana pasada (la ruta de
    siempre, de lunes a viernes cerca de las 6:40) por el aprendizaje real de LOST. Tras el primero, **Mis

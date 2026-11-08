@@ -37,6 +37,8 @@ campus. Es la persona principal de `docs/investigacion/personas.md`.
    adb shell cmd locale set-app-locales com.lost.watch --locales es-CO
    ```
 
+   Para ensayar varias veces no hace falta `adb`: **Ajustes → Demostración → Empezar de nuevo** borra lo
+   aprendido y vuelve a la bienvenida (Laura y los destinos de ejemplo se quedan).
 3. **Comprobar internet** abriendo una vez el detalle de una ruta: si se ven calles, el mapa real funciona. Sin
    internet la app sigue funcionando y dice "Te muestro tu ruta sin calles." (también es parte del diseño).
 4. **Plan B abierto en otra pestaña**, por si el emulador falla:
