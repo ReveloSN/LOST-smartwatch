@@ -16,7 +16,7 @@ a ejecutar: los destinos de ejemplo (`DemoDestinations`) y la rutina que aprende
 |---|---|---|
 | `demo_normal.gpx` | De la casa en Catambuco a la universidad por la ruta de siempre (≈ 11 km, 35 min). | Nivel bajo, anillo aqua que respira. |
 | `demo_voluntary_detour.gpx` | Se baja del bus en Torobajo y, en vez de entrar al campus, camina estable hacia una papelería. | Nivel bajo + pregunta suave "¿Vas a otro lado hoy?". |
-| `demo_disorientation.gpx` | Calle cerrada: al bajarse del bus no puede seguir por su calle, da 3 vueltas a una manzana real que nunca toca la ruta, vuelve y entra a la U. | "¿Necesitas ayuda?" → guía → "Ya estás en tu ruta". |
+| `demo_disorientation.gpx` | Calle cerrada: al bajarse del bus no puede seguir por su calle, da 2 vueltas a una manzana real que nunca toca la ruta, vuelve y entra a la U. | "¿Necesitas ayuda?" → guía → "Ya estás en tu ruta". |
 | `demo_new_place.gpx` | Primera visita a la Fundación Hospital San Pedro: da 3 vueltas a una manzana vecina y llega al consultorio. | Modo lugar nuevo: pregunta al dar vueltas y luego llega. |
 
 Las manzanas de las vueltas se eligen solas: de varias candidatas, la de menor perímetro que encierra un

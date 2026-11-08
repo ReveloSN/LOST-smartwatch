@@ -31,6 +31,7 @@ WALK_TO_STOP_M = 250  # de la casa al paradero de la Panamericana
 WALK_FROM_STOP_M = 600  # el bus deja de andar 600 m (por la vía) antes del campus: ahí está el paradero
 SAMPLE_SECONDS = 5
 MIN_BLOCK_AREA_M2 = 1500
+CLOSED_STREET_LAPS = 2  # la alerta llega en la primera vuelta; 2 bastan y acortan la demo
 EARTH_RADIUS = 6_371_000.0
 START = datetime(2026, 10, 12, 11, 40, tzinfo=timezone.utc)  # 6:40 a. m. en Colombia
 USER_AGENT = 'LOST-smartwatch-demo-generator/1.0 (student project; github.com/ReveloSN/LOST-smartwatch)'
@@ -158,7 +159,7 @@ def area(path):
     return abs(sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(xy, xy[1:] + xy[:1]))) / 2
 
 
-def real_block(centers, accept=lambda loops: True):
+def real_block(centers, accept=lambda loops: True, laps=3):
     """De varias manzanas candidatas, la de menor perímetro que de verdad es una manzana.
 
     Las calles de Pasto no forman una cuadrícula: un cuadrado de esquinas cualquiera puede terminar en una
@@ -174,11 +175,11 @@ def real_block(centers, accept=lambda loops: True):
     if not candidates:
         raise RuntimeError('No encontré una manzana real cerca')
     _, center, half_side = min(candidates)
-    return osrm(*block_loops(center, half_side, 3))
+    return osrm(*block_loops(center, half_side, laps))
 
 
 def closed_street_walk(normal, from_stop):
-    """La caminata del paradero al campus con la calle cerrada: sale de la ruta, da 3 vueltas a una manzana
+    """La caminata del paradero al campus con la calle cerrada: sale de la ruta, da 2 vueltas a una manzana
     real que nunca toca la ruta (siempre a más de 100 m), vuelve al mismo punto y sigue. De los lugares
     posibles para la calle cerrada se queda con el de la manzana más corta."""
     options = []
@@ -189,7 +190,7 @@ def closed_street_walk(normal, from_stop):
         centers = [p for meters in (120, 160, 200, 240, 280)
                    for p in perpendicular_offsets(closed_street, toward, meters)] + around(closed_street, 200)
         try:
-            loops = real_block(centers, accept=lambda lap: min_distance_to(lap, normal) > 100)
+            loops = real_block(centers, accept=lambda lap: min_distance_to(lap, normal) > 100, laps=CLOSED_STREET_LAPS)
         except RuntimeError:
             continue
         options.append((length(loops), before, after, loops))
@@ -238,7 +239,7 @@ def build_routes():
     # Desvío voluntario: se baja del bus y camina estable hacia una papelería, sin volver sobre sus pasos.
     voluntary = normal[:2] + [(steady_walk_away(last_stop, normal_path), WALK_MPS)]
 
-    # Calle cerrada: al bajarse del bus no puede seguir por su calle, da 3 vueltas a una manzana y vuelve.
+    # Calle cerrada: al bajarse del bus no puede seguir por su calle, da 2 vueltas a una manzana y vuelve.
     lost = normal[:2] + [(closed_street_walk(normal_path, from_stop), WALK_MPS)]
 
     # Lugar nuevo: llega al hospital por primera vez, da 3 vueltas a una manzana vecina y llega al consultorio.
