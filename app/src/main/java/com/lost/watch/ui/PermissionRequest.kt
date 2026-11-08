@@ -20,8 +20,9 @@ fun rememberPermissionRequest(permissions: Array<String>, onAnswered: () -> Unit
     val context = LocalContext.current
     val activity = LocalActivity.current
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-        val isGranted = result.isNotEmpty() && result.values.all { it }
-        if (!isGranted && activity != null && !canAskAgain(activity, permissions)) openAppSettings(context)
+        // Un resultado vacío es un pedido cancelado, no una negativa: ahí no se manda a nadie a los ajustes.
+        val wasDenied = result.isNotEmpty() && result.values.none { it }
+        if (wasDenied && activity != null && !canAskAgain(activity, permissions)) openAppSettings(context)
         onAnswered()
     }
     return { launcher.launch(permissions) }
