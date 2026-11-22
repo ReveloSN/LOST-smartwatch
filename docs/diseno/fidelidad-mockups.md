@@ -44,6 +44,7 @@ Cada diferencia cae en una de tres categorías:
 | Guía (F.3) | Flecha blanca de contorno y "hacia la carrera 7" | Flecha aqua y "≈ 3 min caminando" + "Ya sé dónde estoy" | El nombre de la calle exige geocodificación inversa (otra petición a internet); la salida de la guía se pidió el 25 de octubre. |
 | Lugares (03.2) | Dirección de la calle ("Avenida 19 con calle 45") | Destino guardado o rutina ("Cerca de Biblioteca Central", "En tu ruta Casa → U") | La dirección exige enviar a un tercero dónde se desorientó la persona ([ADR 005](../adr/005-lugares-sin-geocodificacion.md)). |
 | Vista rápida (05.2) | Aparece sola al reconocer la rutina y se cierra sola | Tile que el usuario agrega al carrusel | Wear OS no tiene una vista transitoria para apps de terceros; la Tile y la complicación se actualizan en vivo. |
+| Logo (05.2) | Anillo aqua abierto | Pin con brújula y recorrido, en el mismo aqua (lanzador y splash); en la notificación, pin y brújula sin recorrido | Decisión del 22 de noviembre: el pin reemplaza al anillo como logo. El anillo que respira sigue siendo el indicador de estado. A 24 dp el recorrido no se lee. |
 | Tu semana (03.1) | "5 de 5" y la frase "Esta semana hiciste tu ruta a la U 5 de 5 veces sin desvíos." | "3 de 5 días" y "3 recorridos · 1 día con desvío" | La frase del mockup supone una sola rutina; el resumen corto cabe en pt y con Texto grande. Cuenta días hábiles: un recorrido del fin de semana no aparece en el anillo. |
 
 ## (c) Pendientes

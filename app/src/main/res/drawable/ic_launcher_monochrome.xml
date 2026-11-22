@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- El mismo anillo en un solo color, para los íconos temáticos del sistema. -->
+<!-- El mismo pin con recorrido en un solo color, para los íconos temáticos del sistema. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path
-        android:fillColor="#00000000"
-        android:pathData="M65,34.95A22,22 0,1 1,43.67 34.58"
-        android:strokeWidth="6"
-        android:strokeColor="#FFFFFFFF"
-        android:strokeLineCap="round" />
+    <group
+        android:pivotX="0"
+        android:pivotY="0"
+        android:scaleX="0.333"
+        android:scaleY="0.333"
+        android:translateX="24.36"
+        android:translateY="22.03">
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M22,156 C40,150 46,132 62,134 S84,156 102,148 S138,132 156,140"
+            android:strokeWidth="5"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M22,156m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M156,140m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M92,118 C80,98 65,80 65,60 A27,27 0 0 1 119,60 C119,80 104,98 92,118 Z"
+            android:strokeWidth="6"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeLineJoin="round" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M102.6,52.5 L97.2,67.4 L81.4,67.5 L86.8,52.6 Z"
+            android:strokeWidth="4.5"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeLineJoin="round" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M77,124 L107,124"
+            android:strokeWidth="4"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeLineCap="round" />
+    </group>
 </vector>

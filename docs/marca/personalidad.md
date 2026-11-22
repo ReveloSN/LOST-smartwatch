@@ -17,6 +17,18 @@
 - **Alivio** al recuperar la ruta: el anillo vuelve a aqua y respira, "Ya estás en tu ruta" (`BackOnRouteAlert`).
 - **Control**: el usuario confirma, renombra o borra lo aprendido; puede quitar el permiso a su contacto.
 
+## Logo
+
+Pin con brújula sobre un recorrido, en aqua (`#3EE6D2`) sobre negro OLED. Reemplaza al anillo del mockup 05.2
+(decisión del 22 de noviembre); el anillo que respira sigue siendo el indicador de estado, no el logo.
+
+| Uso | Versión | Recurso |
+|---|---|---|
+| Lanzador | Completo, en aqua | `ic_launcher_foreground` |
+| Icono temático | Completo, en un color | `ic_launcher_monochrome` |
+| Splash | Completo, dentro del círculo visible | `splash_icon` |
+| Notificación | Sin recorrido, en un color | `ic_lost_notification` |
+
 ## Iconografía
 
 Material Symbols redondeados, peso ligero, **siempre con etiqueta en las acciones críticas** (los botones llevan texto; los iconos decorativos tienen `contentDescription = null` porque el texto ya los describe).

@@ -753,6 +753,14 @@ README.
 
 ---
 
+## Logo nuevo (22 de noviembre)
+
+El pin con brújula y recorrido reemplaza al anillo del mockup 05.2 como logo en el lanzador, el icono temático,
+el splash y la notificación (ver [personalidad](marca/personalidad.md#logo)). El anillo de estado de Inicio no
+cambia. Las capturas y los videos anteriores a esta fecha todavía muestran el logo anterior donde aparezca.
+
+---
+
 ## Pendientes generales
 
 | Pendiente | Por qué quedó pendiente | Cómo cerrarlo |
