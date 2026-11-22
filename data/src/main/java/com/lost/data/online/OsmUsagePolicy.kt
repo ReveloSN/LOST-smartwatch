@@ -8,6 +8,9 @@ internal object OsmUsagePolicy {
     const val USER_AGENT = "LOST-smartwatch/1.0 (Wear OS student project; github.com/ReveloSN/LOST-smartwatch)"
     const val CONNECT_TIMEOUT_MILLIS = 8_000
     const val READ_TIMEOUT_MILLIS = 10_000
+
+    /** Tope de toda la descarga de una tesela: los dos anteriores no limitan la operación completa. */
+    const val TILE_TOTAL_TIMEOUT_MILLIS = 12_000L
     const val TILE_URL = "https://tile.openstreetmap.org/%d/%d/%d.png"
     const val SEARCH_URL = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=%d&accept-language=%s&q=%s"
     const val WALKING_ROUTE_URL =
