@@ -10,6 +10,7 @@ import com.lost.domain.usecase.ObserveRoutinesUseCase
 import com.lost.domain.usecase.RenameRoutineUseCase
 import com.lost.watch.navigation.LostDestination
 import com.lost.watch.ui.map.MapRoutes
+import com.lost.watch.ui.map.MapUiState
 import com.lost.watch.ui.map.MapUiStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -33,11 +34,13 @@ class RoutineDetailViewModel @Inject constructor(
     private val deletion = MutableStateFlow(DeletionStep.IDLE)
 
     private val routine = observeRoutines().map { routines -> routines.firstOrNull { it.id == routineId } }
+
+    /** Empieza en el mapa simple: el detalle no espera a internet para mostrarse. */
     private val mapState = mapStates.of(
         routine.map {
             MapRoutes(it?.path.orEmpty(), emptyList(), ComponentTokens.RealMap.SMALL_MAP_FIT_MARGIN_FRACTION)
         }
-    )
+    ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), MapUiState.Simple)
 
     val uiState: StateFlow<RoutineDetailUiState> = combine(routine, deletion, mapState) { routine, step, map ->
         RoutineDetailUiState(
